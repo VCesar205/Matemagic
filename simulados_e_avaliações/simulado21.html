@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 8</span>
+                        <span id="q-topic">Simulado</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box" style="display: none;">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen" style="display: none;">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu o simulado especial de matemática.</p>
+                    <a href="inicio.html" class="btn-action btn-back">Voltar ao Início</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                    Boliche é um jogo em que se arremessa uma bola sobre uma pista para atingir dez pinos, dispostos em uma formação de base triangular, buscando derrubar o maior número de pinos. A razão entre o total de vezes em que o jogador derruba todos os pinos e o número de jogadas determina seu desempenho. Em uma disputa entre os cinco jogadores, foram obtidos os seguintes resultados:<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px; font-weight: bold;">JOGADOR I</td><td style="padding: 10px;">Derrubou todos os pinos 50 vezes em 85 jogadas.</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px; font-weight: bold;">JOGADOR II</td><td style="padding: 10px;">Derrubou todos os pinos 40 vezes em 65 jogadas.</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px; font-weight: bold;">JOGADOR III</td><td style="padding: 10px;">Derrubou todos os pinos 20 vezes em 65 jogadas.</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px; font-weight: bold;">JOGADOR IV</td><td style="padding: 10px;">Derrubou todos os pinos 30 vezes em 40 jogadas.</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px; font-weight: bold;">JOGADOR V</td><td style="padding: 10px;">Derrubou todos os pinos 48 vezes em 90 jogadas.</td></tr>
+                        </tbody>
+                    </table>
+                    Qual desses jogadores apresentou maior desempenho?`, 
+                o: ["I.", "II.", "III.", "IV.", "V."], 
+                c: 3, 
+                e: "Para comparar os desempenhos, avaliamos as frações ou valores decimais aproximados de cada razão (sucessos/jogadas): Jogador I: 50/85 ≈ 0,588; Jogador II: 40/65 ≈ 0,615; Jogador III: 20/65 ≈ 0,307; Jogador IV: 30/40 = 0,750; Jogador V: 48/90 ≈ 0,533. O maior desempenho é o do Jogador IV." 
+            },
+            { 
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                    Durante uma epidemia de uma gripe viral, o secretário de saúde de um município comprou 16 galões de álcool em gel, com 4 litros de capacidade cada um, para distribuir igualmente em recipientes para 10 escolas públicas do município. O fornecedor dispõe à venda diversos tipos de recipientes, com suas respectivas capacidades listadas:<br><br>
+                    • Recipiente I: 0,125 litro.<br>
+                    • Recipiente II: 0,250 litro.<br>
+                    • Recipiente III: 0,320 litro.<br>
+                    • Recipiente IV: 0,500 litro.<br>
+                    • Recipiente V: 0,800 litro.<br><br>
+                    O secretário de saúde comprará recipientes de um mesmo tipo, de modo a instalar 20 deles em cada escola, abastecidos com álcool em gel na sua capacidade máxima, de forma a utilizar todo o gel dos galões de uma só vez.<br><br>
+                    Que tipo de recipiente o secretário de saúde deve comprar?`, 
+                o: ["I.", "II.", "III.", "IV.", "V."], 
+                c: 2, 
+                e: "Total de álcool disponível: 16 galões × 4 litros = 64 litros. Total de recipientes a serem instalados: 10 escolas × 20 recipientes = 200 recipientes. Dividindo a capacidade total pelo número de recipientes: 64 litros / 200 = 0,320 litro. Portanto, deve ser comprado o Recipiente III." 
+            },
+            { 
+                t: `<strong>Questão 3 (INÉDITA)</strong><br><br>
+                    <strong>Brasil é líder no ranking dos países com maior incidência de raios</strong><br><br>
+                    O físico Daniel Ângelo, do grupo Ciência em Show, explica como os raios são produzidos: eles se formam na atmosfera por conta do atrito entre as partículas de gelo. Como a zona tropical é a que tem mais nuvens do tipo que produz raios, e como o Brasil é o maior país nessa região da Terra, é aqui onde caem mais raios.<br><br>
+                    Dos 3,15 bilhões de raios que caem na Terra durante um ano, 100 milhões deles vêm cair no Brasil.<br><br>
+                    A razão entre o número de raios que caem no Brasil e o número de raios que caem na Terra é igual a`, 
+                o: [
+                    `<div class="frac"><span class="nominator">1</span><span>35</span></div>`, 
+                    `<div class="frac"><span class="nominator">2</span><span>63</span></div>`, 
+                    `<div class="frac"><span class="nominator">10</span><span>63</span></div>`, 
+                    `<div class="frac"><span class="nominator">5</span><span>61</span></div>`, 
+                    `<div class="frac"><span class="nominator">63</span><span>5</span></div>`
+                ], 
+                c: 2, 
+                e: "Escrevemos os valores na mesma unidade (milhões): 100 milhões no Brasil para 3.150 milhões na Terra (pois 3,15 bilhões = 3.150 milhões). Montando a razão: 100 / 3150. Simplificando por 10, cortando os zeros, obtemos 10/63." 
+            },
+            { 
+                t: `<strong>Questão 4 (INÉDITA)</strong><br><br>
+                    Num bairro da cidade de João Pessoa-PB, foi realizada uma campanha de conscientização para que não se jogue óleo no ralo da pia. Cada litro de óleo jogado no ralo polui rios e mares, além de entupir tubulações. Uma das alternativas apresentadas pelos moradores da comunidade foi fazer sabão com esse resíduo. A cada 4 litros de óleo é possível fazer 10 kg de sabão. Um morador que conseguiu juntar 10 litros de óleo, além de preservar o meio ambiente, consegue produzir`, 
+                o: ["10 kg de sabão.", "15 kg de sabão.", "20 kg de sabão.", "25 kg de sabão.", "30 kg de sabão."], 
+                c: 3, 
+                e: "Montando a proporção: se 4 litros produzem 10 kg, cada 1 litro produz 10 / 4 = 2,5 kg de sabão. Multiplicando pelo total arrecadado: 10 litros × 2,5 kg/litro = 25 kg de sabão." 
+            },
+            { 
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                    Nos últimos cinco anos, 32 mil mulheres de 20 a 24 anos foram internadas nos hospitais do SUS por causa de AVC. Entre os homens da mesma faixa etária, houve 28 mil internações pelo mesmo motivo.<br>
+                    Suponha que, nos próximos cinco anos, haja um acréscimo de 8 mil internações de mulheres e que o acréscimo de internações de homens por AVC ocorra na mesma proporção.<br><br>
+                    De acordo com as informações dadas, o número de homens que seriam internados por AVC, nos próximos cinco anos, corresponderia a`, 
+                o: ["4 mil.", "9 mil.", "21 mil.", "35 mil.", "39 mil."], 
+                c: 3, 
+                e: "A razão do acréscimo feminino é de 8 mil sobre as 32 mil internações iniciais (8/32 = 1/4 ou 25%). Mantendo a mesma proporção para os homens, calculamos o acréscimo deles: 28 mil × 25% = 7 mil. Portanto, o total de homens internados nos próximos cinco anos será de 28 mil + 7 mil = 35 mil." 
+            },
+            {
+                t: `<strong>Questão 6 (INÉDITA)</strong><br><br>
+                    O presidente de uma empresa resolveu premiar os três vendedores mais eficientes do ano com a quantia de R$ 13 500,00 (que será distribuída de forma diretamente proporcional ao número de pontos obtidos por cada um na avaliação do ano). O vencedor, com 45 pontos, recebeu R$ 6 750,00 e o número de pontos do segundo colocado foi igual a 27. O número de pontos a menos que o terceiro colocado conseguiu em relação ao segundo colocado foi`,
+                o: ["8.", "9.", "10.", "11.", "12."],
+                c: 1,
+                e: "Se a divisão é direta, dividimos o prêmio pelos pontos para achar a constante: 6750 / 45 = R$ 150 por ponto. O segundo colocado tem 27 pontos, logo recebeu 27 × 150 = R$ 4.050. O que sobrou para o terceiro foi 13500 - 6750 - 4050 = R$ 2.700. Pontos do terceiro: 2700 / 150 = 18 pontos. A diferença de pontos entre o segundo e o terceiro é de 27 - 18 = 9."
+            },
+            {
+                t: `<strong>Questão 7 (ENEM ADAPTADA)</strong><br><br>
+                    A relação da resistência elétrica com as dimensões do condutor foi estudada por um grupo de cientistas por meio de vários experimentos de eletricidade. Eles verificaram que existe proporcionalidade entre:<br><br>
+                    • resistência (R) e comprimento (l), dada a mesma secção transversal (A);<br>
+                    • resistência (R) e área da secção transversal (A), dado o mesmo comprimento (l) e<br>
+                    • comprimento (l) e área da secção transversal (A), dada a mesma resistência (R).<br><br>
+                    Considerando os resistores como fios, pode-se exemplificar o estudo das grandezas que influem na resistência elétrica utilizando as figuras seguintes.<br><br>
+                    <img src="imagens avs/joule.jpeg" alt="Esquema de fios condutores" class="img-center"><br>
+                    Disponível em: www.efeitojoule.com. Acesso em: abr. 2010 (adaptado).<br><br>
+                    As figuras mostram que as proporcionalidades tentes entre resistência (R) e comprimento (l), resistência (R) e área da seção transversal (A), e entre comprimento (l) e área da seção transversal (A) são, respectivamente,`,
+                o: [
+                    "direta, direta e direta.",
+                    "direta, direta e inversa.",
+                    "direta, inversa e direta.",
+                    "inversa, direta e direta.",
+                    "inversa, direta e inversa."
+                ],
+                c: 2,
+                e: "Analisando as figuras: aumentando o comprimento, a resistência aumenta (direta); aumentando a área da seção transversal, a resistência diminui (inversa); para manter a mesma resistência, se aumentamos o comprimento, precisamos também aumentar a área (direta)."
+            },
+            {
+                t: `<strong>Questão 8 (ENEM)</strong><br><br>
+                    Uma mãe correu à bula para verificar a dosagem de um remédio que precisava dar a seu filho. Na bula, recomendava-se a seguinte dosagem: 5 gotas para cada 2 kg de massa corporal a cada 8 hours.<br><br>
+                    Se a mãe administrou corretamente 30 gotas do remédio a seu filho a cada 8 horas, then a massa corporal dele é de`,
+                o: ["12 kg.", "16 kg.", "24 kg.", "36 kg.", "75 kg."],
+                c: 0,
+                e: "Montando uma regra de três simples direta: 5 gotas estão para 2 kg, assim como 30 gotas estão para x kg. <br>5/2 = 30/x &rArr; 5x = 60 &rArr; x = 12 kg."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

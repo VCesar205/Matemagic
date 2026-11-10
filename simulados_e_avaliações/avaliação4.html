@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação Geral - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 10</span>
+                        <span id="topic-title">Avaliação</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box" style="display: none;">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen" style="display: none;">
+                    <div class="finish-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Avaliação Concluída!</h2>
+                    <p class="finish-score">Parabéns por finalizar o teste de desempenho!</p>
+                    <a href="painel1.html" class="btn-action btn-back">Voltar ao Painel</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                A figura abaixo representa o boleto de cobrança da mensalidade de uma escola, referente ao mês de junho de 2008.<br><br>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #edf2f7; font-size: 0.9rem;">
+                    <tbody>
+                        <tr style="background-color: #f8fafc; border-bottom: 2px solid #2d3748;">
+                            <td colspan="2" style="padding: 8px;"><strong>Banco S.A.</strong></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">Local de Pagamento<br><strong>Pagável em qualquer agência bancária até a data de vencimento</strong></td>
+                            <td style="padding: 6px; width: 30%;">Vencimento<br><strong>30/06/2008</strong></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">Cedente<br><strong>Escola de Ensino Médio</strong></td>
+                            <td style="padding: 6px;">Agência/Cód. cedente</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">Data documento<br><strong>01/06/2008</strong></td>
+                            <td style="padding: 6px;">Nosso número</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">Uso do banco</td>
+                            <td style="padding: 6px; background-color: #f8fafc;">(=) Valor documento<br><strong>R$ 500,00</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0; font-size: 0.85rem;">Instruções<br><strong>Observação: no caso de pagamento em atraso, cobrar multa de R$ 10,00 mais 40 centavos por dia de atraso.</strong></td>
+                            <td style="padding: 6px; line-height: 1.8;">(-) Descontos<br>(-) Outras deduções<br>(+) Mora/Multa<br>(+) Outros acréscimos<br><strong>(=) Valor Cobrado</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                Se M(x) é o valor, em reais, da mensalidade a ser paga, em que x é o número de dias em atraso, então`,
+                o: [
+                    "M(x) = 500 + 0,4x.",
+                    "M(x) = 500 + 10x.",
+                    "M(x) = 510 + 0,4x.",
+                    "M(x) = 510 + 40x.",
+                    "M(x) = 500 + 10,4x."
+                ],
+                c: 2,
+                e: "O valor do documento é fixado em R$ 500,00. Havendo atraso (ou seja, se x > 0), adiciona-se uma taxa fixa (multa) de R$ 10,00 somada à parcela variável de R$ 0,40 por dia de atraso (0,4x). Logo, combinando os termos independentes fixos temos: 500 + 10 = 510. A equação resultante é M(x) = 510 + 0,4x."
+            },
+            {
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                Os congestionamentos de trânsito constituem um problemático que aflige, todos os dias, milhares de motoristas brasileiros. O gráfico ilustra a situação, representando, ao longo de um intervalo definido de tempo, a variação da velocidade de um veículo durante um congestionamento.<br><br>
+                <img src="imagens avs/grafico velocidade.jpeg" alt="Gráfico de velocidade por tempo" class="img-center"><br>
+                Quantos minutos o veículo permaneceu imóvel ao longo do intervalo de tempo total analisado?`,
+                o: [
+                    "4.",
+                    "3.",
+                    "2.",
+                    "1.",
+                    "0."
+                ],
+                c: 2,
+                e: "Para que o veículo fique imóvel, sua velocidade deve ser igual a zero. No gráfico, a velocidade é representada no eixo vertical (y). O veículo estará imóvel nos intervalos onde a linha do gráfico toca o eixo horizontal (tempo), indicando V = 0. Isso ocorre no intervalo de 6 a 8 minutos, totalizando 2 minutos de imobilidade."
+            },
+            {
+                t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                As curvas de oferta e de demanda de um produto representam, respectivamente, as quantidades que vendedores e consumidores estão dispostos a comercializar em função do preço do produto. Em alguns casos, essas curvas podem ser representadas por retas. Suponha que as quantidades de oferta e de demanda de um produto sejam, respectivamente, representadas pelas equações:<br><br>
+                <div style="text-align: center; font-size: 1.1rem; margin-bottom: 15px; font-weight: bold;">
+                    Qo = - 20 + 4P &nbsp; e &nbsp; Qd = 46 - 2P
+                </div>
+                em que Qo é quantidade de oferta, Qd é a quantidade de demanda e P é o preço do produto. A partir dessas equações, de oferta e de demanda, os economistas encontram o preço de equilíbrio de mercado, ou seja, quando Qo e Qd se igualam. Para a situação descrita, qual o valor do preço de equilíbrio?`,
+                o: [
+                    "5.",
+                    "11.",
+                    "13.",
+                    "23.",
+                    "33."
+                ],
+                c: 1,
+                e: "Para encontrar o preço de equilíbrio, igualamos a quantidade de oferta à quantidade de demanda (Q_o = Q_d):<br><br>-20 + 4P = 46 - 2P<br>4P + 2P = 46 + 20<br>6P = 66<br>P = 11.<br><br>Logo, o preço de equilíbrio é 11."
+            },
+            {
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                O gráfico abaixo, obtido a partir de dados do Ministério do Meio Ambiente, mostra o crescimento do número de espécies da fauna brasileira ameaçadas de extinção.<br><br>
+                <img src="imagens avs/especies extincao.jpeg" alt="Gráfico do crescimento de espécies ameaçadas" class="img-center"><br>
+                Se mantida, pelos próximos anos, a tendência de crescimento mostrada no gráfico, o número de espécies ameaçadas de extinção em 2011 será igual a`,
+                o: [
+                    "465.",
+                    "493.",
+                    "498.",
+                    "538.",
+                    "699."
+                ],
+                c: 2,
+                e: "O gráfico aponta um crescimento linear em um período de 24 anos (de 1983 a 2007). O aumento de espécies foi de 461 - 239 = 222 espécies.<br>A taxa de crescimento anual é de 222 / 24 = 9,25 espécies por ano.<br>De 2007 para 2011 decorrem 4 anos. O incremento será de 4 &times; 9,25 = 37 espécies.<br>Portanto, o total em 2011 será de 461 + 37 = 498 espécies."
+            },
+            {
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                Um posto de combustível vende 10 000 litros de álcool por dia a R$ 1,50 cada litro. Seu proprietário percebeu que, para cada centavo de desconto que concedia por litro, eram vendidos 100 litros a mais por dia. Por exemplo, no dia em que o preço do álcool foi R$ 1,48, foram vendidos 10 200 litros.<br><br>
+                Considerando x o valor, em centavos, do desconto dado no preço de cada litro, e V o valor, em R$, arrecadado por dia com a venda do álcool, então a expressão que relaciona V e x é`,
+                o: [
+                    "V = 10 000 + 50x - x²",
+                    "V = 10 000 + 50x + x²",
+                    "V = 15 000 - 50x - x²",
+                    "V = 15 000 + 50x - x²",
+                    "V = 15 000 - 50x + x²"
+                ],
+                c: 3,
+                e: "O preço por litro será (1,50 - 0,01x) e a quantidade vendida será (10 000 + 100x). Multiplicando o preço pela quantidade para achar a receita V:<br>V = (1,50 - 0,01x)(10 000 + 100x)<br>V = 15 000 + 150x - 100x - x²<br>V = 15 000 + 50x - x²."
+            },
+            {
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                A temperatura T de um forno (em graus centígrados) é reduzida por um sistema a partir do instante de seu desligamento (t=0) e varia de acordo com a expressão T(t) = -<div class="frac"><span>t²</span><span class="nominator"></span><span>4</span></div> + 400, com t em minutos. Por motivos de segurança, a trava do forno só é liberada para abertura quando o forno atinge a temperatura de 39 °C.<br><br>
+                Qual o tempo mínimo de espera, em minutos, após desligar o forno, para que a porta possa ser aberta?`,
+                o: [
+                    "19,0.",
+                    "19,8.",
+                    "20,0.",
+                    "38,0.",
+                    "39,0."
+                ],
+                c: 3,
+                e: "Basta igualar a função T(t) a 39 °C:<br>39 = -t²/4 + 400 &rArr; t²/4 = 400 - 39 &rArr; t²/4 = 361<br>t² = 361 * 4 &rArr; t² = 1444 &rArr; t = &radic;1444 = 38 minutos."
+            },
+            {
+                t: `<strong>Questão 7 (INÉDITA)</strong><br><br>
+                Hoje, o saque no voleibol é uma arma muito potente para definir um ponto. Um jogador de vôlei fez um saque em que a bola foi lançada a uma altura de 2 m do chão, com trajetória parabólica, e atingiu altura máxima bem acima da rede, como mostra a figura.<br><br>
+                Considere um sistema de coordenadas cartesianas ortogonal, de tal modo que o eixo das abscissas está no plano do chão e o eixo das ordenadas está no plano da rede, e os dois eixos estão no mesmo plano que a trajetória da bola. Sabendo que a bola descreve uma trajetória com equação da parábola dada por f(x) = -<div class="frac"><span>1</span><span class="nominator"></span><span>81</span></div>x² + 3 e que a linha de zona de ataque dista 3 m da linha de meio da quadra, a altura em que a bola passou na linha de zona de ataque da quadra adversária foi aproximadamente`,
+                o: [
+                    "2 m.",
+                    "2,5 m.",
+                    "2,9 m.",
+                    "3,1 m.",
+                    "3,5 m."
+                ],
+                c: 2,
+                e: "Como o eixo das ordenadas (y) está na rede (meio da quadra), a linha da zona de ataque da quadra adversária localiza-se na posição x = 3. Substituindo x = 3 na equação da trajetória:<br>f(3) = -(1/81)(3)² + 3 = -(1/81)(9) + 3 = -1/9 + 3 = -0,11 + 3 &asymp; 2,89 m. Portanto, aproximadamente 2,9 m."
+            },
+            {
+                t: `<strong>Questão 8 (ENEM/PPL)</strong><br><br>
+                Em um experimento, uma cultura de bactérias tem sua população reduzida pela metade a cada hora, devido à ação de um agente bactericida. Neste experimento, o número de bactérias em função do tempo pode ser modelado por uma função do tipo`,
+                o: [
+                    "afim.",
+                    "seno.",
+                    "cosseno.",
+                    "logarítmica crescente.",
+                    "exponencial."
+                ],
+                c: 4,
+                e: "Como a população reduz-se pela metade a cada intervalo de tempo fixo (1 hora), a taxa de decrescimento é proporcional ao valor atual della população. Fenômenos em que o valor é multiplicado/dividido por um fator constante a intervalos regulares são modelados por funções exponenciais."
+            },
+            {
+                t: `<strong>Questão 9 (ENEM/PPL)</strong><br><br>
+                A torre de Hanói é um jogo que tem o objetivo de mover todos os discos de uma haste para outra, utilizando o menor número possível de movimento, respeitando-se as regras.<br><br>
+                <img src="imagens avs/torre hanoi.jpeg" alt="Torre de Hanói com 5 discos" class="img-center"><br>
+                As regras são:<br>
+                1 – um disco maior não pode ser colocado sobre um disco menor;<br>
+                2 – pode-se mover um único disco por vez;<br>
+                3 – um disco deve estar sempre em uma das três hastes ou em movimento.<br><br>
+                <small>Disponível em: www.uime.usp.br. Acesso em: 28 abr. 2010 (adaptado).<br>Disponível em: www.realidadevirtual.com.br. Acesso em: 28 abr. 2010 (adaptado).</small><br><br>
+                Usando a torre de Hanói e baseando-se nas regras do jogo, podemos montar uma tabela entre o número de peças (X) e o número mínimo de movimentos (Y):<br><br>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #edf2f7; text-align: center;">
+                    <thead>
+                        <tr style="background-color: #f8fafc; border-bottom: 2px solid #2d3748;">
+                            <th style="padding: 8px;">NÚMERO DE PEÇAS</th>
+                            <th style="padding: 8px;">NÚMERO MÍNIMO DE MOVIMENTOS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">1</td>
+                            <td style="padding: 6px;">1</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">2</td>
+                            <td style="padding: 6px;">3</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">3</td>
+                            <td style="padding: 6px;">7</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">4</td>
+                            <td style="padding: 6px;">15</td>
+                        </tr>
+                    </tbody>
+                </table>
+                A relação entre (X) e (Y) é`,
+                o: [
+                    "Y = 2<sup>X</sup> - 1",
+                    "Y = 2<sup>X - 1</sup>",
+                    "Y = 2<sup>X</sup>",
+                    "Y = 2X - 1",
+                    "Y = 2X - 4"
+                ],
+                c: 0,
+                e: "Analisando os valores fornecidos na tabela:<br>• Para $X=1 \\implies Y = 2^1 - 1 = 1$<br>• Para $X=2 \\implies Y = 2^2 - 1 = 3$<br>• Para $X=3 \\implies Y = 2^3 - 1 = 7$<br>• Para $X=4 \\implies Y = 2^4 - 1 = 15$<br>A lei matemática correspondente que modela o comportamento padrão do jogo é $Y = 2^X - 1$."
+            },
+            {
+                t: `<strong>Questão 10 (ENEM)</strong><br><br>
+                O gerente de uma empresa aplicou R$ 2 000,00 em um fundo de investimento que rende juros compostos a uma taxa de 10% ao ano. Ele deseja acompanhar a evolução do seu montante ao longo do tempo. A expressão matemática que define o montante M(t), em reais, em função do tempo t, em anos, é`,
+                o: [
+                    "M(t) = 2 000 + 0,1t",
+                    "M(t) = 2 000 + 200t",
+                    "M(t) = 2 000 &middot; (0,1)<sup>t</sup>",
+                    "M(t) = 2 000 &middot; (1,1)<sup>t</sup>",
+                    "M(t) = 2 000 &middot; (10)<sup>t</sup>"
+                ],
+                c: 3,
+                e: "A fórmula matemática para o cálculo do montante sob regime de juros compostos é dada por M(t) = C &middot; (1 + i)<sup>t</sup>, onde C é o capital aplicado inicial e i representa a taxa de juros efetiva por período. Substituindo os dados (C = 2000 e i = 10% = 0,1), temos:<br>M(t) = 2000 &middot; (1 + 0,1)<sup>t</sup> = 2000 &middot; (1,1)<sup>t</sup>."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

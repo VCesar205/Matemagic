@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação Substitutiva - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 10</span>
+                        <span id="q-topic">Avaliação Substitutiva</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box" style="display: none;">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen" style="display: none;">
+                    <div class="finish-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Avaliação Substitutiva Concluída!</h2>
+                    <p class="finish-score">Seu desempenho foi registrado no sistema.</p>
+                    <a href="inicio.html" class="btn-action btn-back">Voltar ao Painel</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                topic: "Razão",
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                    O quadro apresenta o teor de cafeína em diferentes bebidas comumente consumidas pela população.<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px; text-align: left;">BEBIDA</th>
+                                <th style="padding: 10px; text-align: center;">VOLUME (ml)</th>
+                                <th style="padding: 10px; text-align: center;">QUANTIDADE MÉDIA DE CAFEÍNA (mg)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Café expresso</td><td style="padding: 10px; text-align: center;">80,0</td><td style="padding: 10px; text-align: center;">120</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Café filtrado</td><td style="padding: 10px; text-align: center;">50,0</td><td style="padding: 10px; text-align: center;">35</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Chá preto</td><td style="padding: 10px; text-align: center;">180,0</td><td style="padding: 10px; text-align: center;">45</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Refrigerante de cola</td><td style="padding: 10px; text-align: center;">250,0</td><td style="padding: 10px; text-align: center;">80</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Chocolate quente</td><td style="padding: 10px; text-align: center;">60,0</td><td style="padding: 10px; text-align: center;">25</td></tr>
+                        </tbody>
+                    </table>
+                    Da análise do quadro, conclui-se que o menor teor de cafeína por unidade de volume está presente no`, 
+                o: ["café expresso.", "café filtrado.", "chá preto.", "refrigerante de cola.", "chocolate quente."], 
+                c: 2, 
+                e: "Calculamos a razão de cafeína por volume (mg/ml) para cada bebida: Café expresso: 120/80 = 1,5 mg/ml; Café filtrado: 35/50 = 0,7 mg/ml; Chá preto: 45/180 = 0,25 mg/ml; Refrigerante de cola: 80/250 = 0,32 mg/ml; Chocolate quente: 25/60 ≈ 0,416 mg/ml. O menor valor está no chá preto." 
+            },
+            { 
+                topic: "Razão",
+                t: `<strong>Questão 2 (INÉDITA)</strong><br><br>
+                    Com o intuito de pintar o quarto de sua filha, Antônio contratou um pintor muito experiente. Ele queria obter um tom de rosa bem clarinho (rosa bebê) para pintar as paredes do quarto onde vai ficar sua filha que irá nascer. Para obter a cor desejada (rosa bebê), o pintor misturou tinta branca com rosa pink (rosa escuro), na razão de 8 partes da primeira para 5 partes da segunda. Usando 6 litros de tinta branca, quantos litros de rosa bebê ele obterá?`, 
+                o: ["3,8.", "6.", "9.", "9,5.", "9,75."], 
+                c: 4, 
+                e: "A proporção é de 8 partes de branca para 5 partes de pink, totalizando 13 partes de rosa bebê (8 + 5 = 13). Sabendo que 8 partes correspondem a 6 litros de tinta branca, determinamos o tamanho de cada parte: 6 / 8 = 0,75 litros por parte. O total da mistura será de 13 partes × 0,75 litros = 9,75 litros." 
+            },
+            { 
+                topic: "Razão",
+                t: `<strong>Questão 3 (INÉDITA)</strong><br><br>
+                    O capitão de uma embarcação sabe que a distância entre o porto que está ancorado e o próximo porto que deverá atracar é de 4 000 km. Ao construir a carta náutica verificou, com o uso de um instrumento de medida, que a distância entre os dois portos é de 4 cm. A carta náutica analisada está em uma escala de`, 
+                o: ["1 : 1 000.", "1 : 10 000.", "1 : 1 000 000.", "1 : 100 000 000.", "1 : 1 000 000 000."], 
+                c: 3, 
+                e: "A escala é a razão entre a medida no desenho (d) e a medida real (D), expressas na mesma unidade. d = 4 cm. D = 4.000 km = 400.000.000 cm. Escala = 4 / 400.000.000 = 1 : 100.000.000." 
+            },
+            { 
+                topic: "Proporção",
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                    Nos últimos cinco anos, 32 mil mulheres de 20 a 24 anos foram internadas nos hospitais do SUS por causa de AVC. Entre os homens da mesma faixa etária, houve 28 mil internações pelo mesmo motivo.<br>
+                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 15px;">ÉPOCA, 26 abr. 2010 (adaptado).</div>
+                    Suponha que, nos próximos cinco anos, haja um acréscimo de 8 mil internações de mulheres e que o acréscimo de internações de homens por AVC ocorra na mesma proporção.<br><br>
+                    De acordo com as informações dadas, o número de homens que seriam internados por AVC, nos próximos cinco anos, corresponderia a`, 
+                o: ["4 mil.", "9 mil.", "21 mil.", "35 mil.", "39 mil."], 
+                c: 3, 
+                e: "A razão do acréscimo feminino é de 8 mil sobre as 32 mil internações iniciais (8/32 = 1/4 ou 25%). Mantendo a mesma proporção para os homens, calculamos o acréscimo deles: 28 mil × 25% = 7 mil. Portanto, o total de homens internados nos próximos cinco anos será de 28 mil + 7 mil = 35 mil." 
+            },
+            { 
+                topic: "Proporção",
+                t: `<strong>Questão 5 (INÉDITA)</strong><br><br>
+                    Uma piscina tem a forma de um paralelepípedo retângulo de 10 m de largura, 15 m de comprimento e 2 m de profundidade. Para tratar a água dessa piscina, é preciso adicionar 1 kg de certo produto químico a cada 2 500 litros de água. Estando ela completamente cheia de água, e sabendo-se que 1 m³ equivale a 1 000 litros, a quantidade em quilos do produto químico que deverá ser usada para o tratamento é`, 
+                o: ["12 kg.", "60 kg.", "120 kg.", "600 kg.", "1.200 kg."], 
+                c: 2, 
+                e: "Primeiro calculamos o volume da piscina: 10m × 15m × 2m = 300 m³. Convertendo para litros: 300 × 1000 = 300.000 litros. Sabendo que é usado 1 kg a cada 2.500 litros: 300.000 / 2.500 = 120 kg do produto." 
+            },
+            { 
+                topic: "Proporção",
+                t: `<strong>Questão 6 (ENEM/PPL)</strong><br><br>
+                    Médicos alertam sobre a importância de educar as crianças para terem hábitos alimentares saudáveis. Por exemplo, analisando-se uma bolacha com recheio de chocolate (25 g) e um pé de alface (25 g), observam-se as seguintes quantidades de nutrientes, respectivamente:<br>
+                    • carboidratos: 15 g e 0,5 g;<br>
+                    • proteínas: 1,9 g e 0,5 g.<br>
+                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 15px;">Disponível em: veja.abril.com.br. Acesso em: 27 abr. 2010 (adaptado).</div>
+                    Considerando as informações apresentadas, qual deve ser o número de pés de alface consumidos para se obter a mesma quantidade de carboidratos de uma bolacha?`, 
+                o: ["50.", "30.", "14.", "8.", "7."], 
+                c: 1, 
+                e: "Uma bolacha possui 15 g de carboidratos e um pé de alface possui 0,5 g. Para encontrar a quantidade necessária de alface dividimos a quantidade da bolacha pela do alface: 15 / 0,5 = 30 pés de alface." 
+            },
+            { 
+                topic: "Grandezas",
+                t: `<strong>Questão 7 (ENEM)</strong><br><br>
+                    A resistência mecânica S de uma viga de madeira, em forma de um paralelepípedo retângulo, é diretamente proporcional à sua largura (b) e ao quadrado de sua altura (d) e inversamente proporcional ao quadrado da distância entre os suportes da viga, que coincide com o seu comprimento (x), conforme ilustra a figura. A constante de proporcionalidade k é chamada de resistência da viga.<br><br>
+                    <img src="imagens avs/madeira.jpeg" alt="Dimensões da viga" class="img-center"><br>
+                    A expressão que traduz a resistência S dessa viga de madeira é`, 
+                o: [
+                    `<div class="frac"><span class="nominator">k • b • d<sup>2</sup></span><span>x<sup>2</sup></span></div>`,
+                    `<div class="frac"><span class="nominator">k • b • d</span><span>x<sup>2</sup></span></div>`,
+                    `<div class="frac"><span class="nominator">k • b • d<sup>2</sup></span><span>x</span></div>`,
+                    `<div class="frac"><span class="nominator">k • b<sup>2</sup> • d</span><span>x<sup>2</sup></span></div>`,
+                    `<div class="frac"><span class="nominator">k • b • 2d</span><span>2x</span></div>`
+                ], 
+                c: 0, 
+                e: "As grandezas diretamente proporcionais (b e d<sup>2</sup>) multiplicam a constante k no numerador. A grandeza inversamente proporcional (x<sup>2</sup>) vai para o denominador. Portanto: S = (k • b • d<sup>2</sup>) / x<sup>2</sup>." 
+            },
+            { 
+                topic: "Grandezas",
+                t: `<strong>Questão 8 (ENEM)</strong><br><br>
+                    Pedro ganhou R$ 360 000,00 em uma loteria federal e resolveu dividir integralmente o prêmio entre os seus três filhos, Ana, Renato e Carlos, de forma que cada um receba uma quantia que seja inversamente proporcional às suas idades. Sabendo que Ana tem 4 anos, Renato, 5 anos e Carlos, 20 anos, eles receberão, respectivamente:`, 
+                o: [
+                    "R$ 54 000,00; R$ 216 000,00 e R$ 90 000,00.",
+                    "R$ 90 000,00; R$ 54 000,00 e R$ 216 000,00.",
+                    "R$ 216 000,00; R$ 90 000,00 e R$ 54 000,00.",
+                    "R$ 180 000,00; R$ 144 000,00 e R$ 36 000,00.",
+                    "R$ 180 000,00; R$ 120 000,00 e R$ 60 000,00."
+                ], 
+                c: 3, 
+                e: "Sendo inversa, a soma das frações das idades multiplicada por uma constante x é igual ao prêmio: x/4 + x/5 + x/20 = 360.000. O MMC é 20, transformando a equação em 5x/20 + 4x/20 + 1x/20 = 360.000 -> 10x/20 = 360.000 -> 0,5x = 360.000 -> x = 720.000. Agora dividimos pelas idades: Ana = 720.000/4 = R$ 180.000; Renato = 720.000/5 = R$ 144.000; Carlos = 720.000/20 = R$ 36.000." 
+            },
+            { 
+                topic: "Regra de Três",
+                t: `<strong>Questão 9 (INÉDITA)</strong><br><br>
+                    Em uma bicicleta elétrica, a autonomia total da bateria carregada por oito horas é de 56 quilômetros de deslocamento em média. A bateria é similar às dos celulares: descarrega de forma linear. Alexandro recarregou por apenas 2 horas a bateria da sua bicicleta que estava totalmente descarregada, e pretende ir à escola que fica a 7,5 quilômetros da sua casa, e voltar.<br><br>
+                    A distância, em quilômetros, que Alexandro terá que caminhar após descarregar por completo a bateria de sua bicicleta é de`, 
+                o: ["1.", "1,5.", "2.", "2,5.", "3."], 
+                c: 0, 
+                e: "Com 8 horas de carga, a autonomia é de 56 km. Como o carregamento é linear, com 2 horas de carga (1/4 do tempo total) ele terá 56 / 4 = 14 km de autonomia. <br>O trajeto total de ida e volta para a escola é de 7,5 + 7,5 = 15 km. <br>Portanto, faltará cobrir a pé uma distância de 15 - 14 = 1 km." 
+            },
+            { 
+                topic: "Regra de Três",
+                t: `<strong>Questão 10 (INÉDITA)</strong><br><br>
+                    Numa empresa de grande porte, sabe-se que 5 máquinas, todas de igual eficiência, são capazes de produzir 500 peças de um determinado produto em 5 dias, se operarem durante 5 horas por dia. Olhando agora essa situação, em que 10 máquinas iguais às primeiras operassem 10 horas por dia, durante 10 dias, conclui-se que o número de peças produzidas seria igual a`, 
+                o: ["2 000.", "3 500.", "4 000.", "6 000.", "8 000."], 
+                c: 4, 
+                e: "Utilizando a regra de três composta:<br>Máquinas, Dias e Horas/dia são diretamente proporcionais ao número de Peças.<br>(5/10) × (5/10) × (5/10) = 500/x &rArr; 125/1000 = 500/x &rArr; 1/8 = 500/x &rArr; x = 4 000 peças." 
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

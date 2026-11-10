@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado 2 - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 8</span>
+                        <span id="topic-title">Simulado 2</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box" style="display: none;">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen" style="display: none;">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu o segundo simulado com sucesso!</p>
+                    <a href="painel1.html" class="btn-action btn-back">Voltar ao Painel</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                Os congestionamentos de trânsito constituem um problema que aflige, todos os dias, milhares de motoristas brasileiros. O gráfico ilustra a situação, representando, ao longo de um intervalo definido de tempo, a variação da velocidade de um veículo durante um congestionamento.<br><br>
+                <img src="imagens avs/grafico velocidade.jpeg" alt="Gráfico de velocidade por tempo" class="img-center"><br>
+                Quantos minutos o veículo permaneceu imóvel ao longo do intervalo de tempo total analisado?`,
+                o: [
+                    "4.",
+                    "3.",
+                    "2.",
+                    "1.",
+                    "0."
+                ],
+                c: 2,
+                e: "Para que o veículo fique imóvel, sua velocidade deve ser igual a zero. No gráfico, a velocidade é representada no eixo vertical (y). O veículo estará imóvel nos intervalos onde a linha do gráfico toca o eixo horizontal (tempo), indicando V = 0. Isso ocorre no intervalo de 6 a 8 minutos, totalizando 2 minutos de imobilidade."
+            },
+            {
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                O gráfico abaixo, obtido a partir de dados do Ministério do Meio Ambiente, mostra o crescimento do número de espécies da fauna brasileira ameaçadas de extinção.<br><br>
+                <img src="imagens avs/especies extincao.jpeg" alt="Gráfico do crescimento de espécies ameaçadas" class="img-center"><br>
+                Se mantida, pelos próximos anos, a tendência de crescimento mostrada no gráfico, o número de espécies ameaçadas de extinção em 2011 será igual a`,
+                o: [
+                    "465.",
+                    "493.",
+                    "498.",
+                    "538.",
+                    "699."
+                ],
+                c: 2,
+                e: "O gráfico aponta um crescimento linear em um período de 24 anos (de 1983 a 2007). O aumento de espécies foi de 461 - 239 = 222 espécies.<br>A taxa de crescimento anual é de 222 / 24 = 9,25 espécies por ano.<br>De 2007 para 2011 decorrem 4 anos. O incremento será de 4 &times; 9,25 = 37 espécies.<br>Portanto, o total em 2011 será de 461 + 37 = 498 espécies."
+            },
+            {
+                t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                O saldo de contratações no mercado formal no setor varejista da região metropolitana de São Paulo registrou alta. Comparando as contratações deste setor no mês de fevereiro com as de janeiro deste ano, houve incremento de 4 300 vagas no setor, totalizando 880 605 trabalhadores com carteira assinada.<br><br>
+                <small style="color: #718096;">Disponível em: www.folha.uol.com.br. Acesso em: 26 abr. 2010 (adaptado).</small><br><br>
+                Suponha que o incremento de trabalhadores no setor varejista seja sempre o mesmo nos seis primeiros meses do ano. Considerando-se que y e x representam, respectivamente, as quantidades de trabalhadores no setor varejista e os meses, janeiro sendo o primeiro, fevereiro, o segundo, e assim por diante, a expressão algébrica que relaciona essas quantidades nesses meses é`,
+                o: [
+                    "y = 4 300x.",
+                    "y = 884 905x.",
+                    "y = 872 005 + 4 300x.",
+                    "y = 876 305 + 4 300x.",
+                    "y = 880 605 + 4 300x."
+                ],
+                c: 3,
+                e: "Temos que no mês x = 2 (fevereiro), o total y é de 880 605. O problema indica que houve um incremento de 4 300 vagas em relação ao mês x = 1 (janeiro). Assim, o valor inicial constante ou coeficiente linear correspondente ao 'mês zero' (b) seria:<br>b = 880 605 - (2 * 4 300) = 880 605 - 8 600 = 876 305.<br>Montando a lei da função afim y = ax + b, temos: y = 876 305 + 4 300x."
+            },
+            {
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                A temperatura T de um forno (em graus centígrados) é reduzida por um sistema a partir do instante de seu desligamento (t=0) e varia de acordo com a expressão T(t) = -<div class="frac"><span>t²</span><span class="nominator"></span><span>4</span></div> + 400, com t em minutos. Por motivos de segurança, a trava do forno só é liberada para abertura quando o forno atinge a temperatura de 39 °C.<br><br>
+                Qual o tempo mínimo de espera, em minutos, após desligar o forno, para que a porta possa ser aberta?`,
+                o: [
+                    "19,0.",
+                    "19,8.",
+                    "20,0.",
+                    "38,0.",
+                    "39,0."
+                ],
+                c: 3,
+                e: "Basta igualar a função T(t) a 39 °C:<br>39 = -t²/4 + 400 &rArr; t²/4 = 400 - 39 &rArr; t²/4 = 361<br>t² = 361 * 4 &rArr; t² = 1444 &rArr; t = &radic;1444 = 38 minutos."
+            },
+            {
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                Atualmente existem diversas locadoras de veículos, permitindo uma concorrência saudável para o mercado, fazendo com que os preços se tornem acessíveis. Nas locadoras P e Q, o valor da diária de seus carros depende da distância percorrida, conforme o gráfico.<br><br>
+                <img src="imagens avs/locadora.jpeg" alt="Gráfico de custos das locadoras P e Q" class="img-center"><br>
+                O valor pago na locadora Q é menor ou igual àquele pago na locadora P para distâncias, em quilômetros, presentes em qual(is) intervalo(s)?`,
+                o: [
+                    "De 20 a 100.",
+                    "De 80 a 130.",
+                    "De 100 a 160.",
+                    "De 0 a 20 e de 100 a 160.",
+                    "De 40 a 80 e de 130 a 160."
+                ],
+                c: 3,
+                e: "No gráfico, a linha da locadora Q está abaixo ou intercepta a linha da locadora P nos intervalos de 0 a 20 km e também de 100 a 160 km. Nesses trechos específicos, o valor cobrado por Q é mais vantajoso (menor ou igual ao de P)."
+            },
+            {
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                Ao abrir um negócio, um microempresário descreveu suas vendas, em milhares de reais (unidade monetária brasileira), durante os dois primeiros anos. No primeiro ano, suas vendas cresceram de modo linear. Posteriormente, ele decidiu investir em propaganda, o que fez suas vendas crescerem de modo exponencial.<br><br>
+                Qual é o gráfico que melhor descreve as vendas em função do tempo?`,
+                o: [
+                    "<img src='imagens avs/grafico_2a.jpeg' alt='Alternativa A' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens avs/grafico_2b.jpeg' alt='Alternativa B' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens avs/grafico_2c.jpeg' alt='Alternativa C' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens avs/grafico_2d.jpeg' alt='Alternativa D' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens avs/grafico_2e.jpeg' alt='Alternativa E' style='max-height: 100px; display: inline-block; vertical-align: middle;'>"
+                ],
+                c: 3,
+                e: "O comportamento das vendas é dividido em duas partes distintas:<br>1. No primeiro ano ($0 \\le t \\le 1$), o crescimento é linear, representado graficamente por um segmento de <strong>linha reta inclinada</strong>.<br>2. No segundo ano ($1 < t \\le 2$), o crescimento torna-se exponencial, representado por uma <strong>curva com concavidade voltada para cima</strong> que cresce de forma acelerada. O gráfico D representa perfeitamente essa transição."
+            },
+            {
+                t: `<strong>Questão 7 (UNIFG)</strong><br><br>
+                <img src="imagens avs/bacteria.jpeg" alt="Microscopia de Escherichia coli" class="img-center"><br>
+                Um pequeno número da bactéria <em>E.Coli</em>, no intestino grosso de uma pessoa, pode desencadear uma séria infecção em poucas horas, pois cada uma delas se reproduz exponencialmente, dividindo-se em duas, a cada meia hora.<br><br>
+                Admitindo-se que uma infecção se inicie com 100 dessas bactérias e que nenhuma bactéria morre em um intervalo de k horas, então o tamanho da população de <em>E. Coli</em> t horas pós o início da infecção, 0 &le; t &le; k, pode ser determinado através da expressão matemática`,
+                o: [
+                    "P(t) = 100<sup>2t</sup>",
+                    "P(t) = 100 + 2<sup>t</sup>",
+                    "P(t) = 100 + 2<sup>2t</sup>",
+                    "P(t) = 100 · 2<sup>t</sup>",
+                    "P(t) = 100 · 2<sup>2t</sup>"
+                ],
+                c: 4,
+                e: "• A população inicial $P_0$ é igual a 100.<br>• As bactérias se duplicam (fator de crescimento = 2) a cada meia hora. Isso significa que em 1 hora, ocorrem exatamente dois ciclos de duplicação.<br>• Portanto, em $t$ horas, ocorrerão $2t$ ciclos de divisão celular.<br>A expressão final que modela o crescimento populacional é $P(t) = 100 \\cdot 2^{2t}$."
+            },
+            {
+                t: `<strong>Questão 8 (ENEM)</strong><br><br>
+                O acréscimo de tecnologias no sistema produtivo industrial tem por objetivo reduzir custos e aumentar a produtividade. No primeiro ano de funcionamento, uma indústria fabricou 8 000 unidades de um determinado produto. No ano seguinte, investiu em tecnologia adquirindo novas máquinas e aumentou a produção em 50%. Estima-se que esse aumento percentual se repita nos próximos anos, garantindo um crescimento anual de 50%. Considere P a quantidade anual de produtos fabricados no ano t de funcionamento da indústria.<br>
+                Se a estimativa for alcançada, qual é a expressão que determina o número de unidades produzidas P em função de t para t &le; 1?`,
+                o: [
+                    "P(t) = 0,5 · t<sup>-1</sup> + 8 000",
+                    "P(t) = 50 · t<sup>-1</sup> + 8 000",
+                    "P(t) = 4 000 · t<sup>-1</sup> + 8 000",
+                    "P(t) = 8 000 · (0,5)<sup>t-1</sup>",
+                    "P(t) = 8 000 · (1,5)<sup>t-1</sup>"
+                ],
+                c: 4,
+                e: "Este cenário configura-se matematicamente como uma progressão geométrica (PG) ou crescimento exponencial:<br>• Ano $t=1$: $P(1) = 8000$<br>• Ano $t=2$: $P(2) = 8000 \\cdot (1 + 0,5) = 8000 \\cdot (1,5)$<br>• Ano $t=3$: $P(3) = 8000 \\cdot (1,5)^2$<br>Generalizando para o ano $t$, o fator multiplicador acumulado terá expoente $(t-1)$, resultando na função $P(t) = 8000 \\cdot (1,5)^{t-1}$."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

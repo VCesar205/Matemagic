@@ -1,0 +1,259 @@
+        /* --- ESTILOS PADRONIZADOS MATEMAGIC --- */
+        * { 
+          margin: 0; 
+          padding: 0; 
+          box-sizing: border-box; 
+          font-family: 'Segoe UI', sans-serif; 
+        }
+        
+        body { 
+          background-color: #f8fafc; 
+          color: #333; 
+          display: flex; 
+          min-height: 100vh;
+        }
+        
+        .sidebar { 
+          width: 70px; 
+          background: #fff; 
+          border-right: 1px solid #e5e7eb; 
+          position: fixed; 
+          height: 100vh; 
+          display: flex; 
+          flex-direction: column; 
+          align-items: center; 
+          padding: 20px 0; 
+          z-index: 100;
+        }
+        
+        .nav-item { 
+          color: #666; 
+          font-size: 22px; 
+          padding: 12px; 
+          border-radius: 12px; 
+          transition: 0.2s; 
+          text-decoration: none; 
+          display: flex; 
+          justify-content: center; 
+          margin-bottom: 20px; 
+        }
+        
+        .nav-item:hover { 
+          background-color: #ecffeb; 
+          color: #03ad3c; 
+        }
+
+        .main-wrapper { 
+          flex-grow: 1; 
+          margin-left: 70px;
+        }
+        
+        .top-header { 
+          background: #fff; 
+          height: 80px; 
+          display: flex; 
+          align-items: center; 
+          padding: 0 40px; 
+          border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .logo { 
+          font-size: 24px; 
+          font-weight: bold; 
+          color: #03ad3c; 
+          text-decoration: none;
+        }
+
+        .content-area { 
+          padding: 40px; 
+          max-width: 850px; 
+          margin: 0 auto;
+        }
+        
+        .question-card { 
+          background: white; 
+          border-radius: 20px; 
+          padding: 40px; 
+          border: 1px solid #edf2f7; 
+          box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); 
+          position: relative; 
+        }
+        
+        .q-header { 
+          display: flex; 
+          justify-content: space-between; 
+          margin-bottom: 25px; 
+          color: #718096; 
+          font-size: 0.9rem; 
+          border-bottom: 1px solid #f0f0f0; 
+          padding-bottom: 15px;
+        }
+        
+        .q-text { 
+          font-size: 1.2rem; 
+          color: #2d3748; 
+          margin-bottom: 30px; 
+          line-height: 1.6;
+        }
+
+        .options-list { 
+          display: flex; 
+          flex-direction: column; 
+          gap: 12px;
+        }
+        
+        .option-item { 
+          display: flex; 
+          align-items: center; 
+          gap: 15px; 
+          padding: 15px; 
+          border: 2px solid #e2e8f0; 
+          border-radius: 12px; 
+          cursor: pointer; 
+          transition: 0.2s;
+        }
+        
+        .option-item:hover:not(.disabled) { 
+          background: #ecffeb; 
+          border-color: #c39eff; 
+        }
+        
+        .option-item.selected { 
+          border-color: #03ad3c; 
+          background: #ecffeb;
+        }
+        
+        .option-item.disabled { 
+          cursor: default; 
+          opacity: 0.8;
+        }
+        
+        .option-letter { 
+          width: 35px; 
+          height: 35px; 
+          border: 2px solid #e2e8f0; 
+          border-radius: 50%; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center;
+          font-weight: bold; 
+          color: #718096; 
+        }
+        
+        .option-item.selected .option-letter { 
+          background: #03ad3c; 
+          color: white; 
+          border-color: #03ad3c; 
+        }
+        
+        input[type="radio"] { display: none; }
+
+        .btn-action { 
+          background: #03ad3c; 
+          color: white; 
+          border: none; 
+          padding: 15px 30px; 
+          border-radius: 50px; 
+          font-weight: bold; 
+          cursor: pointer; 
+          transition: 0.3s; 
+          margin-top: 25px; 
+          width: 100%; 
+          font-size: 1rem; 
+          text-decoration: none; 
+          display: inline-block; 
+          text-align: center;
+        }
+        
+        .btn-action:hover { 
+          background: #5900ff; 
+          transform: translateY(-2px);
+        }
+        
+        .btn-next { 
+          background: #2d3748; 
+          margin-top: 15px;
+        }
+        
+        .btn-back { 
+          background: #03ad3c; 
+          width: auto; 
+          padding: 12px 40px; 
+          margin-top: 20px;
+        }
+
+        .feedback-box { 
+          margin-top: 20px; 
+          padding: 20px; 
+          border-radius: 12px; 
+          display: none; 
+          animation: slideIn 0.3s ease-out; 
+        }
+        
+        @keyframes slideIn { from { 
+          opacity: 0; 
+          transform: translateY(10px); 
+        } to { 
+          opacity: 1; 
+          transform: translateY(0); 
+        } }
+
+        #finish-screen { 
+          text-align: center; 
+          display: none; 
+          padding: 20px; 
+        }
+        
+        .finish-icon {
+          font-size: 4rem; 
+          color: #8F00FF; 
+          margin-bottom: 10px; 
+        }
+        
+        .finish-title { 
+          font-size: 2rem; 
+          color: #2d3748; 
+          margin-bottom: 10px;
+        }
+        
+        .points-badge { 
+          background: #f6f5f7; 
+          color: #03ad3c; 
+          padding: 10px 25px; 
+          border-radius: 50px; 
+          display: inline-block; 
+          font-weight: bold; 
+          font-size: 1.5rem; 
+          margin-bottom: 20px; 
+          border: 2px solid #03ad3c; 
+        }
+        
+        .finish-score { 
+          font-size: 1.1rem; 
+          color: #718096;
+          margin-bottom: 25px; 
+        }
+
+	.img-center {
+    	display: block;
+    	margin-left: auto;
+    	margin-right: auto;
+    	max-width: 100%; /* Garante que a imagem não ultrapasse a largura da tela */
+    	height: auto;
+    	padding: 20px 0; /* Adiciona um espaço opcional em cima e embaixo */
+	}
+
+        /* Estilos auxiliares para equações e frações inline sem quebrar o layout */
+        .frac {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            padding: 0 2px;
+        }
+        .frac > span {
+            display: block;
+            padding: 0 2px;
+        }
+        .frac span.nominator {
+            border-bottom: 1px solid #2d3748;
+        }

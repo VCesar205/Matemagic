@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 10</span>
+                        <span>Avaliação</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu a sua avaliação de 10 questões.</p>
+                    <a href="inicio.html" class="btn-action btn-back">Voltar ao Início</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Banco de dados completo extraído dos arquivos exercicios11, 12, 13 e 14 originais
+        const questions = [
+            // Do arquivo exercicios11.html
+            { 
+                t: `<strong>Questão 1 (ENEM/PPL ADAPTADA)</strong><br><br>
+                    O Ministério da Saúde acompanha com preocupação a difusão da tuberculose no Brasil. Um sistema de vigilância baseia-se no acompanhamento sistemático das taxas de incidência dessa doença nos estados. Depois de credenciar alguns estados a receberem recursos, em 2006, passou a ser de grande importância definir prioridades para a alocação de recursos de combate e de prevenção, levando em consideração as taxas de incidência nos anos de 2000 e 2004, conforme o quadro seguinte.<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px; text-align: left;">ESTADO</th>
+                                <th style="padding: 10px; text-align: center;">TAXA DE INCIDÊNCIA 2000</th>
+                                <th style="padding: 10px; text-align: center;">TAXA DE INCIDÊNCIA 2004</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Amapá</td><td style="padding: 10px; text-align: center;">9,0</td><td style="padding: 10px; text-align: center;">37,1</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Amazonas</td><td style="padding: 10px; text-align: center;">72,8</td><td style="padding: 10px; text-align: center;">69,0</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Goiás</td><td style="padding: 10px; text-align: center;">20,5</td><td style="padding: 10px; text-align: center;">16,7</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Minas Gerais</td><td style="padding: 10px; text-align: center;">0,3</td><td style="padding: 10px; text-align: center;">27,2</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Pernambuco</td><td style="padding: 10px; text-align: center;">43,3</td><td style="padding: 10px; text-align: center;">51,0</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Rio de Janeiro</td><td style="padding: 10px; text-align: center;">90,7</td><td style="padding: 10px; text-align: center;">79,7</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">São Paulo</td><td style="padding: 10px; text-align: center;">45,8</td><td style="padding: 10px; text-align: center;">38,2</td></tr>
+                        </tbody>
+                    </table>
+                    <div style="font-size: 0.8rem; color: #718096; text-align: right; margin-bottom: 15px;">Disponível em: SINAM, 2006; IBGE, Censo 2000.</div>
+                    Se a prioridade na distribuição de recursos for dada ao estado que tiver maior aumento absoluto em suas taxas de incidência, ela será dada para`, 
+                o: ["Amapá.", "Amazonas.", "Minas Gerais.", "Pernambuco.", "Rio de Janeiro."], 
+                c: 0, 
+                e: "Calculando a variação absoluta (subtração direta): Amapá aumentou 28,1 (37,1 - 9,0); Minas Gerais aumentou 26,9 (27,2 - 0,3); Pernambuco aumentou 7,7. O maior aumento absoluto foi o do Amapá." 
+            },
+            { 
+                t: `<strong>Questão 2 (ENEM/PPL ADAPTADA)</strong><br><br>
+                    Camile gosta de caminhar em uma calçada em torno de uma praça circular que possui 500 metros de extensão, localizada perto de casa. A praça, bem como alguns locais ao seu redor e o ponto de onde inicia a caminhada, estão representados na figura:<br>
+                    <img src="Screenshot_20260524-023953.jpg" alt="Esquema da Praça Circular" class="img-center"><br>
+                    Em uma tarde, Camile caminhou 4 125 metros, no sentido anti-horário, e parou. Qual dos locais indicados na figura é o mais próximo de sua parada?`, 
+                o: ["Centro cultural.", "Drogaria.", "Lan house.", "Ponto de partida.", "Padaria."], 
+                c: 4, 
+                e: "Dividindo a distância total pela extensão da pista: 4125 / 500 = 8 voltas completas e sobra um resto de 125 metros. Como a pista tem 500m, 125m equivale exatamente a 1/4 de volta (ou 2/8). Caminhando no sentido anti-horário, 1/4 de volta a deixa exatamente em frente à Padaria." 
+            },
+            // Do arquivo exercicios12.html
+            { 
+                t: `<strong>Questão 3 (INÉDITA)</strong><br><br>
+                    Estamos vivendo em um período em que a água está ficando escassa no planeta. De acordo com a Organização das Nações Unidas (ONU), cada pessoa deve consumir, diariamente, 50 litros de água para suprir suas necessidades diárias. Nesse sentido, João consome, em média, por dia, 57 litros de água. Mensalmente, ele ultrapassa a orientação da ONU em`, 
+                o: ["7 litros.", "107 litros.", "210 litros.", "1 500 litros.", "1 710 litros."], 
+                c: 2, 
+                e: "João consome 7 litros a mais por dia do que o recomendado (57 - 50 = 7). Considerando um mês comercial padrão de 30 dias: 7 litros/dia x 30 dias = 210 litros no mês." 
+            },
+            // Do arquivo exercicios13.html
+            { 
+                t: `<strong>Questão 4 (ENEM/PPL)</strong><br><br>
+                    Uma loja decide premiar seus clientes. Cada cliente receberá um dos seis possíveis brindes disponíveis, conforme sua ordem de chegada na loja. Os brindes a serem distribuídos são: uma bola, um chaveiro, uma caneta, um refrigerante, um sorvete e um CD, nessa ordem. O primeiro cliente da loja recebe uma bola, o segundo recebe um chaveiro, o terceiro recebe uma caneta, o quarto recebe um refrigerante, o quinto recebe um sorvete, o sexto recebe um CD, o sétimo recebe uma bola, o oitavo recebe um chaveiro, e assim sucessivamente, segundo a ordem dos brindes.<br>
+                    O milésimo cliente receberá de brinde um(a):`, 
+                o: ["Bola.", "Caneta.", "Refrigerante.", "Sorvete.", "CD."], 
+                c: 2, 
+                e: "Como são 6 brindes que se repetem ciclicamente, dividimos 1000 por 6. O quociente é 166 (voltas completas no ciclo) e o resto é 4. O quarto brinde da sequência é o refrigerante (1º bola, 2º chaveiro, 3º caneta, 4º refrigerante)." 
+            },
+            { 
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                    O gerente de um cinema fornece anualmente ingressos gratuitos para escolas. Este ano, serão distribuídos 400 ingressos para uma sessão vespertina e 320 ingressos para uma sessão noturna de um mesmo filme. Várias escolas podem ser escolhidas para receberem ingressos. Há alguns critérios para a distribuição dos ingressos:<br><br>
+                    <ul>
+                        <li>cada escola deverá receber ingressos para uma única sessão;</li>
+                        <li>todas as escolas contempladas deverão receber o mesmo número de ingressos;</li>
+                        <li>não haverá sobra de ingressos (ou seja, todos os ingressos serão distribuídos).</li>
+                    </ul><br>
+                    O número mínimo de escolas que podem ser escolhidas para obter ingressos, segundo os critérios estabelecidos, é`, 
+                o: ["2.", "4.", "9.", "40.", "80."], 
+                c: 2, 
+                e: "Para minimizar o número de escolas, devemos maximizar o número de ingressos por escola usando o MDC(400, 320) = 80. O número total de escolas será (400 / 80) + (320 / 80) = 5 + 4 = 9 escolas." 
+            },
+            { 
+                t: `<strong>Questão 6 (UFSM ADAPTADA)</strong><br><br>
+                    Estudos e simulações são necessários para melhorar o trânsito. Por exemplo: imagine que, de um terminal rodoviário, partam os ônibus de três empresas, A, B e C. Os ônibus da empresa A partem a cada 15 minutos; da empresa B, a cada 20 minutes; da empresa C, a cada 25 minutos.<br>
+                    Às 7 h, partem simultaneamente 3 ônibus, um de cada empresa. A próxima partida simultânea dos ônibus das 3 empresas será às`, 
+                o: ["9 h.", "9 h 50min.", "10 h 30min.", "11 h.", "12 h."], 
+                c: 4, 
+                e: "Devemos calcular o MMC de 15, 20 e 25 para descobrir após quantos minutos eles partirão juntos novamente. MMC(15, 20, 25) = 300 minutos. Convertendo para horas: 300 / 60 = 5 horas. Partindo das 7 h, a próxima partida será às 7 + 5 = 12 h." 
+            },
+            { 
+                t: `<strong>Questão 7 (ENEM)</strong><br><br>
+                    Nosso calendário atual é embasado no antigo calendário romano, que, por sua vez, tinha como base as fases da lua. Os meses de janeiro, março, maio, julho, agosto, outubro e dezembro possuem 31 dias, e os demais, com exceção de fevereiro, possuem 30 dias. O dia 31 de março de certo ano ocorreu em uma terça-feira.<br>
+                    Nesse mesmo ano, qual dia da semana será o dia 12 de outubro?`, 
+                o: ["Domingo.", "Segunda-feira.", "Terça-feira.", "Quinta-feira.", "Sexta-feira."], 
+                c: 1, 
+                e: "Contamos os dias de 31 de março até 12 de outubro: Abril (30), Maio (31), Junho (30), Julho (31), Agosto (31), Setembro (30) e 12 dias de Outubro. Total = 30+31+30+31+31+30+12 = 195 dias. Dividindo 195 por 7, temos resto 6. Avançando 6 dias a partir de terça-feira (ou voltando 1 dia), chegamos a uma segunda-feira." 
+            },
+            // Do arquivo exercicios14.html
+            { 
+                t: `<strong>Questão 8 (PUC-RS)</strong><br><br>
+                    Pitágoras estabeleceu a seguinte relação entre as sete notas musicais e os números racionais:<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem; text-align: center;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px;">Dó</th>
+                                <th style="padding: 10px;">Ré</th>
+                                <th style="padding: 10px;">Mi</th>
+                                <th style="padding: 10px;">Fá</th>
+                                <th style="padding: 10px;">Sol</th>
+                                <th style="padding: 10px;">Lá</th>
+                                <th style="padding: 10px;">Si</th>
+                                <th style="padding: 10px;">Dó</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7; background: #fff;">
+                                <td style="padding: 10px;">1</td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">8</span><span>9</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">64</span><span>81</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">3</span><span>4</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">2</span><span>3</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">16</span><span>27</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">128</span><span>243</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">1</span><span>2</span></div></td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    Para encontrar o número <div class="frac"><span class="nominator">16</span><span>27</span></div> (relativo à nota Lá), multiplica-se <div class="frac"><span class="nominator">2</span><span>3</span></div> (o correspondente à nota Sol) por <div class="frac"><span class="nominator">8</span><span>9</span></div>. Assim, para obter <div class="frac"><span class="nominator">3</span><span>4</span></div> (relativo à nota Fá), deve-se multiplicar <div class="frac"><span class="nominator">64</span><span>81</span></div> (da nota Mi) por`, 
+                o: [
+                    `<div class="frac"><span class="nominator">8</span><span>9</span></div>`, 
+                    `<div class="frac"><span class="nominator">9</span><span>8</span></div>`, 
+                    `<div class="frac"><span class="nominator">243</span><span>256</span></div>`, 
+                    `<div class="frac"><span class="nominator">256</span><span>243</span></div>`, 
+                    `<div class="frac"><span class="nominator">192</span><span>324</span></div>`
+                ], 
+                c: 2, 
+                e: "Para descobrir o fator multiplicador, basta efetuar a operação inversa (divisão): (3/4) ÷ (64/81) = (3/4) * (81/64) = 243/256." 
+            },
+            { 
+                t: `<strong>Questão 9 (UFRJ ADAPTADA)</strong><br><br>
+                    Numa escola foi feito um levantamento para saber quais os tipos de calçados mais usados pelas crianças. Foi obtido o seguinte resultado: um terço usa sandálias; um quarto usa tênis; um quinto usa sapatos, e os 52 restantes usam outros tipos de calçados. Conclui-se que, pelos tipos de calçados encontrados, há nessa escola um total de`, 
+                o: ["280 crianças.", "270 crianças.", "260 crianças.", "250 crianças.", "240 crianças."], 
+                c: 4, 
+                e: "Somando as frações conhecidas: 1/3 + 1/4 + 1/5 = 20/60 + 15/60 + 12/60 = 47/60. A fração restante para completar o todo é de 13/60, que corresponde às 52 crianças restantes. Se 13/60 = 52, então 1/60 = 4. Portanto, o total é 60 * 4 = 240 crianças." 
+            },
+            { 
+                t: `<strong>Questão 10 (UFSP)</strong><br><br>
+                    Um confeiteiro vende bolos de mesmo tamanho e cortados em fatias iguais. Certo dia, ele colocou três bolos à venda em fatias. Venderam-se <div class="frac"><span class="nominator">3</span><span>4</span></div> de um bolo de chocolate, <div class="frac"><span class="nominator">2</span><span>3</span></div> de um bolo de creme e <div class="frac"><span class="nominator">5</span><span>6</span></div> de um bolo de nozes. A fração correspondente ao que sobrou dos bolos é`, 
+                o: [
+                    `<div class="frac"><span class="nominator">1</span><span>2</span></div>`, 
+                    `<div class="frac"><span class="nominator">1</span><span>4</span></div>`, 
+                    `<div class="frac"><span class="nominator">3</span><span>4</span></div>`, 
+                    `<div class="frac"><span class="nominator">5</span><span>6</span></div>`, 
+                    `<div class="frac"><span class="nominator">3</span><span>8</span></div>`
+                ], 
+                c: 2, 
+                e: "Calculamos o que sobrou de cada bolo individualmente: Chocolate sobrou 1/4 (1 - 3/4); Creme sobrou 1/3 (1 - 2/3); Nozes sobrou 1/6 (1 - 5/6). Somando as sobras: 1/4 + 1/3 + 1/6 = 3/12 + 4/12 + 2/12 = 9/12. Simplificando a fração por 3, obtemos 3/4." 
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

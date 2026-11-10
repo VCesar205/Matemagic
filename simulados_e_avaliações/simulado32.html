@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado 2 - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 8</span>
+                        <span id="topic-title">Simulado 2</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen" style="display: none;">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XPs</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu o segundo simulado de questões.</p>
+                    <a href="painel1.html" class="btn-action btn-back">Voltar ao Painel</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            // --- QUESTÕES DO ARQUIVO exercicios31.html ---
+            {
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                Devido ao não cumprimento das metas definidas para a campanha de vacinação contra a gripe comum e o vírus H1N1 em um ano, o Ministério da Saúde anunciou a prorrogação da campanha por mais uma semana. A tabela apresenta as quantidades de pessoas vacinadas dentre os cinco grupos de risco até a data de início da prorrogação da campanha.<br><br>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                    <thead>
+                        <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                            <th style="padding: 10px; text-align: left;">Grupo de risco</th>
+                            <th style="padding: 10px; text-align: center;">População (milhão)</th>
+                            <th style="padding: 10px; text-align: center;">População já vacinada (milhão)</th>
+                            <th style="padding: 10px; text-align: center;">(%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 10px;">Crianças</td>
+                            <td style="padding: 10px; text-align: center;">4,5</td>
+                            <td style="padding: 10px; text-align: center;">0,9</td>
+                            <td style="padding: 10px; text-align: center;">20</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 10px;">Profissionais da Saúde</td>
+                            <td style="padding: 10px; text-align: center;">2,0</td>
+                            <td style="padding: 10px; text-align: center;">1,0</td>
+                            <td style="padding: 10px; text-align: center;">50</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 10px;">Gestantes</td>
+                            <td style="padding: 10px; text-align: center;">2,5</td>
+                            <td style="padding: 10px; text-align: center;">1,5</td>
+                            <td style="padding: 10px; text-align: center;">60</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 10px;">Indígenas</td>
+                            <td style="padding: 10px; text-align: center;">0,5</td>
+                            <td style="padding: 10px; text-align: center;">0,4</td>
+                            <td style="padding: 10px; text-align: center;">80</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 10px;">Idosos</td>
+                            <td style="padding: 10px; text-align: center;">20,5</td>
+                            <td style="padding: 10px; text-align: center;">8,2</td>
+                            <td style="padding: 10px; text-align: center;">40</td>
+                        </tr>
+                    </tbody>
+                </table>
+                Qual é a porcentagem aproximada do total de pessoas vacinadas em relação à população total dos cinco grupos de risco?`,
+                o: [
+                    "30%",
+                    "40%",
+                    "50%",
+                    "60%",
+                    "70%"
+                ],
+                c: 1,
+                e: "População total = 4,5 + 2,0 + 2,5 + 0,5 + 20,5 = 30 milhões.<br>Total vacinado = 0,9 + 1,0 + 1,5 + 0,4 + 8,2 = 12 milhões.<br>Porcentagem = (12 &divide; 30) &times; 100 = 40%."
+            },
+            // --- QUESTÕES DO ARQUIVO exercicios32.html ---
+            {
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                O acréscimo de tecnologias no sistema produtivo industrial tem por objetivo reduzir custos e aumentar a produtividade. No primeiro ano de funcionamento, uma indústria fabricou 8 000 unidades de um determinado product. No ano seguinte, investiu em tecnologia adquirindo novas máquinas e aumentou a produção em 50%. Estima-se que esse aumento percentual se repita nos próximos anos, garantindo um crescimento anual de 50%. Considere P a quantidade anual de produtos fabricados no ano t de funcionamento da indústria. Se a estimativa for alcançada, qual é a expressão que determina o número de unidades produzidas P em função de t para t &ge; 1?`,
+                o: [
+                    "P(t) = 0,5t⁻¹ + 8 000",
+                    "P(t) = 50t⁻¹ + 8 000",
+                    "P(t) = 4 000t⁻¹ + 8 000",
+                    "P(t) = 8 000 &middot; (0,5)<sup>t-1</sup>",
+                    "P(t) = 8 000 &middot; (1,5)<sup>t-1</sup>"
+                ],
+                c: 4,
+                e: "Como o crescimento é de 50% ao ano sobre o ano anterior, trata-se de uma função exponencial de fator (1 + 0,5) = 1,5. Para t = 1, P(1) deve ser 8000. A lei que modela é P(t) = 8000 &middot; (1,5)<sup>t-1</sup>."
+            },
+            {
+                t: `<strong>Questão 3 (UERJ)</strong><br><br>
+                Observe o anúncio a seguir, que apresenta descontos promocionais de uma loja.<br><br>
+                <img src="imagens avs/mega.jpeg" alt="Anúncio Mega Desconto" class="img-center"><br>
+                Admita que essa promoção obedece à seguinte sequência:<br>
+                &bull; primeiro desconto de 10% sobre o preço da mercadoria;<br>
+                &bull; segundo desconto de 10% sobre o valor após o primeiro desconto;<br>
+                &bull; desconto de R$ 100,00 sobre o valor após o segundo desconto.<br><br>
+                Determine o preço inicial de uma mercadoria cujo valor, após os três descontos, é igual a R$ 710,00.`,
+                o: [
+                    "R$ 1 000,00.",
+                    "R$ 1 050,00.",
+                    "R$ 1 100,00.",
+                    "R$ 1 150,00.",
+                    "R$ 1 200,00."
+                ],
+                c: 0,
+                e: "Fazendo o caminho reverso:<br>Antes do desconto de R$ 100: 710 + 100 = R$ 810,00.<br>Esse valor representa 90% após o segundo desconto: 810 &divide; 0,9 = R$ 900,00.<br>Esse valor representa 90% do preço original: 900 &divide; 0,9 = R$ 1 000,00."
+            },
+            {
+                t: `<strong>Questão 4 (INÉDITA)</strong><br><br>
+                No Brasil, foi criada uma forma irregular de empréstimo de dinheiro chamada agiotagem. É a prática de emprestar dinheiro sem autorização ou submissão às regulações das taxas normais. Na agiotagem, essas taxas são superiores à oficial de câmbio.<br>
+                Uma pessoa pegou emprestado com um agiota um capital de R$ 1 000,00 a ser pago daqui a três meses, a juros compostos cobrados da seguinte forma: 10% no primeiro mês; 15% no segundo mês e 20% no terceiro mês, nessa ordem. Ao final desses três meses o montante que essa pessoa estará devendo a esse agiota será de`,
+                o: [
+                    "R$ 1 256,00.",
+                    "R$ 1 340,00.",
+                    "R$ 1 518,00.",
+                    "R$ 1 620,00.",
+                    "R$ 1 742,00."
+                ],
+                c: 2,
+                e: "M = C &middot; (1 + i₁) &middot; (1 + i₂) &middot; (1 + i₃)<br>M = 1000 &middot; 1,10 &middot; 1,15 &middot; 1,20<br>M = 1100 &middot; 1,15 &middot; 1,20 = 1265 &middot; 1,20 = R$ 1 518,00."
+            },
+            // --- QUESTÕES DO ARQUIVO exercicios33.html ---
+            {
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                A Secretaria de Saúde de um município avalia um programa que disponibiliza, para cada aluno de uma escola municipal, uma bicicleta, que deve ser usada no trajeto de ida e volta, entre sua casa e a escola. Na fase de implantação do programa, o aluno que morava mais distante da escola realizou sempre o mesmo trajeto, representado na figura, na escala 1 : 25 000, por um período de cinco dias.<br><br>
+                <img src="imagens avs/malha.jpeg" class="img-center" alt="Malha do trajeto"><br>
+                Quantos quilômetros esse aluno percorreu na fase de implantação do programa?`,
+                o: [
+                    "4",
+                    "8",
+                    "16",
+                    "20",
+                    "40"
+                ],
+                c: 3,
+                e: "Contando os segmentos na malha quadriculada da Casa até a Escola, temos 16 segmentos de 1 cm, totalizando 16 cm no desenho. Pela escala, 16 cm &times; 25.000 = 400.000 cm = 4 km por trajeto simples. Como ele fez ida e volta durante 5 dias, são 10 trajetos: 4 km &times; 10 = 40 km."
+            },
+            {
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                As exportações de soja do Brasil totalizaram 4,129 milhões de toneladas no mês de julho de 2012, e registraram um aumento em relação ao mês de julho de 2011, embora tenha havido uma baixa em relação ao mês de maio de 2012.<br><br>
+                <small>Disponível em: www.noticiasagricolas.com.br. Acesso em: 02 ago. 2012.</small><br><br>
+                A quantidade, em quilogramas, de soja exportada pelo Brasil no mês de julho de 2012 foi de`,
+                o: [
+                    "4,129 &middot; 10³",
+                    "4,129 &middot; 10⁶",
+                    "4,129 &middot; 10⁹",
+                    "4,129 &middot; 10¹²",
+                    "4,129 &middot; 10¹⁵"
+                ],
+                c: 2,
+                e: "1 milhão = 10⁶ e 1 tonelada = 10³ kg. Logo, 4,129 milhões de toneladas equivalem a 4,129 &times; 10⁶ &times; 10³ kg = 4,129 &times; 10⁹ kg."
+            },
+            {
+                t: `<strong>Questão 7 (ENEM)</strong><br><br>
+                A London Eye é uma enorme roda-gigante na capital inglesa. Por ser um dos monumentos construídos para celebrar a entrada do terceiro milênio, ela também é conhecida como Roda do Milênio. Um turista brasileiro, em visita à Inglaterra, perguntou a um londrino o diâmetro (destacado na imagem) da Roda do Milênio e ele respondeu que ele tem 443 pés.<br><br>
+                <img src="imagens avs/londoneye.jpeg" class="img-center" alt="London Eye"><br>
+                <small>Disponível em: www.mapadelondres.org. Acesso em: 14 mai. 2015 (adaptado).</small><br><br>
+                Não habituado com a unidade pé, e querendo saber sua curiosidade, esse turista consultou um manual de unidades de medidas e constatou que 1 pé equivale a 12 polegadas, e que 1 polegada equivale a 2,54 cm. Após alguns cálculos de conversão, o turista ficou surpreendido com o resultado obtido em metros. Qual a medida que mais se aproxima do diâmetro da Roda do Milênio, em metro?`,
+                o: [
+                    "53",
+                    "94",
+                    "113",
+                    "135",
+                    "145"
+                ],
+                c: 3,
+                e: "Cálculo da conversão: 443 pés &times; 12 polegadas = 5.316 polegadas. Em centímetros: 5.316 &times; 2,54 cm = 13.502,64 cm. Em metros, isso corresponde a aproximadamente 135 metros."
+            },
+            // --- QUESTÕES DO ARQUIVO exercicios34.html ---
+            {
+                t: `<strong>Questão 8 (INÉDITA)</strong><br><br>
+                Para a comemoração dos 30 anos de fundação, uma loja de eletrodomésticos lançou a promoção Discos Premiados. Para compras a partir de R$ 300,00, os clientes tinham direito de girar uma vez cada um dos três discos representados na roleta a seguir:<br><br>
+                <img src="imagens/roleta premios.jpeg" alt="Roleta Discos Premiados" class="img-center"><br>
+                Girando o disco maior, o participante concorre a uma torradeira (T); no disco médio, a um liquidificador (L) e no pequeno, a R$ 100,00 (R). Para ganhar cada um dos prêmios, basta que a parte colorida esteja posicionada sob a seta indicadora no fim do giro. Após o fim da promoção, a diretoria de marketing apresentou alguns dados acerca dos prêmios conquistados pelos 300 clientes participantes da promoção: 21 ganharam os três prêmios; 44 ganharam torradeira e liquidificador; 49 ganharam liquidificador e R$ 100,00; 66 ganharam torradeira e R$ 100,00; 98 ganharam uma torradeira; 153 ganharam um liquidificador; 184 ganharam R$ 100,00.<br><br>
+                O número de clientes participantes da promoção que não ganharam nenhum dos prêmios nos discos é igual a`,
+                o: [
+                    "3.",
+                    "4.",
+                    "5.",
+                    "6.",
+                    "7."
+                ],
+                c: 4,
+                e: "Utilizando o Princípio da Inclusão-Exclusão para 3 conjuntos:<br>n(T &cup; L &cup; R) = n(T) + n(L) + n(R) - n(T &cap; L) - n(L &cap; R) - n(T &cap; R) + n(T &cap; L &cap; R)<br>n(T &cup; L &cup; R) = 98 + 153 + 184 - 44 - 49 - 66 + 21 = 295.<br>Clientes que não ganharam nenhum prêmio: 300 - 295 = 5."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

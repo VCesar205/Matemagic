@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado 2 - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 8</span>
+                        <span id="q-topic">Simulado 2</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box" style="display: none;">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen" style="display: none;">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu o segundo simulado especial de matemática.</p>
+                    <a href="inicio.html" class="btn-action btn-back">Voltar ao Início</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                    Um dos grandes problemas da poluição dos mananciais (rios, córregos e outros) ocorre pelo hábito de jogar óleo utilizado em frituras nos encanamentos que estão interligados com o sistema de esgoto. Se isso ocorrer, cada 10 litros de óleo poderão contaminar 10 milhões (10<sup>7</sup>) de litros de água potável.<br>
+                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 15px;">Manual de etiquette. Parte integrante das revistas Veja (ed. 2055), Cláudia (ed. 555), National Geographic ed. 93) e Nova Escola (ed. 208) (adaptado).</div>
+                    Suponha que todas as famílias de uma cidade descartem os óleos de frituras através dos encanamentos e consumam 1 000 litros de óleo em frituras por semana. Qual seria, em litros, a quantidade de água potável contaminada por semana nessa cidade?`, 
+                o: [
+                    "10<sup>2</sup>", 
+                    "10<sup>3</sup>", 
+                    "10<sup>4</sup>", 
+                    "10<sup>6</sup>", 
+                    "10<sup>9</sup>"
+                ], 
+                c: 4, 
+                e: "A proporção é de 10<sup>7</sup> litros de água poluída para cada 10 litros de óleo (o que simplifica para 10<sup>6</sup> litros de água por litro de óleo). Para um consumo de 1 000 litros (10<sup>3</sup> litros) de óleo: 10<sup>3</sup> × 10<sup>6</sup> = 10<sup>9</sup> litros de água contaminada." 
+            },
+            { 
+                t: `<strong>Questão 2 (ENEM ADAPTADA)</strong><br><br>
+                    Muitas medidas podem ser tomadas em nossas casas visando à utilização racional de energia elétrica. Isso deve ser uma atitude diária de cidadania. Uma delas pode ser a redução do tempo no banho. Um chuveiro com potência de 4 800 kWh consome 4,8 kW por hora. Uma pessoa que toma dois banhos diariamente, de 10 minutos cada, consumirá, em sete dias, quantos kW?`, 
+                o: ["0,8.", "1,6.", "5,6.", "11,2.", "33,6."], 
+                c: 3, 
+                e: "Cada dia possui 2 banhos de 10 minutos, totalizando 20 minutes por dia. Em 7 dias, o tempo total é de 7 × 20 = 140 minutos. Convertendo para horas: 140 / 60 = 7/3 horas. Como o consumo é de 4,8 kW por hora: Consumo = 4,8 × (7 / 3) = 1,6 × 7 = 11,2 kW." 
+            },
+            { 
+                t: `<strong>Questão 3 (INÉDITA)</strong><br><br>
+                    Uma piscina tem a forma de um paralelepípedo retângulo de 10 m de largura, 15 m de comprimento e 2 m de profundidade. Para tratar a água dessa piscina, é preciso adicionar 1 kg de certo produto químico a cada 2 500 litros de água. Estando ela completamente cheia de água, e sabendo-se que 1 m³ equivale a 1 000 litros, a quantidade em quilos do produto químico que deverá ser usada para o tratamento é`, 
+                o: ["12 kg.", "60 kg.", "120 kg.", "600 kg.", "1.200 kg."], 
+                c: 2, 
+                e: "Primeiro calculamos o volume da piscina: 10m × 15m × 2m = 300 m³. Convertendo para litros: 300 × 1000 = 300.000 litros. Sabendo que é usado 1 kg a cada 2.500 litros: 300.000 / 2.500 = 120 kg do produto." 
+            },
+            { 
+                t: `<strong>Questão 4 (INÉDITA)</strong><br><br>
+                    A pressão P que o vento exerce sobre um barco à vela cresce proporcionalmente com a área A da superfície da vela e com o quadrado da velocidade v do vento. Denominando k como sendo a constante positiva de proporcionalidade, tem-se que a pressão P é dada por`, 
+                o: [
+                    "P = k • &radic;A • v",
+                    "P = k • A • &radic;v",
+                    "P = k • A • v",
+                    "P = k • A • v<sup>2</sup>",
+                    "P = k • A<sup>2</sup> • v"
+                ], 
+                c: 3, 
+                e: "Diretamente proporcional significa que as grandezas multiplicam a constante k. Como cresce com a área (A) e com o quadrado da velocidade (v<sup>2</sup>), a equação correta é P = k • A • v<sup>2</sup>." 
+            },
+            { 
+                t: `<strong>Questão 5 (INÉDITA)</strong><br><br>
+                    A fórmula usada para o cálculo do IMC (Índice de Massa Corporal) é dada pela massa (m) do indivíduo, em kg, dividida pelo quadrado da sua altura (h), em metros. Dessa forma, as quantidades relativas a`, 
+                o: [
+                    "IMC e h<sup>2</sup> são diretamente proporcionais.",
+                    "IMC e m são inversamente proporcionais.",
+                    "m e h são diretamente profissionais.",
+                    "m e h são inversamente proporcionais.",
+                    "m e h<sup>2</sup> são diretamente proporcionais."
+                ], 
+                c: 4, 
+                e: "A fórmula é IMC = m / h<sup>2</sup>. Isolando a massa, temos m = IMC • h<sup>2</sup>. Fixando o IMC como uma constante para análise da relação isolada da estrutura, m e h<sup>2</sup> variam no mesmo sentido multiplicativo direto." 
+            },
+            {
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                    No depósito de uma biblioteca há caixas contendo folhas de papel de 0,1 mm de espessura, e em cada uma delas estão anotados 10 títulos de livros diferentes. Essas folhas foram empilhadas formando uma torre vertical de 1 m de altura.<br><br>
+                    Qual a representação, em potência de 10, correspondente à quantidade de títulos de livros registrados nesse empilhamento?`,
+                o: [
+                    "10<sup>2</sup>",
+                    "10<sup>4</sup>",
+                    "10<sup>5</sup>",
+                    "10<sup>6</sup>",
+                    "10<sup>7</sup>"
+                ],
+                c: 2,
+                e: "Primeiro convertemos a altura da torre para milímetros: 1 m = 1 000 mm. <br>O número de folhas é 1 000 mm / 0,1 mm = 10 000 folhas (10<sup>4</sup>). <br>Como cada folha possui 10 títulos, o total de títulos é 10 000 × 10 = 100 000, que equivale a 10<sup>5</sup>."
+            },
+            {
+                t: `<strong>Questão 7 (ENEM)</strong><br><br>
+                    Pneus usados geralmente são descartados de forma inadequada, favorecendo a proliferação de insetos e roedores e provocando sérios problemas de saúde pública. Estima-se que no Brasil, a cada ano, sejam descartados 20 milhões de pneus usados. Como uma alternativa para dar uma destinação final a estes pneus, a Petrobrás, em sua unidade de São Mateus do Sul, no Paraná, desenvolveu um processo de obtenção de combustível a partir da mistura dos pneus com xisto. Esse procedimento permite a partir de 1 tonelada de pneu, um rendimento de cerca de 530 kg de óleo. Considerando que uma tonelada corresponde em média a 200 pneus, se todos os pneus descartados anualmente fossem utilizados no processo de obtenção de combustível pela mistura com xisto, seriam então produzidas`,
+                o: [
+                    "5,3 mil toneladas de óleo.",
+                    "53 mil toneladas de óleo.",
+                    "530 mil toneladas de óleo.",
+                    "5,3 milhões de toneladas de óleo.",
+                    "530 milhões de toneladas de óleo."
+                ],
+                c: 1,
+                e: "Total de pneus: 20 000 000. Como 200 pneus equivalem a 1 tonelada, temos: 20 000 000 / 200 = 100 000 toneladas de pneus. <br>Cada tonelada rende 530 kg (0,53 toneladas) de óleo. <br>Logo, 100 000 × 0,53 = 53 000 toneladas (ou 53 mil toneladas) de óleo."
+            },
+            {
+                t: `<strong>Questão 8 (ENEM)</strong><br><br>
+                    A resistência mecânica S de uma viga de madeira, em forma de um paralelepípedo retângulo, é diretamente proporcional à sua largura (b) e ao quadrado de sua altura (d) e inversamente proporcional ao quadrado da distância entre os suportes da viga, que coincide com o seu comprimento (x), conforme ilustra a figura. A constante de proporcionalidade k é chamada de resistência da viga.<br><br>
+                    <img src="imagens avs/madeira.jpeg" alt="Dimensões da viga" class="img-center"><br>
+                    A expressão que traduz a resistência S dessa viga de madeira é`,
+                o: [
+                    `<div class="frac"><span class="nominator">k • b • d<sup>2</sup></span><span>x<sup>2</sup></span></div>`,
+                    `<div class="frac"><span class="nominator">k • b • d</span><span>x<sup>2</sup></span></div>`,
+                    `<div class="frac"><span class="nominator">k • b • d<sup>2</sup></span><span>x</span></div>`,
+                    `<div class="frac"><span class="nominator">k • b<sup>2</sup> • d</span><span>x<sup>2</sup></span></div>`,
+                    `<div class="frac"><span class="nominator">k • b • 2d</span><span>2x</span></div>`
+                ],
+                c: 0,
+                e: "As grandezas diretamente proporcionais (b e d<sup>2</sup>) multiplicam a constante k no numerador. A grandeza inversamente proporcional (x<sup>2</sup>) vai para o adenocarcinoma. Portanto: S = (k • b • d<sup>2</sup>) / x<sup>2</sup>."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

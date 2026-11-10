@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado 2 - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de <span id="total-idx">8</span></span>
+                        <span id="theme-tag">Matemática</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XPs</div>
+                    <h2 class="finish-title">Incrível!</h2>
+                    <p class="finish-score">Você concluiu o segundo simulado de exercícios.</p>
+                    <a href="unidade1.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Array de questões INÉDITAS em relação ao Simulado 1, preservando o texto original
+        const questions = [
+            { 
+                theme: "Fundamentos",
+                t: `<strong>Questão 1 (ENEM/PPL ADAPTADA)</strong><br><br>
+                    Camile gosta de caminhar em uma calçada em torno de uma praça circular que possui 500 metros de extensão, localizada perto de casa. A praça, bem como alguns locais ao seu redor e o ponto de onde inicia a caminhada, estão representados na figura:<br>
+                    <img src="imagens avs/praca.png" alt="Esquema da Praça Circular" class="img-center"><br>
+                    Em uma tarde, Camile caminhou 4 125 metros, no sentido anti-horário, e parou. Qual dos locais indicados na figura é o mais próximo de sua parada?`, 
+                o: ["Centro cultural.", "Drogaria.", "Lan house.", "Ponto de partida.", "Padaria."], 
+                c: 4, 
+                e: "Dividindo a distância total pela extensão da pista: 4125 / 500 = 8 voltas completas e sobra um resto de 125 metros. Como a pista tem 500m, 125m equivale exatamente a 1/4 de volta (ou 2/8). Caminhando no sentido anti-horário, 1/4 de volta a deixa exatamente em frente à Padaria." 
+            },
+            { 
+                theme: "Operações Matemáticas",
+                t: `<strong>Questão 2 (ENEM ADAPTADA)</strong><br><br>
+                    Em um aeroporto, os passageiros de um voo internacional que estava atrasado receberam, cada um, um cartão-alimentação no valor de R$ 45,00, válido apenas para os estabelecimentos comerciais daquele aeroporto. Uma família de 4 pessoas decidiu juntar seus cartões para jantar em um restaurante que oferecia as seguintes opções:<br><br>
+                    • Prato feito (individual): R$ 38,50<br>
+                    • Pizza gigante (serve 4 pessoas): R$ 132,00<br>
+                    • Rodízio (por pessoa): R$ 48,00<br><br>
+                    Além do jantar, cada membro da família consumiu uma lata de suco no valor de R$ 6,50. Sabendo que o valor total dos cartões foi suficiente para pagar a janta e os sucos, e que não houve troco em dinheiro, qual foi a opção de jantar escolhida por essa família?`, 
+                o: ["4 pratos feitos.", "1 pizza gigante.", "4 rodízios.", "2 pratos feitos e 1 pizza gigante.", "2 rodízios e 2 pratos feitos."], 
+                c: 1, 
+                e: "O valor total recebido pela família em cartões foi de 4 x R$ 45,00 = R$ 180,00. O consumo total de sucos foi de 4 x R$ 6,50 = R$ 26,00. Subtraindo o valor dos sucos do total dos cartões, restam R$ 180,00 - R$ 26,00 = R$ 154,00 para o jantar. A única opção de jantar cujo valor total não ultrapassa R$ 154,00 e atende a toda a família é a pizza gigante (R$ 132,00)." 
+            },
+            { 
+                theme: "Fundamentos",
+                t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                    Nosso calendário atual é embasado no antigo calendário romano, que, por sua vez, tinha como base as fases da lua. Os meses de janeiro, março, maio, julho, agosto, outubro e dezembro possuem 31 dias, e os demais, com exceção de fevereiro, possuem 30 dias. O dia 31 de março de certo ano ocorreu em uma terça-feira.<br><br>
+                    Nesse mesmo ano, qual dia da semana será o dia 12 de outubro?`, 
+                o: ["Domingo.", "Segunda-feira.", "Terça-feira.", "Quinta-feira.", "Sexta-feira."], 
+                c: 1, 
+                e: "Contamos os dias de 31 de março até 12 de outubro: Abril (30), Maio (31), Junho (30), Julho (31), Agosto (31), Setembro (30) e 12 dias de Outubro. Total = 30+31+30+31+31+30+12 = 195 dias. Dividindo 195 por 7, temos resto 6. Avançando 6 dias a partir de terça-feira (ou voltando 1 dia), chegamos a uma segunda-feira." 
+            },
+            { 
+                theme: "Fundamentos",
+                t: `<strong>Questão 4 (INÉDITA)</strong><br><br>
+                    Certa vez, um amigo me ligou para resolver um problemado seu cotidiano. Ele é proprietário de uma agência de turismo, chamada Alex Carioca Turismo.<br>
+                    Em um determinado dia, ele estava com um grupo de 846 pessoas que iriam fazer um retiro religioso, e sua empresa dispõe de ônibus com capacidade máxima de 45 pessoas e vans com capacidade para 20 pessoas. A tabela abaixo mostra os preços cobrados pela empresa de turismo para o aluguel de ônibus e vans.<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px; text-align: left;">Transporte (IDA E VOLTA)</th>
+                                <th style="padding: 10px; text-align: center;">Preço</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">ônibus</td><td style="padding: 10px; text-align: center;">R$ 600,00</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">van</td><td style="padding: 10px; text-align: center;">R$ 280,00</td></tr>
+                        </tbody>
+                    </table>
+                    A quantidade mínima de ônibus e vans que esse grupo deve alugar para fazer essa viagem, de modo que todos se acomodem sentados e que tenham o menor custo possível para eles, é`, 
+                o: ["18 ônibus.", "19 ônibus.", "18 ônibus e 1 van.", "18 ônibus e 2 vans.", "43 vans."], 
+                c: 3, 
+                e: "O custo por pessoa no ônibus cheio é R$600/45 ≈ R$13,33, e na van é R$280/20 = R$14,00. Logo, compensa usar o máximo de ônibus possível. 846 / 45 = 18 ônibus com resto de 36 pessoas. Para levar as 36 pessoas restantes: alugar mais 1 ônibus custaria R$600,00. Alugar vans para 36 pessoas exigiria 2 vans (pois cada uma leva 20), totalizando 2 x R$280,00 = R$560,00. Como R$560,00 é menor que R$600,00, o melhor cenário econômico é 18 ônibus e 2 vans." 
+            },
+            { 
+                theme: "Razão e Frações",
+                t: `<strong>Questão 5 (PUC-RS)</strong><br><br>
+                    Pitágoras estabeleceu a seguinte relação entre as sete notas musicais e os números racionais:<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem; text-align: center;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px;">Dó</th>
+                                <th style="padding: 10px;">Ré</th>
+                                <th style="padding: 10px;">Mi</th>
+                                <th style="padding: 10px;">Fá</th>
+                                <th style="padding: 10px;">Sol</th>
+                                <th style="padding: 10px;">Lá</th>
+                                <th style="padding: 10px;">Si</th>
+                                <th style="padding: 10px;">Dó</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7; background: #fff;">
+                                <td style="padding: 10px;">1</td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">8</span><span>9</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">64</span><span>81</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">3</span><span>4</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">2</span><span>3</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">16</span><span>27</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">128</span><span>243</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">1</span><span>2</span></div></td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    Para encontrar o número <div class="frac"><span class="nominator">16</span><span>27</span></div> (relativo à nota Lá), multiplica-se <div class="frac"><span class="nominator">2</span><span>3</span></div> (o correspondente à nota Sol) por <div class="frac"><span class="nominator">8</span><span>9</span></div>. Assim, para obter <div class="frac"><span class="nominator">3</span><span>4</span></div> (relativo à nota Fá), deve-se multiplicar <div class="frac"><span class="nominator">64</span><span>81</span></div> (da nota Mi) por`, 
+                o: [
+                    `<div class="frac"><span class="nominator">8</span><span>9</span></div>`, 
+                    `<div class="frac"><span class="nominator">9</span><span>8</span></div>`, 
+                    `<div class="frac"><span class="nominator">243</span><span>256</span></div>`, 
+                    `<div class="frac"><span class="nominator">256</span><span>243</span></div>`, 
+                    `<div class="frac"><span class="nominator">192</span><span>324</span></div>`
+                ], 
+                c: 2, 
+                e: "Para descobrir o fator multiplicador, basta efetuar a operação inversa (divisão): (3/4) ÷ (64/81) = (3/4) * (81/64) = 243/256." 
+            },
+            { 
+                theme: "Razão e Frações",
+                t: `<strong>Questão 6 (UFSP)</strong><br><br>
+                    Um confeiteiro vende bolos de mesmo tamanho e cortados em fatias iguais. Certo dia, ele colocou três bolos à venda em fatias. Venderam-se <div class="frac"><span class="nominator">3</span><span>4</span></div> de um bolo de chocolate, <div class="frac"><span class="nominator">2</span><span>3</span></div> de um bolo de creme e <div class="frac"><span class="nominator">5</span><span>6</span></div> de um bolo de nozes. A fração correspondente ao que sobrou dos bolos é`, 
+                o: [
+                    `<div class="frac"><span class="nominator">1</span><span>2</span></div>`, 
+                    `<div class="frac"><span class="nominator">1</span><span>4</span></div>`, 
+                    `<div class="frac"><span class="nominator">3</span><span>4</span></div>`, 
+                    `<div class="frac"><span class="nominator">5</span><span>6</span></div>`, 
+                    `<div class="frac"><span class="nominator">3</span><span>8</span></div>`
+                ], 
+                c: 2, 
+                e: "Calculamos o que sobrou de cada bolo individualmente: Chocolate sobrou 1/4 (1 - 3/4); Creme sobrou 1/3 (1 - 2/3); Nozes sobrou 1/6 (1 - 5/6). Somando as sobras: 1/4 + 1/3 + 1/6 = 3/12 + 4/12 + 2/12 = 9/12. Simplificando a fração por 3, obtemos 3/4." 
+            },
+            { 
+                theme: "Razão e Frações",
+                t: `<strong>Questão 7 (UNIOESTE ADAPTADA)</strong><br><br>
+                    Um produtor rural possui dois açudes, A e B, de igual capacidade, utilizados para armazenamento de água para irrigação. Durante o período de estiagem, o açude A estava com <div class="frac"><span class="nominator">1</span><span>4</span></div> de sua capacidade, e o açude B com apenas <div class="frac"><span class="nominator">1</span><span>5</span></div>. Para reduzir custos de manutenção, o produtor resolveu passar <div class="frac"><span class="nominator">3</span><span>4</span></div> da água do açude B para o açude A e trabalhar apenas com este último. Após essa operação, sendo V litros a capacidade destes açudes quando estão cheios, para que o açude A fique completo, faltam`, 
+                o: [
+                    `<div class="frac"><span class="nominator">3</span><span>4</span></div> V litros.`, 
+                    `<div class="frac"><span class="nominator">2</span><span>5</span></div> V litros.`, 
+                    `<div class="frac"><span class="nominator">2</span><span>3</span></div> V litros.`, 
+                    `<div class="frac"><span class="nominator">3</span><span>5</span></div> V litros.`, 
+                    `<div class="frac"><span class="nominator">4</span><span>3</span></div> V litros.`
+                ], 
+                c: 3, 
+                e: "A quantidade transferida de B para A é: 3/4 * 1/5 = 3/20 de V. O açude A já possuía 1/4 de sua capacidade (ou 5/20). O novo volume de A passa a ser: 5/20 + 3/20 = 8/20 = 2/5 de V. Para ficar completamente cheio (5/5), faltam: 5/5 - 2/5 = 3/5 V litros." 
+            },
+            { 
+                theme: "Razão e Frações",
+                t: `<strong>Questão 8 (ENEM ADAPTADA)</strong><br><br>
+                    No tanque de um certo carro de passeio, cabem até 50 L de combustível, e o rendimento médio desse carro na estrada é de 15 km/L. Ao sair para uma viagem de 600 km, o motorista observou que o marcador de combustível estava exatamente sobre uma das marcas da escala divisória do medidor, conforme figura a seguir.<br>
+                    <img src="imagens avs/marcador.jpeg" alt="Marcador de Combustível indicando 3/4" class="img-center"><br>
+                    Como o motorista conhece o percurso, sabe que existem, até a chegada a seu destino, cinco postos de abastecimento de combustível, localizados a 150 km, 187 km, 210 km, 250 km e 500 km do ponto de partida. Qual o último posto em que o motorista poderá abastecer antes que o combustível do tanque acabe?`, 
+                o: ["1º posto (a 150 km).", "2º posto (a 187 km).", "3º posto (a 210 km).", "4º posto (a 250 km).", "5º posto (a 500 km)."], 
+                c: 3, 
+                e: "O ponteiro do medidor indica que o tanque está com 3/4 de sua capacidade máxima (50 litros). Calculamos a quantidade de combustível disponível: 3/4 * 50 = 37,5 litros. Como o rendimento do veículo é de 15 km/L, a autonomia máxima atual é de: 37,5 L * 15 km/L = 562,5 km. Olhando a posição dos postos ao longo do trajeto, o motorista consegue passar tranquilamente pelos postos de 150 km, 187 km, 210 km e o último possível antes do limite de pane seca é o de 250 km, pois o próximo (500 km) já excederia o combustível atual." 
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

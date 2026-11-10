@@ -1,5 +1,6 @@
 import { Question } from '../types';
 import { PREPARED_EXERCISES_BY_UNIT } from './preparedExercises';
+import { IMPORTED_QUIZZES_BY_UNIT } from './importedQuizzes';
 
 export const QUESTIONS_BY_UNIT: Record<string, Record<string, Question[]>> = {
   unit1: {
@@ -326,4 +327,8 @@ unitIds.forEach((uId) => {
       ];
     }
   });
+});
+
+Object.entries(IMPORTED_QUIZZES_BY_UNIT).forEach(([unitId, quizzes]) => {
+  Object.assign(QUESTIONS_BY_UNIT[unitId], quizzes);
 });

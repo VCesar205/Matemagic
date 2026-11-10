@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação Substitutiva - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="painel1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 10</span>
+                        <span>Avaliação Substitutiva</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen" style="display: none;">
+                    <div class="finish-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Avaliação Finalizada!</h2>
+                    <p class="finish-score">Você concluiu a avaliação substitutiva com sucesso.</p>
+                    <a href="painel1.html" class="btn-action btn-back">Voltar ao Início</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+		O Brasil é um país com uma vantagem econômica clara no terreno de recursos naturais, dispondo de uma das maiores áreas com vocação agrícola do mundo. Especialistas calculam que, dos 853 milhões de hectares do país, as cidades, as reservas indígenas e as áreas de preservação, incluindo florestas e mananciais, cobram por volta de 470 milhões de hectares. Aproximadamente 280 milhões se destinam à agropecuária, 200 milhões para pastagens e 80 milhões para a agricultura, somadas as lavouras anuais e perenes, como o café e a fruticultura.<br><br>
+                FORTES, G. Recuperação de pastagens é alternativa para ampliar cultivos. Folha de S. Paulo, 30 out. 2011.<br><br>
+                De acordo com os dados apresentados, o percentual correspondente à área utilizada para agricultura em relação à área do território brasileiro é mais próximo de`,
+                o: ["32,8%", "28,6%", "10,7%", "9,4%", "8,0%"],
+                c: 3,
+                e: "A área de agricultura é 80 milhões. Área total: 853 milhões. Cálculo: (80 / 853) * 100 ≈ 9,37%. O valor mais próximo é 9,4%."
+            },
+            {
+                t: `<strong>Questão 2 (INÉDITA)</strong><br><br>
+                Júlia comprou uma mercadoria no valor de R$ 150,00 no atacado. Para vender na sua loja, ela acrescentou 50% de lucro. No período de promoção, ela ofereceu essa mercadoria com 40% de desconto sobre o preço que ali estava. Ela imaginava que ainda teria lucro.<br><br>
+                Com esses descontos, a Júlia na verdade teve`,
+                o: ["lucro de R$ 10,00", "lucro de R$ 15,00", "lucro de R$ 25,00", "prejuízo de R$ 15,00", "prejuízo de R$ 20,00"],
+                c: 3,
+                e: "Preço com lucro: 150 + 50% = 225. Desconto de 40% sobre 225: 225 * 0,6 = 135. Comparando com o custo (150): 135 - 150 = -15. Logo, prejuízo de R$ 15,00."
+            },
+            {
+                t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                Uma pessoa aplicou certa quantia em ações. No primeiro mês, ela perdeu 30% do total do investimento e, no segundo mês, recuperou 20% do que havia perdido. Depois desses dois meses, resolveu tirar o montante de R$ 3 800,00 gerado pela aplicação.<br><br>
+                A quantia inicial que essa pessoa aplicou em ações corresponde ao valor de`,
+                o: ["R$ 4 222,22", "R$ 4 523,80", "R$ 5 000,00", "R$ 13 300,00", "R$ 17 100,00"],
+                c: 2,
+                e: "Perda de 30% deixa 70%. Recuperar 20% do que perdeu (20% de 30%) é 6%. Saldo final: 70% + 6% = 76%. Se 0,76x = 3800, então x = 3800 / 0,76 = 5000."
+            },
+            {
+                t: `<strong>Questão 4 (INÉDITA)</strong><br><br>
+ 		No Brasil, foi criada uma forma irregular de empréstimo de dinheiro chamada agiotagem. É a prática de emprestar dinheiro sem autorização ou submissão às regulações das taxas normais. Na agiotagem, essas taxas são superiores à oficial de câmbio.<br>
+                Uma pessoa pegou emprestado com um agiota um capital de R$ 1 000,00 a ser pago daqui a três meses, a juros compostos cobrados da seguinte forma: 10% no primeiro mês; 15% no segundo mês e 20% no terceiro mês, nessa ordem. Ao final desses três meses o montante que essa pessoa estará devendo a esse agiota será de`,
+                o: ["R$ 1 256,00", "R$ 1 340,00", "R$ 1 518,00", "R$ 1 620,00", "R$ 1 742,00"],
+                c: 2,
+                e: "Montante = 1000 * 1,10 * 1,15 * 1,20 = 1518. Os juros incidem sobre o saldo acumulado de cada mês."
+            },
+            {
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                A maior piscina do mundo está localizada no Chile, cobrindo um terreno de 8 hectares de área. Sabe-se que 1 hectare corresponde a 1 hectômetro quadrado. Qual é o valor, em metros quadrados, da área coberta pelo terreno da piscina?`,
+                o: ["8", "80", "800", "8 000", "80 000"],
+                c: 4,
+                e: "1 ha = 1 hm² = 10.000 m². Portanto, 8 ha = 8 * 10.000 = 80.000 m²."
+            },
+            {
+                t: `<strong>Questão 6 (INÉDITA)</strong><br><br>
+                A tabela nutricional é a comunicação entre a empresa produtora de alimentos e os consumidores que desejam maiores informações sobre os produtos que estão comprando. Na embalagem de um alimento analisado por uma pessoa que segue orientações nutricionais, vêm descritas as seguintes informações:<br><br>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                    <thead>
+                        <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                            <th colspan="3" style="padding: 10px; text-align: center;">INFORMAÇÃO NUTRICIONAL<br><small>Valor nutricional numa porção de 50 g</small></th>
+                        </tr>
+                        <tr style="background-color: #f8fafc; border-bottom: 1px solid #edf2f7;">
+                            <th style="padding: 8px; text-align: left;">Quantidade por porção</th>
+                            <th style="padding: 8px; text-align: center;">VD%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 8px;">Carboidratos: 24,5 g</td>
+                            <td style="padding: 8px; text-align: center;">7,8%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 8px;">Proteínas: 35 dg</td>
+                            <td style="padding: 8px; text-align: center;">4,5%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 8px;">Sódio: 750 mg</td>
+                            <td style="padding: 8px; text-align: center;">4%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                Se essa pessoa consumir, durante uma semana, 2 kg desse alimento, ela terá consumido uma quantidade de carboidratos, proteína e sódio total de`,
+                o: ["1 000 g", "1 150 g", "1 200 g", "1 250 g", "1 300 g"],
+                c: 1,
+                e: "Por porção (50g): 24,5g + 3,5g (35dg) + 0,75g (750mg) = 28,75g. Em 2kg (40 porções): 40 * 28,75 = 1.150g."
+            },
+            {
+                t: `<strong>Questão 7 (UFPB ADAPTADO)</strong><br><br>
+                Antes da realização de uma campanha de conscientização de qualidade de vida, a Secretaria de Saúde de um município fez algumas observações de campo e notou que, dos 300 indivíduos analisados, 130 eram tabagistas, 150 eram alcoólatras e 40 tinham esses dois vícios.<br>
+                Após a campanha, o número de pessoas que apresentaram, pelo menos, um dos dois vícios sofreu uma redução de 20%.<br>
+                Com base nessas informações, conclui-se que com essa redução, o número de pessoas sem qualquer um desses vícios passou a ser:`,
+                o: ["102", "104", "106", "108", "110"],
+                c: 3,
+                e: "Total com vício inicial: 130 + 150 - 40 = 240. Redução de 20% (sobra 80%): 240 * 0,8 = 192. Pessoas sem vício: 300 - 192 = 108."
+            },
+            {
+                t: `<strong>Questão 8 (INÉDITA)</strong><br><br>
+                Para a comemoração dos 30 anos de fundação, uma loja de eletrodomésticos lançou a promoção Discos Premiados. Para compras a partir de R$ 300,00, os clientes tinham direito de girar uma vez cada um dos três discos representados na roleta a seguir:<br><br>
+                <img src="imagens avs/roleta premios.jpeg" alt="Roleta Discos Premiados" class="img-center"><br>
+                Girando o disco maior, o participante concorre a uma torradeira (T); no disco médio, a um liquidificador (L) e no pequeno, a R$ 100,00 (R). Para ganhar cada um dos prêmios, basta que a parte colorida esteja posicionada sob a seta indicadora no fim do giro. Após o fim da promoção, a diretoria de marketing apresentou alguns dados acerca dos prêmios conquistados pelos 300 clientes participantes da promoção: 21 ganharam os três prêmios; 44 ganharam torradeira e liquidificador; 49 ganharam liquidificador e R$ 100,00; 66 ganharam torradeira e R$ 100,00; 98 ganharam uma torradeira; 153 ganharam um liquidificador; 184 ganharam R$ 100,00.<br>
+                O número de clientes participantes da promoção que não ganharam nenhum dos prêmios nos discos é igual a`,
+                o: ["3", "4", "5", "6", "7"],
+                c: 2,
+                e: "Pelo Princípio da Inclusão-Exclusão: 98 + 153 + 184 - (44 + 49 + 66) + 21 = 295. Logo, 300 - 295 = 5 pessoas não ganharam nada."
+            },
+            {
+                t: `<strong>Questão 9 (ENEM)</strong><br><br>
+                Uma indústria fabricou 8 000 unidades no primeiro ano. No ano seguinte, aumentou a produção em 50%. Estima-se que esse aumento de 50% se repita anualmente.<br><br>
+                Qual expressão determina o número de unidades produzidas P em função do ano t (para t ≥ 1)?`,
+                o: [
+                    "P(t) = 0,5t⁻¹ + 8 000",
+                    "P(t) = 50t⁻¹ + 8 000",
+                    "P(t) = 4 000t⁻¹ + 8 000",
+                    "P(t) = 8 000 · (0,5)ᵗ⁻¹",
+                    "P(t) = 8 000 · (1,5)ᵗ⁻¹"
+                ],
+                c: 4,
+                e: "O fator de aumento é 1,5 (100% + 50%). Como no ano 1 a produção é 8000, usamos o expoente (t-1). Logo: 8000 * (1,5)ᵗ⁻¹."
+            },
+            {
+                t: `<strong>Questão 10 (ENEM)</strong><br><br>
+                Um turista constatou que 1 pé equivale a 12 polegadas e 1 polegada equivale a 2,54 cm. Ele quer saber o diâmetro da London Eye, que tem 443 pés.<br><br>
+                Qual a medida que mais se aproxima do diâmetro em metros?`,
+                o: ["53", "94", "113", "135", "145"],
+                c: 3,
+                e: "443 pés * 12 pol = 5316 pol. 5316 pol * 2,54 cm = 13502,64 cm ≈ 135 metros."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10;
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Resposta Correta!' : '❌ Resposta Incorreta';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XP`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

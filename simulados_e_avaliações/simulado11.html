@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de <span id="total-idx">8</span></span>
+                        <span id="theme-tag">Simulado</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XPs</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu a rodada unificada de exercícios.</p>
+                    <a href="unidade1.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Array de questões extraído integralmente dos arquivos originais
+        const questions = [
+            { 
+                theme: "Fundamentos",
+                t: `<strong>Questão 1 (ENEM/PPL ADAPTADA)</strong><br><br>
+                    O Ministério da Saúde acompanha com preocupação a difusão da tuberculose no Brasil. Um sistema de vigilância baseia-se no acompanhamento sistemático das taxas de incidência dessa doença nos estados. Depois de credenciar alguns estados a receberem recursos, em 2006, passou a ser de grande importância definir prioridades para a alocação de recursos de combate e de prevenção, levando em consideração as taxas de incidência nos anos de 2000 e 2004, conforme o quadro seguinte.<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px; text-align: left;">ESTADO</th>
+                                <th style="padding: 10px; text-align: center;">TAXA DE INCIDÊNCIA 2000</th>
+                                <th style="padding: 10px; text-align: center;">TAXA DE INCIDÊNCIA 2004</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Amapá</td><td style="padding: 10px; text-align: center;">9,0</td><td style="padding: 10px; text-align: center;">37,1</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Amazonas</td><td style="padding: 10px; text-align: center;">72,8</td><td style="padding: 10px; text-align: center;">69,0</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Goiás</td><td style="padding: 10px; text-align: center;">20,5</td><td style="padding: 10px; text-align: center;">16,7</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Minas Gerais</td><td style="padding: 10px; text-align: center;">0,3</td><td style="padding: 10px; text-align: center;">27,2</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Pernambuco</td><td style="padding: 10px; text-align: center;">43,3</td><td style="padding: 10px; text-align: center;">51,0</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Rio de Janeiro</td><td style="padding: 10px; text-align: center;">90,7</td><td style="padding: 10px; text-align: center;">79,7</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">São Paulo</td><td style="padding: 10px; text-align: center;">45,8</td><td style="padding: 10px; text-align: center;">38,2</td></tr>
+                        </tbody>
+                    </table>
+                    <div style="font-size: 0.8rem; color: #718096; text-align: right; margin-bottom: 15px;">Disponível em: SINAM, 2006; IBGE, Censo 2000.</div>
+                    Se a prioridade na distribuição de recursos for dada ao estado que tiver maior aumento absoluto em suas taxas de incidência, ela será dada para`, 
+                o: ["Amapá.", "Amazonas.", "Minas Gerais.", "Pernambuco.", "Rio de Janeiro."], 
+                c: 0, 
+                e: "Calculando a variação absoluta (subtração direta): Amapá aumentou 28,1 (37,1 - 9,0); Minas Gerais aumentou 26,9 (27,2 - 0,3); Pernambuco aumentou 7,7. O maior aumento absoluto foi o do Amapá." 
+            },
+            { 
+                theme: "Operações Matemáticas",
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                    Na cidade de João e Maria, haverá shows em uma boate. Pensando em todos, a boate propôs pacotes para que os fregueses escolhessem o que seria melhor para si. Pacote 1: taxa de 40 reais por show. Pacote 2: taxa de 80 reais mais 10 reais por show. Pacote 3: taxa de 60 reais para 4 shows, e 15 reais por cada show a mais. João assistirá a 7 shows e Maria, a 4. As melhores opções para João e Maria são, respectivamente, os pacotes`, 
+                o: ["1 e 2.", "2 e 2.", "3 e 1.", "2 e 1.", "3 e 3."], 
+                c: 4, 
+                e: "Para João (7 shows): Pacote 1 = 7 × 40 = R$ 280,00; Pacote 2 = 80 + (7 × 10) = R$ 150,00; Pacote 3 = 60 + (3 × 15) = R$ 105,00. Melhor opção: Pacote 3. Para Maria (4 shows): Pacote 1 = 4 × 40 = R$ 160,00; Pacote 2 = 80 + (4 × 10) = R$ 120,00; Pacote 3 = R$ 60,00. Melhor opção: Pacote 3. Portanto, a resposta correta é 3 e 3." 
+            },
+            { 
+                theme: "Operações Matemáticas",
+                t: `<strong>Questão 3 (INÉDITA)</strong><br><br>
+                    Estamos vivendo em um período em que a água está ficando escassa no planeta. De acordo com a Organização das Nações Unidas (ONU), cada pessoa deve consumir, diariamente, 50 litros de água para suprir suas necessidades diárias. Nesse sentido, João consome, em média, por dia, 57 litros de água. Mensalmente, ele ultrapassa a orientação da ONU em`, 
+                o: ["7 litros.", "107 litros.", "210 litros.", "1 500 litros.", "1 710 litros."], 
+                c: 2, 
+                e: "João consome 7 litros a mais por dia do que o recomendado (57 - 50 = 7). Considerando um mês comercial padrão de 30 dias: 7 litros/dia x 30 dias = 210 litros no mês." 
+            },
+            { 
+                theme: "Operações Matemáticas",
+                t: `<strong>Questão 4 (INÉDITA)</strong><br><br>
+                    Lucas comprou, em uma loja de informática, 6 artigos: um laptop, no valor de R$ 1 800,00; uma impressora por R$ 960,00; e 4 cartuchos de tinta para impressora que custam R$ 75,00 a unidade. Se essas mercadorias foram pagas em 6 parcelas iguais, o valor de cada parcela, em reais, foi de`, 
+                o: ["R$ 3 060,00.", "R$ 1 530,00.", "R$ 1 020,00.", "R$ 510,00.", "R$ 320,00."], 
+                c: 3, 
+                e: "Primeiro calcula-se o total da compra: 1800 + 960 + (4 x 75) = 1800 + 960 + 300 = R$ 3.060,00. Dividindo o valor total pelas 6 parcelas iguais: 3060 / 6 = R$ 510,00 por parcela." 
+            },
+            { 
+                theme: "Fundamentos",
+                t: `<strong>Questão 5 (ENEM/PPL)</strong><br><br>
+                    Uma loja decide premiar seus clientes. Cada cliente receberá um dos seis possíveis brindes disponíveis, conforme sua ordem de chegada na loja. Os brindes a serem distribuídos são: uma bola, um chaveiro, uma caneta, um refrigerante, um sorvete e um CD, nessa ordem. O primeiro cliente da loja recebe uma bola, o segundo recebe um chaveiro, o terceiro recebe uma caneta, o quarto recebe um refrigerante, o quinto recebe um sorvete, o sexto recebe um CD, o sétimo recebe uma bola, o oitavo recebe um chaveiro, e assim sucessivamente, segundo a ordem dos brindes.<br><br>
+                    O milésimo cliente receberá de brinde um(a):`, 
+                o: ["Bola.", "Caneta.", "Refrigerante.", "Sorvete.", "CD."], 
+                c: 2, 
+                e: "Como são 6 brindes que se repetem ciclicamente, dividimos 1000 por 6. O quociente é 166 (voltas completas no ciclo) e o resto é 4. O quarto brinde da sequência é o refrigerante (1º bola, 2º chaveiro, 3º caneta, 4º refrigerante)." 
+            },
+            { 
+                theme: "Fundamentos",
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                    O gerente de um cinema fornece anualmente ingressos gratuitos para escolas. Este ano, serão distribuídos 400 ingressos para uma sessão vespertina e 320 ingressos para uma sessão noturna de um mesmo filme. Várias escolas podem ser escolhidas para receberem ingressos. Há alguns critérios para a distribuição dos ingressos:<br><br>
+                    <ul>
+                        <li>cada escola deverá receber ingressos para uma única sessão;</li>
+                        <li>todas as escolas contempladas deverão receber o mesmo número de ingressos;</li>
+                        <li>não haverá sobra de ingressos (ou seja, todos os ingressos serão distribuídos).</li>
+                    </ul><br>
+                    O número mínimo de escolas que podem ser escolhidas para obter ingressos, segundo os critérios estabelecidos, é`, 
+                o: ["2.", "4.", "9.", "40.", "80."], 
+                c: 2, 
+                e: "Para minimizar o número de escolas, devemos maximizar o número de ingressos por escola usando o MDC(400, 320) = 80. O número total de escolas será (400 / 80) + (320 / 80) = 5 + 4 = 9 escolas." 
+            },
+            { 
+                theme: "Fundamentos",
+                t: `<strong>Questão 7 (UFSM ADAPTADA)</strong><br><br>
+                    Estudos e simulações são necessários para melhorar o trânsito. Por exemplo: imagine que, de um terminal rodoviário, partam os ônibus de três empresas, A, B e C. Os ônibus da empresa A partem a cada 15 minutos; da empresa B, a cada 20 minutos; da empresa C, a cada 25 minutos.<br><br>
+                    Às 7 h, partem simultaneamente 3 ônibus, um de cada empresa. A próxima partida simultânea dos ônibus das 3 empresas será às`, 
+                o: ["9 h.", "9 h 50min.", "10 h 30min.", "11 h.", "12 h."], 
+                c: 4, 
+                e: "Devemos calcular o MMC de 15, 20 e 25 para descobrir após quantos minutos eles partirão juntos novamente. MMC(15, 20, 25) = 300 minutos. Convertendo para horas: 300 / 60 = 5 horas. Partindo das 7 h, a próxima partida será às 7 + 5 = 12 h." 
+            },
+            { 
+                theme: "Razão e Frações",
+                t: `<strong>Questão 8 (UFRJ ADAPTADA)</strong><br><br>
+                    Numa escola foi feito um levantamento para saber quais os tipos de calçados mais usados pelas crianças. Foi obtido o seguinte resultado: um terço usa sandálias; um quarto usa tênis; um quinto usa sapatos, e os 52 restantes usam outros tipos de calçados. Conclui-se que, pelos tipos de calçados encontrados, há nessa escola um total de`, 
+                o: ["280 crianças.", "270 crianças.", "260 crianças.", "250 crianças.", "240 crianças."], 
+                c: 4, 
+                e: "Somando as frações conhecidas: 1/3 + 1/4 + 1/5 = 20/60 + 15/60 + 12/60 = 47/60. A fração restante para completar o todo é de 13/60, que corresponde às 52 crianças restantes. Se 13/60 = 52, então 1/60 = 4. Portanto, o total é 60 * 4 = 240 crianças." 
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

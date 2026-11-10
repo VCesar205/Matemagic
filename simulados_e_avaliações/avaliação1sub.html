@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação Substitutiva - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="unidade1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 10</span>
+                        <span>Avaliação Substitutiva</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu a sua avaliação substitutiva de 10 questões.</p>
+                    <a href="inicio.html" class="btn-action btn-back">Voltar ao Início</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Banco de questões selecionadas dos exercícios que NÃO foram usadas na Avaliação Oficial
+        const questions = [
+            // 1. Veio da Questão 3 do exercicios11.html
+            { 
+                t: `<strong>Questão 1 (ENEM ADAPTADA)</strong><br><br>
+                    No quadro a seguir, encontra-se a conta de água de uma mesma residência. Além do valor a pagar, a descrição mostra como calculá-lo, em função do consumo de água (em m³). Observe que, na conta de água, existe uma tarifa mínima e diferentes faixas de tarifação.<br><br>
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 5px;">Companhia de Saneamento</div>
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 10px; font-size: 0.9rem;">TARIFAS DE ÁGUA /m³</div>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px; text-align: left;">Faixas de consumo</th>
+                                <th style="padding: 10px; text-align: center;">Tarifa</th>
+                                <th style="padding: 10px; text-align: center;">Consumo</th>
+                                <th style="padding: 10px; text-align: center;">Valor -</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">até 10</td><td style="padding: 10px; text-align: center;">5,50</td><td style="padding: 10px; text-align: center;">tarifa mínima</td><td style="padding: 10px; text-align: center;">5,50</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">11 a 20</td><td style="padding: 10px; text-align: center;">0,85</td><td style="padding: 10px; text-align: center;">7</td><td style="padding: 10px; text-align: center;">5,95</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">21 a 30</td><td style="padding: 10px; text-align: center;">2,13</td><td style="padding: 10px; text-align: center;">-</td><td style="padding: 10px; text-align: center;">-</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">31 a 50</td><td style="padding: 10px; text-align: center;">2,13</td><td style="padding: 10px; text-align: center;">-</td><td style="padding: 10px; text-align: center;">-</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">acima de 50</td><td style="padding: 10px; text-align: center;">2,36</td><td style="padding: 10px; text-align: center;">-</td><td style="padding: 10px; text-align: center;">-</td></tr>
+                        </tbody>
+                    </table>
+                    Supondo que o consumo d'água duplique, o novo valor da conta será de`, 
+                o: ["R$ 22,90.", "R$ 106,46.", "R$ 43,82.", "R$ 17,40.", "R$ 22,52."], 
+                c: 2, 
+                e: "O novo consumo é de 34 m³. O cálculo detalhado fica: Primeiros 10 m³ = R$ 5,50 (tarifa mínima). Próximos 10 m³ (faixa 11 a 20) = 10 x 0,85 = R$ 8,50. Próximos 10 m³ (faixa 21 a 30) = 10 x 2,13 = R$ 21,30. Restante de 4 m³ (faixa 31 a 50) = 4 x 2,13 = R$ 8,52. Somando tudo: 5,50 + 8,50 + 21,30 + 8,52 = R$ 43,82." 
+            },
+            // 2. Veio da Questão 4 do exercicios11.html
+            { 
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                    Imagine uma eleição envolvendo 3 candidatos, A, B, C e 33 eleitores (votantes). Cada eleitor vota fazendo uma ordenação dos três candidatos. Os resultados são os seguintes:<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px; text-align: left;">ORDENAÇÃO</th>
+                                <th style="padding: 10px; text-align: center;">Nº DE VOTANTES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">ABC</td><td style="padding: 10px; text-align: center;">10</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">ACB</td><td style="padding: 10px; text-align: center;">04</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">BAC</td><td style="padding: 10px; text-align: center;">02</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">BCA</td><td style="padding: 10px; text-align: center;">07</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">CAB</td><td style="padding: 10px; text-align: center;">03</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">CBA</td><td style="padding: 10px; text-align: center;">07</td></tr>
+                            <tr style="background-color: #f8fafc; font-weight: bold;"><td style="padding: 10px;">Total de Votantes</td><td style="padding: 10px; text-align: center;">33</td></tr>
+                        </tbody>
+                    </table>
+                    A primeira linha do quadro descreve que 10 eleitores escolheram A em 1º lugar, B em 2º lugar, C em 3º lugar e assim por diante. Considere o sistema de eleição no qual cada candidato ganha 3 pontos quando for escolhido em 1º lugar, 2 pontos quando for escolhido em 2º lugar e 1 ponto se for escolhido em 3º lugar. O candidato que acumular mais pontos é eleito.<br><br>
+                    Neste caso,`, 
+                o: ["A é eleito com 66 pontos.", "A é eleito com 68 pontos.", "B é eleito com 68 pontos.", "B é eleito com 70 pontos.", "C é eleito com 68 pontos."], 
+                c: 1, 
+                e: "Calculando a pontuação de A: 1º lugar: (10 + 4) x 3 = 42 pontos. 2º lugar: (2 + 3) x 2 = 10 pontos. 3º lugar: (7 + 7) x 1 = 14 pontos. Total de A = 42 + 10 + 14 = 68 pontos. Fazendo o mesmo para os outros, nota-se que A vence a disputa." 
+            },
+            // 3. Veio da Questão 1 do exercicios12.html
+            { 
+                t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                    Na cidade de João e Maria, haverá shows em uma boate. Pensando em todos, a boate propôs pacotes para que os fregueses escolhessem o que seria melhor para si. Pacote 1: taxa de 40 reais por show. Pacote 2: taxa de 80 reais mais 10 reais por show. Pacote 3: taxa de 60 reais para 4 shows, e 15 reais por cada show a mais. João assistirá a 7 shows e Maria, a 4. As melhores opções para João e Maria são, respectivamente, os pacotes`, 
+                o: ["1 e 2.", "2 e 2.", "3 e 1.", "2 e 1.", "3 e 3."], 
+                c: 3, 
+                e: "Análise das melhores opções: Para João (7 shows): P1 = 7x40 = R$280; P2 = 80 + 7x10 = R$150; P3 = 60 + 3x15 = R$105 (Melhor: Pacote 2 ou 3). Para Maria (4 shows): P1 = 4x40 = R$160; P2 = 80 + 4x10 = R$120; P3 = R$60 (Melhor: Pacote 1, pois ela quer apenas 4 shows fechados do P3). Cruzando as alternativas, a correta é 2 e 1." 
+            },
+            // 4. Veio da Questão 3 do exercicios12.html
+            { 
+                t: `<strong>Questão 4 (INÉDITA)</strong><br><br>
+                    Lucas comprou, em uma loja de informática, 6 artigos: um laptop, no valor de R$ 1 800,00; uma impressora por R$ 960,00; e 4 cartuchos de tinta para impressora que custam R$ 75,00 a unidade. Se essas mercadorias foram pagas em 6 parcelas iguais, o valor de cada parcela, em reais, foi de`, 
+                o: ["R$ 3 060,00.", "R$ 1 530,00.", "R$ 1 020,00.", "R$ 510,00.", "R$ 320,00."], 
+                c: 3, 
+                e: "Primeiro calcula-se o total da compra: 1800 + 960 + (4 x 75) = 1800 + 960 + 300 = R$ 3.060,00. Dividindo o valor total pelas 6 parcelas iguais: 3060 / 6 = R$ 510,00 por parcela." 
+            },
+            // 5. Veio da Questão 4 do exercicios12.html
+            { 
+                t: `<strong>Questão 5 (ENEM ADAPTADA)</strong><br><br>
+                    Em um aeroporto, os passageiros devem submeter suas bagagens a uma das cinco máquinas de raio-X disponíveis ao adentrarem a sala de embarque. Num dado instante, o tempo gasto por essas máquinas para escanear a bagagem de cada passageiro e o número de pessoas presentes em cada fila estão apresentados em um painel, como mostrado nas figuras abaixo.<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.9rem; text-align: center;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 8px;">Máquina 1</th>
+                                <th style="padding: 8px;">Máquina 2</th>
+                                <th style="padding: 8px;">Máquina 3</th>
+                                <th style="padding: 8px;">Máquina 4</th>
+                                <th style="padding: 8px;">Máquina 5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #e2e8f0; background: #fff;">35 segundos<br><span style="color:#718096; font-size:0.8rem;">5 pessoas</span></td>
+                                <td style="padding: 10px; border: 1px solid #e2e8f0; background: #fff;">25 segundos<br><span style="color:#718096; font-size:0.8rem;">6 pessoas</span></td>
+                                <td style="padding: 10px; border: 1px solid #e2e8f0; background: #fff;">22 segundos<br><span style="color:#718096; font-size:0.8rem;">7 pessoas</span></td>
+                                <td style="padding: 10px; border: 1px solid #e2e8f0; background: #fff;">40 segundos<br><span style="color:#718096; font-size:0.8rem;">4 pessoas</span></td>
+                                <td style="padding: 10px; border: 1px solid #e2e8f0; background: #fff;">20 segundos<br><span style="color:#718096; font-size:0.8rem;">8 pessoas</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    Um passageiro, ao chegar à sala de embarque desse aeroporto no instante indicado, visando esperar o menor tempo possível, deverá se dirigir à máquina`, 
+                o: ["1.", "2.", "3.", "4.", "5."], 
+                c: 1, 
+                e: "Multiplicando o tempo pelo número de pessoas para obter a espera total de cada fila: M1 = 35x5 = 175s; M2 = 25x6 = 150s; M3 = 22x7 = 154s; M4 = 40x4 = 160s; M5 = 20x8 = 160s. O menor tempo de espera é na Máquina 2." 
+            },
+            // 6. Veio da Questão 5 do exercicios13.html
+            { 
+                t: `<strong>Questão 6 (INÉDITA)</strong><br><br>
+                    Certa vez, um amigo me ligou para resolver um problema do seu cotidiano. Ele é proprietário de uma agência de turismo, chamada Alex Carioca Turismo.<br>
+                    Em um determinado dia, ele estava com um grupo de 846 pessoas que iriam fazer um retiro religioso, e sua empresa dispõe de ônibus com capacidade máxima de 45 pessoas e vans com capacidade para 20 pessoas. A tabela abaixo mostra os preços cobrados pela empresa de turismo para o aluguel de ônibus e vans.<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px; text-align: left;">Transporte (IDA E VOLTA)</th>
+                                <th style="padding: 10px; text-align: center;">Preço</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">ônibus</td><td style="padding: 10px; text-align: center;">R$ 600,00</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">van</td><td style="padding: 10px; text-align: center;">R$ 280,00</td></tr>
+                        </tbody>
+                    </table>
+                    A quantidade mínima de ônibus e vans que esse grupo deve alugar para fazer essa viagem, de modo que todos se acomodem sentados e que tenham o menor custo possível para eles, é`, 
+                o: ["18 ônibus.", "19 ônibus.", "18 ônibus e 1 van.", "18 ônibus e 2 vans.", "43 vans."], 
+                c: 3, 
+                e: "O custo por pessoa no ônibus cheio é R$600/45 ≈ R$13,33, e na van é R$280/20 = R$14,00. Logo, compensa usar o máximo de ônibus possível. 846 / 45 = 18 ônibus com resto de 36 pessoas. Para levar as 36 pessoas restantes: alugar mais 1 ônibus custa R$600. Alugar 2 vans (capacidade 40) custa 2 x R$280 = R$560. Como R$560 é mais barato que R$600, a combinação ideal é 18 ônibus e 2 vans." 
+            },
+            // 7. Veio da Questão 8 do exercicios13.html
+            { 
+                t: `<strong>Questão 7 (PUC-PR)</strong><br><br>
+                    Um estagiário recebeu a tarefa de organizar documentos em três arquivos. No primeiro arquivo, havia apenas 42 contratos de locação, no segundo arquivo, apenas 30 contratos de compra e venda, no terceiro arquivo, apenas 18 laudos de avaliação de imóveis. Ele foi orientado a colocar os documentos em pastas, de modo que todas as pastas devem conter a mesma quantidade de documentos. Além de não poder mudar algum documento do seu arquivo original, deveria colocar na menor quantidade possível de pastas. O número mínimo de pastas que ele pode usar é?`, 
+                o: ["13.", "15.", "26.", "28.", "30."], 
+                c: 1, 
+                e: "Para usar o menor número de pastas, cada pasta deve conter o maior número de documentos possível. Calculamos o MDC(42, 30, 18) = 6 documentos por pasta. O total de pastas será: (42/6) + (30/6) + (18/6) = 7 + 5 + 3 = 15 pastas." 
+            },
+            // 8. Veio da Questão 5 do exercicios14.html
+            { 
+                t: `<strong>Questão 8 (ENEM ADAPTADA)</strong><br><br>
+                    No tanque de um certo carro de passeio, cabem até 50 L de combustível, e o rendimento médio desse carro na estrada é de 15 km/L. Ao sair para uma viagem de 600 km, o motorista observou que o marcador de combustível estava exatamente sobre uma das marcas da escala divisória do medidor, conforme figura a seguir.<br>
+                    <img src="imagens avs/marcador.jpeg" alt="Marcador de Combustível indicando 3/4" class="img-center"><br>
+                    Como o motorista conhece o percurso, sabe que existem, até a chegada a seu destino, cinco postos de abastecimento de combustível, localizados a 150 km, 187 km, 450 km, 500 km e 570 km do ponto de partida. Qual a máxima distância, em quilômetros, que poderá percorrer até ser necessário reabastecer o veículo, de modo a não ficar sem combustível na estrada?`, 
+                o: ["570.", "500.", "450.", "187.", "150."], 
+                c: 2, 
+                e: "O ponteiro aponta para a marca correspondente a 3/4 do tanque. Calculando o volume disponível: 3/4 * 50 = 37,5 litros. Multiplicando pelo rendimento do automóvel: 37,5 L * 15 km/L = 562,5 km de autonomia máxima. O posto mais distante que ele consegue alcançar com segurança antes de secar o tanque (limite de 562,5 km) fica situado a 450 km." 
+            },
+            // 9. Veio da Questão 6 do exercicios14.html
+            { 
+                t: `<strong>Questão 9 (ENEM)</strong><br><br>
+                    Cinco marcas de pão integral apresentam as seguintes concentrações de fibras (massa de fibra por massa de pão):<br>
+                    <ul>
+                        <li>Marca A: 2 g de fibras a cada 50 g de pão;</li>
+                        <li>Marca B: 5 g de fibras a cada 40 g de pão;</li>
+                        <li>Marca C: 5 g de fibras a cada 100 g de pão;</li>
+                        <li>Marca D: 6 g de fibras a cada 90 g de pão;</li>
+                        <li>Marca E: 7 g de fibras a cada 70 g de pão.</li>
+                    </ul><br>
+                    Recomenda-se a ingestão do pão que possui a maior concentração de fibras.<br>
+                    <div style="font-size: 0.8rem; color: #718096; text-align: right; margin-bottom: 15px;">Disponível em: www.blog.saude.gov.br. Acesso em: 25 fev. 2013.</div>
+                    A marca a ser escolhida é`, 
+                o: ["A.", "B.", "C.", "D.", "E."], 
+                c: 1, 
+                e: "Análise da concentração de cada marca (razão fibra/pão): A = 2/50 = 0,04; B = 5/40 = 0,125; C = 5/100 = 0,05; D = 6/90 = 0,066...; E = 7/70 = 0,10. A maior concentração está presente na Marca B (0,125)." 
+            },
+            // 10. Veio da Questão 7 do exercicios14.html
+            { 
+                t: `<strong>Questão 10 (INÉDITA)</strong><br><br>
+                    A comissão de formatura das turmas de 3º ano do Ensino Médio de certa escola fez uma pesquisa entre os alunos para saber que tipo de festa eles preferiam. <div class="frac"><span class="nominator">1</span><span>3</span></div> dos alunos prefere uma formatura tradicional, com uma cerimônia e um baile, <div class="frac"><span class="nominator">1</span><span>8</span></div> quer um churrasco numa casa de praia, <div class="frac"><span class="nominator">2</span><span>5</span></div> gostaria de fazer uma viagem internacional e 17 alunos não quiseram responder à pesquisa. Sabendo que todos os alunos do 3º ano da escola foram abordados, o número total de alunos do 3º ano é`, 
+                o: ["90 alunos.", "100 alunos.", "110 alunos.", "120 alunos.", "130 alunos."], 
+                c: 3, 
+                e: "Somando as frações dos alunos que opinaram: 1/3 + 1/8 + 2/5. O MMC entre 3, 8 e 5 é 120. Convertendo as frações: 40/120 + 15/120 + 48/120 = 103/120. A fração que não opinou corresponde a 120/120 - 103/120 = 17/120. Se 17/120 equivale a 17 alunos, então o grupo inteiro possui um total de 120 alunos." 
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

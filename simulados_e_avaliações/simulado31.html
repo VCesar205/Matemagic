@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 8</span>
+                        <span id="topic-title">Simulado</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen" style="display: none;">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XPs</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu o simulado integrado de questões.</p>
+                    <a href="painel1.html" class="btn-action btn-back">Voltar ao Painel</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            // --- PORCENTAGEM (exercicios31.html) ---
+            {
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                No dia 12 de janeiro de 2010, o governo da Venezuela adotou um plano de racionamento de energia que previa cortes no fornecimento em todo o país. O ministro da Energia afirmou que uma das formas mais eficazes de se economizar energia nos domicílios seria o uso de lâmpadas que consomem 20% menos da energia consumida por lâmpadas normais. Em uma residência, o consumo mensal de energia proveniente do uso de lâmpadas comuns é de 63 kWh. Se todas as lâmpadas dessa residência forem trocadas pelas lâmpadas econômicas, esse consumo passará a ser de, aproximadamente,`,
+                o: [
+                    "9 kWh.",
+                    "11 kWh.",
+                    "22 kWh.",
+                    "35 kWh.",
+                    "50 kWh."
+                ],
+                c: 4,
+                e: "20% de 63 = 12,6. Então: 63 - 12,6 = 50,4 kWh. Aproximadamente 50 kWh."
+            },
+            {
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                O Brasil é um país com uma vantagem econômica clara no terreno de recursos naturais, dispondo de uma das maiores áreas com vocação agrícola do mundo. Especialistas calculam que, dos 853 milhões de hectares do país, as cidades, as reservas indígenas e as áreas de preservação, incluindo florestas e mananciais, cobram por volta de 470 milhões de hectares. Aproximadamente 280 milhões se destinam à agropecuária, 200 milhões para pastagens e 80 milhões para a agricultura, somadas as lavouras anuais e perenes, como o café e a fruticultura.<br><br>
+                FORTES, G. Recuperação de pastagens é alternativa para ampliar cultivos. Folha de S. Paulo, 30 out. 2011.<br><br>
+                De acordo com os dados apresentados, o percentual correspondente à área utilizada para agricultura em relação à área do território brasileiro é mais próximo de`,
+                o: [
+                    "32,8%.",
+                    "28,6%.",
+                    "10,7%.",
+                    "9,4%.",
+                    "8,0%."
+                ],
+                c: 3,
+                e: "A área utilizada para agricultura é de 80 milhões de hectares. Então: (80 ÷ 853) × 100 ≈ 9,4%."
+            },
+            // --- JUROS SIMPLES E COMPOSTOS (exercicios32.html) ---
+            {
+                t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                João deseja comprar um carro cujo preço à vista, com todos os descontos possíveis, é de R$ 21 000,00, e esse valor não será reajustado nos meses seguintes. Ele tem R$ 20 000,00, que podem ser aplicados a uma taxa de juros compostos de 2% ao mês, e ele escolhe deixar todo seu dinheiro aplicado até que o montante atinja o valor do carro. Para ter o carro, João deverá esperar`,
+                o: [
+                    "2 meses e terá a quantia exata.",
+                    "3 meses e terá a quantia exata.",
+                    "3 meses e ainda sobrarão, aproximadamente, R$ 225,00.",
+                    "4 meses e ainda sobrarão, aproximadamente, R$ 430,00.",
+                    "4 meses e terá a quantia exata."
+                ],
+                c: 2,
+                e: "M = C &middot; (1 + i)<sup>t</sup><br>M = 20.000 &middot; (1,02)<sup>3</sup> = 20.000 &middot; 1,061208 = R$ 21.224,16.<br>Após 3 meses ele terá o valor necessário e sobrarão cerca de R$ 224,16 (aproximadamente R$ 225,00)."
+            },
+            {
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                Uma pessoa aplicou certa quantia em ações. No primeiro mês, ela perdeu 30% do total do investmento e, no segundo mês, recuperou 20% do que havia perdido. Depois desses dois meses, resolveu tirar o montante de R$ 3 800,00 gerado pela aplicação. A quantia inicial que essa pessoa aplicou em ações corresponds ao valor de`,
+                o: [
+                    "R$ 4 222,22.",
+                    "R$ 4 523,80.",
+                    "R$ 5 000,00.",
+                    "R$ 13 300,00.",
+                    "R$ 17 100,00."
+                ],
+                c: 2,
+                e: "Se perdeu 30%, restou 70% (0,7C). No segundo mês recuperou 20% <i>do que havia perdido</i> (20% de 30% = 6%).<br>Total no final: 70% + 6% = 76% (0,76C).<br>0,76C = 3800 &rArr; C = 3800 &divide; 0,76 = R$ 5 000,00."
+            },
+            // --- SISTEMA MÉTRICO DECIMAL E NÃO DECIMAL (exercicios33.html) ---
+            {
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                A maior piscina do mundo, registrada no livro Guinness, está localizada no Chile, em San Alfonso del Mar, cobrindo um terreno de 8 hectares de área. Sabe-se que 1 hectare corresponde a 1 hectômetro quadrado. Qual é o valor, em metros quadrados, da área coberta pelo terreno da piscina?`,
+                o: [
+                    "8",
+                    "80",
+                    "800",
+                    "8 000",
+                    "80 000"
+                ],
+                c: 4,
+                e: "Como 1 ha = 1 hm², temos 8 ha = 8 hm². Sabendo que 1 hm = 100 m, então 1 hm² = (100 m)³ = 10.000 m². Portanto, 8 hm² = 8 × 10.000 = 80.000 m²."
+            },
+            {
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                Atendendo à encomenda de um mecânico, um soldador terá de juntar duas barras de metais diferentes. A solda utilizada tem espessura de 18 milímetros, conforme ilustrado na figura.<br><br>
+                <img src="imagens avs/solda.jpeg" class="img-center" alt="Esquema da soldagem">
+                Qual o comprimento, em metros, da peça resultante após a soldagem?`,
+                o: [
+                    "2,518",
+                    "2,5018",
+                    "2,2300",
+                    "2,0230",
+                    "2,6800"
+                ],
+                c: 0,
+                e: "Convertendo todas as medidas para metros: 1,5 m + 1 m + 0,018 m (pois 18 mm = 0,018 m). Somando tudo, obtemos: 1,5 + 1 + 0,018 = 2,518 metros."
+            },
+            // --- CONJUNTOS (exercicios34.html) ---
+            {
+                t: `<strong>Questão 7 (FGV)</strong><br><br>
+                Observe o diagrama com 5 organizações intergovernamentais de integração sul-americana:<br><br>
+                <img src="imagens avs/diagrama paises.jpeg" alt="Diagrama de integração sul-americana" class="img-center"><br>
+                Dos 12 países que compõem esse diagrama, integram exatamente 3 das organizações apenas`,
+                o: [
+                    "4.",
+                    "5.",
+                    "6.",
+                    "7.",
+                    "8."
+                ],
+                c: 0,
+                e: "Analisando as intersecções do diagrama, contamos quais países estão presentes em exatamente 3 conjuntos simultaneamente. O total obtido é igual a 4 países."
+            },
+            {
+                t: `<strong>Questão 8 (UFPB ADAPTADO)</strong><br><br>
+                Antes da realização de uma campanha de conscientização de qualidade de vida, a Secretaria de Saúde de um município fez algumas observações de campo e notou que, dos 300 indivíduos analisados, 130 eram tabagistas, 150 eram alcoólatras e 40 tinham esses dois vícios.<br>
+                Após a campanha, o número de pessoas que apresentaram, pelo menos, um dos dois vícios sofreu uma redução de 20%.<br>
+                Com base nessas informações, conclui-se que com essa redução, o número de pessoas sem qualquer um desses vícios passou a ser:`,
+                o: [
+                    "102.",
+                    "104.",
+                    "106.",
+                    "108.",
+                    "110."
+                ],
+                c: 3,
+                e: "Antes da campanha:<br>• Total com pelo menos um vício = T + A - (T &cap; A) = 130 + 150 - 40 = 240 pessoas.<br>• Redução de 20% após a campanha: 240 &middot; 0,80 = 192 pessoas continuaram com pelo menos um vício.<br>• Novo número de pessoas sem nenhum vício: 300 - 192 = 108 pessoas."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>
