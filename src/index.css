@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+iframe {
+  color-scheme: dark;
+}
+
+.exercise-rich-content {
+  overflow-wrap: anywhere;
+}
+
+.exercise-rich-content .exercise-question-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.9em;
+}
+
+.exercise-rich-content .exercise-question-cell {
+  border: 1px solid #cbd5e1;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.exercise-rich-content .exercise-illustration {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem auto;
+  border-radius: 0.75rem;
+}
+
+.exercise-rich-content .exercise-fraction {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0 0.125rem;
+}
+
+.exercise-rich-content .exercise-fraction > span {
+  display: block;
+  padding: 0 0.125rem;
+}
+
+.exercise-rich-content .exercise-fraction-numerator {
+  border-bottom: 1px solid currentColor;
+}

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="unidade1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 9</span>
+                        <span>Fundamentos</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios do tema.</p>
+                    <a href="unidade1.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                t: `<strong>Questão 1 (ENEM/PPL)</strong><br><br>
+                    Uma loja decide premiar seus clientes. Cada cliente receberá um dos seis possíveis brindes disponíveis, conforme sua ordem de chegada na loja. Os brindes a serem distribuídos são: uma bola, um chaveiro, uma caneta, um refrigerante, um sorvete e um CD, nessa ordem. O primeiro cliente da loja recebe uma bola, o segundo recebe um chaveiro, o terceiro recebe uma caneta, o quarto recebe um refrigerante, o quinto recebe um sorvete, o sexto recebe um CD, o sétimo recebe uma bola, o oitavo recebe um chaveiro, e assim sucessivamente, segundo a ordem dos brindes.<br>
+                    O milésimo cliente receberá de brinde um(a):`, 
+                o: ["Bola.", "Caneta.", "Refrigerante.", "Sorvete.", "CD."], 
+                c: 3, 
+                e: "Como são 6 brindes que se repetem ciclicamente, dividimos 1000 por 6. O quociente é 166 (voltas completas no ciclo) e o resto é 4. O quarto brinde da sequência é o refrigerante (1º bola, 2º chaveiro, 3º caneta, 4º refrigerante)." 
+            },
+            { 
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                    O gerente de um cinema fornece anualmente ingressos gratuitos para escolas. Este ano, serão distribuídos 400 ingressos para uma sessão vespertina e 320 ingressos para uma sessão noturna de um mesmo filme. Várias escolas podem ser escolhidas para receberem ingressos. Há alguns critérios para a distribuição dos ingressos:<br><br>
+                    <ul>
+                        <li>cada escola deverá receber ingressos para uma única sessão;</li>
+                        <li>todas as escolas contempladas deverão receber o mesmo número de ingressos;</li>
+                        <li>não haverá sobra de ingressos (ou seja, todos os ingressos serão distribuídos).</li>
+                    </ul><br>
+                    O número mínimo de escolas que podem ser escolhidas para obter ingressos, segundo os critérios estabelecidos, é`, 
+                o: ["2.", "4.", "9.", "40.", "80."], 
+                c: 2, 
+                e: "Para minimizar o número de escolas, devemos maximizar o número de ingressos por escola usando o MDC(400, 320) = 80. O número total de escolas será (400 / 80) + (320 / 80) = 5 + 4 = 9 escolas." 
+            },
+            { 
+                t: `<strong>Questão 3 (UFSM ADAPTADA)</strong><br><br>
+                    Estudos e simulações são necessários para melhorar o trânsito. Por exemplo: imagine que, de um terminal rodoviário, partam os ônibus de três empresas, A, B e C. Os ônibus da empresa A partem a cada 15 minutos; da empresa B, a cada 20 minutos; da empresa C, a cada 25 minutos.<br>
+                    Às 7 h, partem simultaneamente 3 ônibus, um de cada empresa. A próxima partida simultânea dos ônibus das 3 empresas será às`, 
+                o: ["9 h.", "9 h 50min.", "10 h 30min.", "11 h.", "12 h."], 
+                c: 4, 
+                e: "Devemos calcular o MMC de 15, 20 e 25 para descobrir após quantos minutos eles partirão juntos novamente. MMC(15, 20, 25) = 300 minutos. Convertendo para horas: 300 / 60 = 5 horas. Partindo das 7 h, a próxima partida será às 7 + 5 = 12 h." 
+            },
+            { 
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                    Nosso calendário atual é embasado no antigo calendário romano, que, por sua vez, tinha como base as fases da lua. Os meses de janeiro, março, maio, julho, agosto, outubro e dezembro possuem 31 dias, e os demais, com exceção de fevereiro, possuem 30 dias. O dia 31 de março de certo ano ocorreu em uma terça-feira.<br>
+                    Nesse mesmo ano, qual dia da semana será o dia 12 de outubro?`, 
+                o: ["Domingo.", "Segunda-feira.", "Terça-feira.", "Quinta-feira.", "Sexta-feira."], 
+                c: 1, 
+                e: "Contamos os dias de 31 de março até 12 de outubro: Abril (30), Maio (31), Junho (30), Julho (31), Agosto (31), Setembro (30) e 12 dias de Outubro. Total = 30+31+30+31+31+30+12 = 195 dias. Dividindo 195 por 7, temos resto 6. Avançando 6 dias a partir de terça-feira (ou voltando 1 dia), chegamos a uma segunda-feira." 
+            },
+            { 
+                t: `<strong>Questão 5 (INÉDITA)</strong><br><br>
+                    Certa vez, um amigo me ligou para resolver um problemado seu cotidiano. Ele é proprietário de uma agência de turismo, chamada Alex Carioca Turismo.<br>
+                    Em um determinado dia, ele estava com um grupo de 846 pessoas que iriam fazer um retiro religioso, e sua empresa dispõe de ônibus com capacidade máxima de 45 pessoas e vans com capacidade para 20 pessoas. A tabela abaixo mostra os preços cobrados pela empresa de turismo para o aluguel de ônibus e vans.<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px; text-align: left;">Transporte (IDA E VOLTA)</th>
+                                <th style="padding: 10px; text-align: center;">Preço</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">ônibus</td><td style="padding: 10px; text-align: center;">R$ 600,00</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">van</td><td style="padding: 10px; text-align: center;">R$ 280,00</td></tr>
+                        </tbody>
+                    </table>
+                    A quantidade mínima de ônibus e vans que esse grupo deve alugar para fazer essa viagem, de modo que todos se acomodem sentados e que tenham o menor custo possível para eles, é`, 
+                o: ["18 ônibus.", "19 ônibus.", "18 ônibus e 1 van.", "18 ônibus e 2 vans.", "43 vans."], 
+                c: 3, 
+                e: "O custo por pessoa no ônibus cheio é R$600/45 ≈ R$13,33, e na van é R$280/20 = R$14,00. Logo, compensa usar o máximo de ônibus possível. 846 / 45 = 18 ônibus com resto de 36 pessoas. Para levar as 36 pessoas restantes: alugar mais 1 ônibus custa R$600. Alugar 2 vans (capacidade 40) custa 2 x R$280 = R$560. Como R$560 é mais barato que R$600, a combinação ideal é 18 ônibus e 2 vans." 
+            },
+            { 
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                    O ciclo de atividade magnética do Sol tem um período de 11 anos. O início do primeiro ciclo registrado se deu no começo de 1755 e se estendeu até o final de 1765. Desde então, todos os ciclos de atividade magnética do Sol têm sido registrados.<br><br>
+                    <div style="font-size: 0.8rem; color: #718096; text-align: right; margin-bottom: 15px;">Disponível em: g1.globo.com. Acesso em: 27 fev. 2013.</div>
+                    No ano de 2101, o Sol estará no ciclo de atividade magnética de número`, 
+                o: ["32.", "34.", "33.", "35.", "31."], 
+                c: 0, 
+                e: "O primeiro ciclo começou em 1755. A diferença de anos até 2101 é 2101 - 1755 = 346 anos. Como cada ciclo dura 11 anos, dividimos 346 por 11, resultando em 31,45. Isso significa que já se passaram 31 ciclos completos e estamos no decorrer do 32º ciclo." 
+            },
+            { 
+                t: `<strong>Questão 7 (INÉDITA)</strong><br><br>
+                    <strong>Gincanas Escolares</strong><br><br>
+                    As crianças sempre se divertem nas gincanas escolares, é um momento de juntar os amigos para brincar, arrecadar alimentos e competir de uma forma saudável. Numa dessas gincanas, além das brincadeiras, uma das tarefas era arrecadar alimentos para posteriormente serem doados. Foram colocados quatro ingredientes para arrecadação: feijão, arroz, açúcar e fubá.<br>
+                    Ao final dessa gincana, foram arrecadados 120 pacotes de feijão, 168 pacotes de arroz, 192 pacotes de açúcar e 240 pacotes de fubá que serão organizados pelos alunos em cestas básicas, contendo o maior número de cestas possível e que não sobrasse nenhum pacote de alimento.<br>
+                    Dessa forma, quantos pacotes de fubá serão colocados em cada cesta?`, 
+                o: ["8 pacotes.", "10 pacotes.", "12 pacotes.", "15 pacotes.", "20 pacotes."], 
+                c: 1, 
+                e: "Primeiro, calculamos o MDC dos pacotes para obter o número máximo de cestas: MDC(120, 168, 192, 240) = 24 cestas. Como há 240 pacotes de fubá no total, a quantidade por cesta será 240 / 24 = 10 pacotes." 
+            },
+            { 
+                t: `<strong>Questão 8 (PUC-PR)</strong><br><br>
+                    Um estagiário recebeu a tarefa de organizar documentos em três arquivos. No primeiro arquivo, havia apenas 42 contratos de locação, no segundo arquivo, apenas 30 contratos de compra e venda, no terceiro arquivo, apenas 18 laudos de avaliação de imóveis. Ele foi orientado a colocar os documentos em pastas, de modo que todas as pastas devem conter a mesma quantidade de documentos. Além de não poder mudar algum documento do seu arquivo original, deveria colocar na menor quantidade possível de pastas. O número mínimo de pastas que ele pode usar é?`, 
+                o: ["13.", "15.", "26.", "28.", "30."], 
+                c: 1, 
+                e: "Para usar o menor número de pastas, cada pasta deve conter o maior número de documentos possível. Calculamos o MDC(42, 30, 18) = 6 documentos por pasta. O total de pastas será: (42/6) + (30/6) + (18/6) = 7 + 5 + 3 = 15 pastas." 
+            },
+            { 
+                t: `<strong>Questão 9 (ENEM)</strong><br><br>
+                    Um arquiteto está reformando uma casa. De modo a contribuir com o meio ambiente, decide reaproveitar 20 tábuas de madeira retiradas da casa. Ele dispõe de 40 tábuas de 540 cm, 30 de 810 cm e 10 de 1 080 cm, todas de mesma largura e espessura. Ele pediu a um carpinteiro que cortasse as tábuas em pedaços de mesmo comprimento, sem deixar sobras, e de modo que as novas peças ficassem com o maior tamanho possível, mas de comprimento menor que 2 m. Atendendo ao pedido do arquiteto, o carpinteiro deverá produzir`, 
+                o: ["105 peças.", "120 peças.", "210 peças.", "243 peças.", "420 peças."], 
+                c: 4, 
+                e: "O MDC das dimensões originais (540, 810, 1080) é 270 cm (2,7 m). Porém, os pedaços devem ter menos de 2 m (200 cm). O maior divisor comum abaixo de 200 cm é 270 / 2 = 135 cm. Calculando o número de peças produzidas: Dimensão total = (40x540) + (30x810) + (10x1080) = 21600 + 24300 + 10800 = 56700 cm. Total de peças = 56700 / 135 = 423 peças. Opa, revendo o enunciado das tábuas disponíveis: são 40 tábuas de 540 cm, 30 de 810 cm e 10 de 1080 cm. Vamos refazer: 40*(540/135) + 30*(810/135) + 10*(1080/135) = 40*4 + 30*6 + 10*8 = 160 + 180 + 80 = 420 peças. Mas espere, na transcrição original da questão do ENEM tradicional: MDC(540, 810, 1080)=270. Divisores de 270: 270, 135, 90... O maior menor que 200 é 135. Total de peças: 40*4 + 30*6 + 10*8 = 420 peças." 
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return; 
+            
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true; 
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+            
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 5;
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? "✅ Muito bem!" : "❌ Quase lá... ";
+            document.getElementById('feedback-msg').innerText = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

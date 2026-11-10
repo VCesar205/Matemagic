@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="unidade2.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 9</span>
+                        <span>Proporção</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios do tema.</p>
+                    <a href="unidade2.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                t: `<strong>Questão 1 (INÉDITA)</strong><br><br>
+                    Num bairro da cidade de João Pessoa-PB, foi realizada uma campanha de conscientização para que não se jogue óleo no ralo da pia. Cada litro de óleo jogado no ralo polui rios e mares, além de entupir tubulações. Uma das alternativas apresentadas pelos moradores da comunidade foi fazer sabão com esse resíduo. A cada 4 litros de óleo é possível fazer 10 kg de sabão. Um morador que conseguiu juntar 10 litros de óleo, além de preservar o meio ambiente, consegue produzir`, 
+                o: ["10 kg de sabão.", "15 kg de sabão.", "20 kg de sabão.", "25 kg de sabão.", "30 kg de sabão."], 
+                c: 3, 
+                e: "Montando a proporção: se 4 litros produzem 10 kg, cada 1 litro produz 10 / 4 = 2,5 kg de sabão. Multiplicando pelo total arrecadado: 10 litros × 2,5 kg/litro = 25 kg de sabão." 
+            },
+            { 
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                    Nos últimos cinco anos, 32 mil mulheres de 20 a 24 anos foram internadas nos hospitais do SUS por causa de AVC. Entre os homens da mesma faixa etária, houve 28 mil internações pelo mesmo motivo.<br>
+                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 15px;">ÉPOCA, 26 abr. 2010 (adaptado).</div>
+                    Suponha que, nos próximos cinco anos, haja um acréscimo de 8 mil internações de mulheres e que o acréscimo de internações de homens por AVC ocorra na mesma proporção.<br><br>
+                    De acordo com as informações dadas, o número de homens que seriam internados por AVC, nos próximos cinco anos, corresponderia a`, 
+                o: ["4 mil.", "9 mil.", "21 mil.", "35 mil.", "39 mil."], 
+                c: 3, 
+                e: "A razão do acréscimo feminino é de 8 mil sobre as 32 mil internações iniciais (8/32 = 1/4 ou 25%). Mantendo a mesma proporção para os homens, calculamos o acréscimo deles: 28 mil × 25% = 7 mil. Portanto, o total de homens internados nos próximos cinco anos será de 28 mil + 7 mil = 35 mil." 
+            },
+            { 
+                t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                    Um dos grandes problemas da poluição dos mananciais (rios, córregos e outros) ocorre pelo hábito de jogar óleo utilizado em frituras nos encanamentos que estão interligados com o sistema de esgoto. Se isso ocorrer, cada 10 litros de óleo poderão contaminar 10 milhões (10<sup>7</sup>) de litros de água potável.<br>
+                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 15px;">Manual de etiqueta. Parte integrante das revistas Veja (ed. 2055), Cláudia (ed. 555), National Geographic ed. 93) e Nova Escola (ed. 208) (adaptado).</div>
+                    Suponha que todas as famílias de uma cidade descartem os óleos de frituras através dos encanamentos e consumam 1 000 litros de óleo em frituras por semana. Qual seria, em litros, a quantidade de água potável contaminada por semana nessa cidade?`, 
+                o: [
+                    "10<sup>2</sup>", 
+                    "10<sup>3</sup>", 
+                    "10<sup>4</sup>", 
+                    "10<sup>6</sup>", 
+                    "10<sup>9</sup>"
+                ], 
+                c: 4, 
+                e: "A proporção é de 10<sup>7</sup> litros de água poluída para cada 10 litros de óleo (o que simplifica para 10<sup>6</sup> litros de água por litro de óleo). Para um consumo de 1 000 litros (10<sup>3</sup> litros) de óleo: 10<sup>3</sup> × 10<sup>6</sup> = 10<sup>9</sup> litros de água contaminada." 
+            },
+            { 
+                t: `<strong>Questão 4 (ENEM ADAPTADA)</strong><br><br>
+                    Muitas medidas podem ser tomadas em nossas casas visando à utilização racional de energia elétrica. Isso deve ser uma atitude diária de cidadania. Uma delas pode ser a redução do tempo no banho. Um chuveiro com potência de 4 800 kWh consome 4,8 kW por hora. Uma pessoa que toma dois banhos diariamente, de 10 minutos cada, consumirá, em sete dias, quantos kW?`, 
+                o: ["0,8.", "1,6.", "5,6.", "11,2.", "33,6."], 
+                c: 3, 
+                e: "Cada dia possui 2 banhos de 10 minutos, totalizando 20 minutos por dia. Em 7 dias, o tempo total é de 7 × 20 = 140 minutos. Convertendo para horas: 140 / 60 = 7/3 horas. Como o consumo é de 4,8 kW por hora: Consumo = 4,8 × (7 / 3) = 1,6 × 7 = 11,2 kW." 
+            },
+            { 
+                t: `<strong>Questão 5 (INÉDITA)</strong><br><br>
+                    Uma piscina tem a forma de um paralelepípedo retângulo de 10 m de largura, 15 m de comprimento e 2 m de profundidade. Para tratar a água dessa piscina, é preciso adicionar 1 kg de certo produto químico a cada 2 500 litros de água. Estando ela completamente cheia de água, e sabendo-se que 1 m³ equivale a 1 000 litros, a quantidade em quilos do produto químico que deverá ser usada para o tratamento é`, 
+                o: ["12 kg.", "60 kg.", "120 kg.", "600 kg.", "1.200 kg."], 
+                c: 2, 
+                e: "Primeiro calculamos o volume da piscina: 10m × 15m × 2m = 300 m³. Convertendo para litros: 300 × 1000 = 300.000 litros. Sabendo que é usado 1 kg a cada 2.500 litros: 300.000 / 2.500 = 120 kg do produto." 
+            },
+            { 
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                    <strong>Fontes alternativas</strong><br>
+                    Há um novo impulso para produzir combustível a partir de gordura animal. Em abril, a <em>High Plains Bioenergy</em> inaugurou uma biorrefinaria próxima a uma fábrica de processamento de carne suína em Guymon, Oklahoma. A refinaria converte a gordura do porco, juntamente com o óleo vegetal, em biodiesel. A expectativa da fábrica é transformar 14 milhões de quilogramas de banha em 112 milhões de litros de biodiesel.<br>
+                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 15px;">Revista Scientific American, Brasil, ago. 2009 (adaptado).</div>
+                    Considere que haja uma proporção direta entre a massa de banha transformada e o volume de biodiesel produzido.<br>
+                    Para produzir 48 milhões de litros de biodiesel, a massa de banha necessária, em quilogramas, será de, aproximadamente,`, 
+                o: ["6 milhões.", "33 milhões.", "78 milhões.", "146 milhões.", "384 milhões."], 
+                c: 0, 
+                e: "Montando a razão entre massa e volume: 14 milhões de kg / 112 milhões de litros = 1/8 kg por litro. Logo, para produzir 48 milhões de litros de biodiesel precisaremos de: 48 milhões / 8 = 6 milhões de quilogramas." 
+            },
+            { 
+                t: `<strong>Questão 7 (CORREIOS)</strong><br><br>
+                    Além da missão de entregar correspondências, os carteiros são também responsáveis pela difusão de importantes campanhas de conscientização da população e pela promoção da cidadania. Um exemplo de ação de caráter social que envolve os carteiros e que tem tido grande receptividade é o projeto Papai Noel dos Correios. Em 2009, foram adotados 21% das 1 981 000 cartas recebidas pelos Correios. O projeto contou com o apoio e com a participação de 3 818 voluntários internos, 669 voluntários externos e 462 parcerias.<br><br>
+                    Se, em 2010, o projeto Papai Noel dos Correios contou com 22 435 voluntários, e se foi mantida a mesma proporção de voluntários externos e internos verificada em 2009, então a quantidade de voluntários internos em 2010 foi:`, 
+                o: [
+                    "Superior a 19 050 e inferior a 19 100.", 
+                    "Superior a 19 100 e inferior a 19 150.", 
+                    "Superior a 19 150.", 
+                    "Inferior a 19 000.", 
+                    "Superior a 19 000 e inferior a 19 050."
+                ], 
+                c: 0, 
+                e: "Em 2009, o total de voluntários (internos + externos) foi de 3.818 + 669 = 4.487. A proporção de voluntários internos era de 3.818 / 4.487. Mantendo a proporção para o total de 22.435 em 2010: (3.818 / 4.487) × 22.435 = 3.818 × 5 = 19.090 voluntários internos. Esse valor é Superior a 19 050 e inferior a 19 100." 
+            },
+            { 
+                t: `<strong>Questão 8 (ENEM/PPL)</strong><br><br>
+                    Médicos alertam sobre a importância de educar as crianças para terem hábitos alimentares saudáveis. Por exemplo, analisando-se uma bolacha com recheio de chocolate (25 g) e um pé de alface (25 g), observam-se as seguintes quantidades de nutrientes, respectivamente:<br>
+                    • carboidratos: 15 g e 0,5 g;<br>
+                    • proteínas: 1,9 g e 0,5 g.<br>
+                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 15px;">Disponível em: veja.abril.com.br. Acesso em: 27 abr. 2010 (adaptado).</div>
+                    Considerando as informações apresentadas, qual deve ser o número de pés de alface consumidos para se obter a mesma quantidade de carboidratos de uma bolacha?`, 
+                o: ["50.", "30.", "14.", "8.", "7."], 
+                c: 1, 
+                e: "Uma bolacha possui 15 g de carboidratos e um pé de alface possui 0,5 g. Para encontrar a quantidade necessária de alface dividimos a quantidade da bolacha pela do alface: 15 / 0,5 = 30 pés de alface." 
+            },
+            { 
+                t: `<strong>Questão 9 (INÉDITA)</strong><br><br>
+                    Um parque de diversão tem o preço de sua entrada diferenciada de acordo com o horário que você vai se divertir: das 15 h às 17:30 h, cada pessoa pagará R$ 20,00; das 17:30 h às 22 h, esse valor aumenta para R$ 35,00. Num dia de bastante movimento, cerca de 846 pessoas frequentaram o parque, sendo que 1/3 deles comparece no período até as 17:30 h. Qual o valor arrecadado na bilheteria do parque nesse dia?`, 
+                o: ["R$ 20 000,00.", "R$ 21 150,00.", "R$ 22 750,00.", "R$ 25 380,00.", "R$ 25 750,00."], 
+                c: 3, 
+                e: "Pessoas até as 17:30 h (pagam R$ 20,00): 1/3 de 846 = 282 pessoas. Faturamento parcial = 282 × R$ 20 = R$ 5.640,00.<br>Pessoas após as 17:30 h (pagam R$ 35,00): 846 - 282 = 564 pessoas. Faturamento parcial = 564 × R$ 35 = R$ 19.740,00.<br>Arrecadação Total = R$ 5.640 + R$ 19.740 = R$ 25.380,00." 
+            },
+            { 
+                t: `<strong>Questão 10 (INÉDITA)</strong><br><br>
+                    Três pessoas formaram uma sociedade. A entrou com R$ 24.000,00; B com R$ 30.000,00 e C com R$ 36.000,00. Depois de três meses, tiveram um lucro de R$ 60.000,00. Os lucros desses sócios, que devem ser proporcionais ao valor investido, são:
+                `,
+                o: ["R$ 12 000,00, R$ 24 000,00, R$ 24 000,00.", "R$ 16 000,00, R$ 18 000,00, R$ 26 000,00.", "R$ 16 000,00, R$ 20 000,00, R$ 24 000,00.", "R$ 10 000,00, R$ 20 000,00, R$ 30 000,00.", "R$ 18 000,00, R$ 20 000,00, R$ 22 000,00."], 
+                c: 2, 
+                e: "A razão dos investimentos é 24.000:30.000:36.000, equivalente a 4:5:6. São 15 partes no total; cada parte vale 60.000 / 15 = R$ 4.000,00. Assim, os lucros são R$ 16.000,00, R$ 20.000,00 e R$ 24.000,00." 
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+            
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return; 
+            
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true; 
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+            
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 5;
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? "✅ Muito bem!" : "❌ Quase lá... ";
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

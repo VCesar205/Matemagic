@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="unidade1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 9</span>
+                        <span>Frações</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios do tema.</p>
+                    <a href="unidade1.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                t: `<strong>Questão 1 (PUC-RS)</strong><br><br>
+                    Pitágoras estabeleceu a seguinte relação entre as sete notas musicais e os números racionais:<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem; text-align: center;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px;">Dó</th>
+                                <th style="padding: 10px;">Ré</th>
+                                <th style="padding: 10px;">Mi</th>
+                                <th style="padding: 10px;">Fá</th>
+                                <th style="padding: 10px;">Sol</th>
+                                <th style="padding: 10px;">Lá</th>
+                                <th style="padding: 10px;">Si</th>
+                                <th style="padding: 10px;">Dó</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7; background: #fff;">
+                                <td style="padding: 10px;">1</td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">8</span><span>9</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">64</span><span>81</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">3</span><span>4</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">2</span><span>3</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">16</span><span>27</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">128</span><span>243</span></div></td>
+                                <td style="padding: 10px;"><div class="frac"><span class="nominator">1</span><span>2</span></div></td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    Para encontrar o número <div class="frac"><span class="nominator">16</span><span>27</span></div> (relativo à nota Lá), multiplica-se <div class="frac"><span class="nominator">2</span><span>3</span></div> (o correspondente à nota Sol) por <div class="frac"><span class="nominator">8</span><span>9</span></div>. Assim, para obter <div class="frac"><span class="nominator">3</span><span>4</span></div> (relativo à nota Fá), deve-se multiplicar <div class="frac"><span class="nominator">64</span><span>81</span></div> (da nota Mi) por`, 
+                o: [
+                    `<div class="frac"><span class="nominator">8</span><span>9</span></div>`, 
+                    `<div class="frac"><span class="nominator">9</span><span>8</span></div>`, 
+                    `<div class="frac"><span class="nominator">243</span><span>256</span></div>`, 
+                    `<div class="frac"><span class="nominator">256</span><span>243</span></div>`, 
+                    `<div class="frac"><span class="nominator">192</span><span>324</span></div>`
+                ], 
+                c: 2, 
+                e: "Para descobrir o fator multiplicador, basta efetuar a operação inversa (divisão): (3/4) ÷ (64/81) = (3/4) * (81/64) = 243/256." 
+            },
+            { 
+                t: `<strong>Questão 2 (UFRJ ADAPTADA)</strong><br><br>
+                    Numa escola foi feito um levantamento para saber quais os tipos de calçados mais usados pelas crianças. Foi obtido o seguinte resultado: um terço usa sandálias; um quarto usa tênis; um quinto usa sapatos, e os 52 restantes usam outros tipos de calçados. Conclui-se que, pelos tipos de calçados encontrados, há nessa escola um total de`, 
+                o: ["280 crianças.", "270 crianças.", "260 crianças.", "250 crianças.", "240 crianças."], 
+                c: 4, 
+                e: "Somando as frações conhecidas: 1/3 + 1/4 + 1/5 = 20/60 + 15/60 + 12/60 = 47/60. A fração restante para completar o todo é de 13/60, que corresponde às 52 crianças restantes. Se 13/60 = 52, então 1/60 = 4. Portanto, o total é 60 * 4 = 240 crianças." 
+            },
+            { 
+                t: `<strong>Questão 3 (UFSP)</strong><br><br>
+                    Um confeiteiro vende bolos de mesmo tamanho e cortados em fatias iguais. Certo dia, ele colocou três bolos à venda em fatias. Venderam-se <div class="frac"><span class="nominator">3</span><span>4</span></div> de um bolo de chocolate, <div class="frac"><span class="nominator">2</span><span>3</span></div> de um bolo de creme e <div class="frac"><span class="nominator">5</span><span>6</span></div> de um bolo de nozes. A fração correspondente ao que sobrou dos bolos é`, 
+                o: [
+                    `<div class="frac"><span class="nominator">1</span><span>2</span></div>`, 
+                    `<div class="frac"><span class="nominator">1</span><span>4</span></div>`, 
+                    `<div class="frac"><span class="nominator">3</span><span>4</span></div>`, 
+                    `<div class="frac"><span class="nominator">5</span><span>6</span></div>`, 
+                    `<div class="frac"><span class="nominator">3</span><span>8</span></div>`
+                ], 
+                c: 2, 
+                e: "Calculamos o que sobrou de cada bolo individualmente: Chocolate sobrou 1/4 (1 - 3/4); Creme sobrou 1/3 (1 - 2/3); Nozes sobrou 1/6 (1 - 5/6). Somando as sobras: 1/4 + 1/3 + 1/6 = 3/12 + 4/12 + 2/12 = 9/12. Simplificando a fração por 3, obtemos 3/4." 
+            },
+            { 
+                t: `<strong>Questão 4 (UNIOESTE ADAPTADA)</strong><br><br>
+                    Um produtor rural possui dois açudes, A e B, de igual capacidade, utilizados para armazenamento de água para irrigação. Durante o período de estiagem, o açude A estava com <div class="frac"><span class="nominator">1</span><span>4</span></div> de sua capacidade, e o açude B com apenas <div class="frac"><span class="nominator">1</span><span>5</span></div>. Para reduzir custos de manutenção, o produtor resolveu passar <div class="frac"><span class="nominator">3</span><span>4</span></div> da água do açude B para o açude A e trabalhar apenas com este último. Após essa operação, sendo V litros a capacidade destes açudes quando estão cheios, para que o açude A fique completo, faltam`, 
+                o: [
+                    `<div class="frac"><span class="nominator">3</span><span>4</span></div> V litros.`, 
+                    `<div class="frac"><span class="nominator">2</span><span>5</span></div> V litros.`, 
+                    `<div class="frac"><span class="nominator">2</span><span>3</span></div> V litros.`, 
+                    `<div class="frac"><span class="nominator">3</span><span>5</span></div> V litros.`, 
+                    `<div class="frac"><span class="nominator">4</span><span>3</span></div> V litros.`
+                ], 
+                c: 3, 
+                e: "A quantidade transferida de B para A é: 3/4 * 1/5 = 3/20 de V. O açude A já possuía 1/4 de sua capacidade (ou 5/20). O novo volume de A passa a ser: 5/20 + 3/20 = 8/20 = 2/5 de V. Para ficar completamente cheio (5/5), faltam: 5/5 - 2/5 = 3/5 V litros." 
+            },
+            { 
+                t: `<strong>Questão 5 (ENEM ADAPTADA)</strong><br><br>
+                    No tanque de um certo carro de passeio, cabem até 50 L de combustível, e o rendimento médio desse carro na estrada é de 15 km/L. Ao sair para uma viagem de 600 km, o motorista observou que o marcador de combustível estava exatamente sobre uma das marcas da escala divisória do medidor, conforme figura a seguir.<br>
+                    <img src="imagens exercicio/marcador.jpeg" class="img-center"><br>
+                    Como o motorista conhece o percurso, sabe que existem, até a chegada a seu destino, cinco postos de abastecimento de combustível, localizados a 150 km, 187 km, 450 km, 500 km e 570 km do ponto de partida. Qual a máxima distância, em quilômetros, que poderá percorrer até ser necessário reabastecer o veículo, de modo a não ficar sem combustível na estrada?`, 
+                o: ["570.", "500.", "450.", "187.", "150."], 
+                c: 2, 
+                e: "O ponteiro aponta para a marca correspondente a 3/4 do tanque. Calculando o volume disponível: 3/4 * 50 = 37,5 litros. Multiplicando pelo rendimento do automóvel: 37,5 L * 15 km/L = 562,5 km de autonomia máxima. O posto mais distante que ele consegue alcançar com segurança antes de secar o tanque (limite de 562,5 km) fica situado a 450 km." 
+            },
+            { 
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                    Cinco marcas de pão integral apresentam as seguintes concentrações de fibras (massa de fibra por massa de pão):<br>
+                    <ul>
+                        <li>Marca A: 2 g de fibras a cada 50 g de pão;</li>
+                        <li>Marca B: 5 g de fibras a cada 40 g de pão;</li>
+                        <li>Marca C: 5 g de fibras a cada 100 g de pão;</li>
+                        <li>Marca D: 6 g de fibras a cada 90 g de pão;</li>
+                        <li>Marca E: 7 g de fibras a cada 70 g de pão.</li>
+                    </ul><br>
+                    Recomenda-se a ingestão do pão que possui a maior concentração de fibras.<br>
+                    <div style="font-size: 0.8rem; color: #718096; text-align: right; margin-bottom: 15px;">Disponível em: www.blog.saude.gov.br. Acesso em: 25 fev. 2013.</div>
+                    A marca a ser escolhida é`, 
+                o: ["A.", "B.", "C.", "D.", "E."], 
+                c: 1, 
+                e: "Análise da concentração de cada marca (razão fibra/pão): A = 2/50 = 0,04; B = 5/40 = 0,125; C = 5/100 = 0,05; D = 6/90 = 0,066...; E = 7/70 = 0,10. A maior concentração está presente na Marca B (0,125)." 
+            },
+            { 
+                t: `<strong>Questão 7 (INÉDITA)</strong><br><br>
+                    A comissão de formatura das turmas de 3º ano do Ensino Médio de certa escola fez uma pesquisa entre os alunos para saber que tipo de festa eles preferiam. <div class="frac"><span class="nominator">1</span><span>3</span></div> dos alunos prefere uma formatura tradicional, com uma cerimônia e um baile, <div class="frac"><span class="nominator">1</span><span>8</span></div> quer um churrasco numa casa de praia, <div class="frac"><span class="nominator">2</span><span>5</span></div> gostaria de fazer uma viagem internacional e 17 alunos não quiseram responder à pesquisa. Sabendo que todos os alunos do 3º ano da escola foram abordados, o número total de alunos do 3º ano é`, 
+                o: ["90 alunos.", "100 alunos.", "110 alunos.", "120 alunos.", "130 alunos."], 
+                c: 3, 
+                e: "Somando as frações dos alunos que opinaram: 1/3 + 1/8 + 2/5. O MMC entre 3, 8 e 5 é 120. Convertendo as frações: 40/120 + 15/120 + 48/120 = 103/120. A fração que não opinou corresponde a 120/120 - 103/120 = 17/120. Se 17/120 equivale a 17 alunos, então o grupo inteiro possui um total de 120 alunos." 
+            },
+            { 
+                t: `<strong>Questão 8 (INÉDITA)</strong><br><br>
+                    Uma garrafa está cheia de uma mistura, na qual <div class="frac"><span class="nominator">2</span><span>3</span></div> do conteúdo são compostos por óleo e <div class="frac"><span class="nominator">1</span><span>3</span></div> por água. Uma segunda garrafa, com o dobro da capacidade da primeira, está cheia de uma mistura dos mesmos produtos da primeira garrafa, sendo agora <div class="frac"><span class="nominator">3</span><span>5</span></div> do conteúdo composto por óleo e <div class="frac"><span class="nominator">2</span><span>5</span></div> por água. O conteúdo das duas garrafas é derramado em uma terceira garrafa, com o triplo da capacidade da primeira. Que fração do conteúdo da terceira garrafa corresponde à quantidade de óleo?`, 
+                o: [
+                    `<div class="frac"><span class="nominator">10</span><span>15</span></div>`, 
+                    `<div class="frac"><span class="nominator">5</span><span>15</span></div>`, 
+                    `<div class="frac"><span class="nominator">28</span><span>45</span></div>`, 
+                    `<div class="frac"><span class="nominator">17</span><span>45</span></div>`, 
+                    `<div class="frac"><span class="nominator">3</span><span>8</span></div>`
+                ], 
+                c: 2, 
+                e: "Definindo a capacidade da garrafa 1 como V. O volume total derramado na terceira garrafa é V (da primeira) + 2V (da segunda) = 3V. Quantidade de óleo da garrafa 1: 2/3 * V. Quantidade de óleo da garrafa 2: 3/5 * 2V = 6/5 * V. Somando todo o óleo: 2/3 * V + 6/5 * V = (10/15 + 18/15) * V = 28/15 * V. A proporção de óleo em relação à garrafa 3 (3V) é: (28/15 * V) / 3V = 28/45." 
+            },
+            { 
+                t: `<strong>Questão 9 (ENEM)</strong><br><br>
+                    Em uma cantina, o sucesso de venda no verão são sucos preparados à base de polpa de frutas. Um dos sucos mais vendidos é o de morango com acerola, que é preparado com <div class="frac"><span class="nominator">2</span><span>3</span></div> de polpa de morango e <div class="frac"><span class="nominator">1</span><span>3</span></div> de polpa de acerola. Para o comerciante, as polpas são vendidas em embalagens de igual volume. Atualmente, a embalagem da polpa de morango custa R$ 18,00 e a de acerola, R$ 14,70. Porém, está prevista uma alta no preço da embalagem da polpa de acerola no próximo mês, passando a custar R$ 15,30. Para não aumentar o preço do suco, o comerciante negociou com o fornecedor o preço da embalagem da polpa de morango. A redução, em real, no preço da embalagem da polpa de morango deverá ser de`, 
+                o: ["1,20.", "0,90.", "0,60.", "0,40.", "0,30."], 
+                c: 3, 
+                e: "O custo atual do suco composto é: 2/3 * 18,00 + 1/3 * 14,70 = 12,00 + 4,90 = R$ 16,90. O aumento da acerola foi de 15,30 - 14,70 = R$ 0,60. Como a acerola representa 1/3 do suco, esse aumento impacta o custo final em 1/3 * 0,60 = R$ 0,20. Para neutralizar esse acréscimo de R$ 0,20, a redução na polpa de morango (que representa 2/3 do composto) deve satisfazer: 2/3 * Redução = 0,20 -> Redução = 0,60 / 2 = R$ 0,30." 
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return; 
+            
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true; 
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+            
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 5;
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? "✅ Muito bem!" : "❌ Quase lá... ";
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

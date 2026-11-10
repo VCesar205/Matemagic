@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="painel1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 10</span>
+                        <span>Função Afim</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios do tema</p>
+                    <a href="unidade3.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                As curvas de oferta e de demanda de um produto representam, respectivamente, as quantidades que vendedores e consumidores estão dispostos a comercializar em função do preço do produto. Em alguns casos, essas curvas podem ser representadas por retas. Suponha que as quantidades de oferta e de demanda de um produto sejam, respectivamente, representadas pelas equações:<br><br>
+                <div style="text-align: center; font-size: 1.1rem; margin-bottom: 15px; font-weight: bold;">
+                    Qo = - 20 + 4P &nbsp; e &nbsp; Qd = 46 - 2P
+                </div>
+                em que Qo é quantidade de oferta, Qd é a quantidade de demanda e P é o preço do produto. A partir dessas equações, de oferta e de demanda, os economistas encontram o preço de equilíbrio de mercado, ou seja, quando Qo e Qd se igualam. Para a situação descrita, qual o valor do preço de equilíbrio?`,
+                o: [
+                    "5.",
+                    "11.",
+                    "13.",
+                    "23.",
+                    "33."
+                ],
+                c: 1,
+                e: "Para encontrar o preço de equilíbrio, igualamos a quantidade de oferta à quantidade de demanda (Q_o = Q_d):<br><br>-20 + 4P = 46 - 2P<br>4P + 2P = 46 + 20<br>6P = 66<br>P = 11.<br><br>Logo, o preço de equilíbrio é 11."
+            },
+            {
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                Um experimento consiste em colocar certa quantidade de bolas de vidro idênticas em um copo com água até certo nível e medir o nível da água, conforme ilustrado na figura a seguir. Como resultado do experimento, concluiu-se que o nível da água é função do número de bolas de vidro que são colocadas dentro do copo. O quadro a seguir mostra alguns resultados do experimento realizado.<br><br>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #edf2f7; font-size: 0.9rem; text-align: center;">
+                    <thead>
+                        <tr style="background-color: #ecffeb; border-bottom: 2px solid #03ad3c;">
+                            <th style="padding: 10px;">NÚMERO DE BOLAS (X)</th>
+                            <th style="padding: 10px;">NÍVEL DE ÁGUA (Y)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 8px;">5</td>
+                            <td style="padding: 8px;">6,35 cm</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 8px;">10</td>
+                            <td style="padding: 8px;">6,70 cm</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 8px;">15</td>
+                            <td style="padding: 8px;">7,05 cm</td>
+                        </tr>
+                    </tbody>
+                </table>
+                Qual a expressão algébrica que permite calcular o nível da água (y) em função do número de bolas (x)?`,
+                o: [
+                    "y = 30x.",
+                    "y = 25x + 20,2.",
+                    "y = 1,27x.",
+                    "y = 0,7x.",
+                    "y = 0,07x + 6."
+                ],
+                c: 4,
+                e: "Anotamos a taxa de variação (coeficiente angular): a cada 5 bolas adicionadas, o nível da água sobe 0,35 cm (6,70 - 6,35). Assim, a taxa por bola é 0,35 / 5 = 0,07.<br>Substituindo na equação da reta y = ax + b com x = 5 e y = 6,35:<br>6,35 = 0,07(5) + b &rArr; 6,35 = 0,35 + b &rArr; b = 6.<br>Portanto, a equação correta é y = 0,07x + 6."
+            },
+            {
+                t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                O gráfico abaixo, obtido a partir de dados do Ministério do Meio Ambiente, mostra o crescimento do número de espécies da fauna brasileira ameaçadas de extinção.<br><br>
+                <img src="imagens exercicio/especies extincao.jpeg" alt="Gráfico do crescimento de espécies ameaçadas" class="img-center"><br>
+                Se mantida, pelos próximos anos, a tendência de crescimento mostrada no gráfico, o número de espécies ameaçadas de extinção em 2011 será igual a`,
+                o: [
+                    "465.",
+                    "493.",
+                    "498.",
+                    "538.",
+                    "699."
+                ],
+                c: 2,
+                e: "O gráfico aponta um crescimento linear em um período de 24 anos (de 1983 a 2007). O aumento de espécies foi de 461 - 239 = 222 espécies.<br>A taxa de crescimento anual é de 222 / 24 = 9,25 espécies por ano.<br>De 2007 para 2011 decorrem 4 anos. O incremento será de 4 &times; 9,25 = 37 espécies.<br>Portanto, o total em 2011 será de 461 + 37 = 498 espécies."
+            },
+            {
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                O saldo de contratações no mercado formal no setor varejista da região metropolitana de São Paulo registrou alta. Comparando as contratações deste setor no mês de fevereiro com as de janeiro deste ano, houve incremento de 4 300 vagas no setor, totalizando 880 605 trabalhadores com carteira assinada.<br><br>
+                <small style="color: #718096;">Disponível em: www.folha.uol.com.br. Acesso em: 26 abr. 2010 (adaptado).</small><br><br>
+                Suponha que o incremento de trabalhadores no setor varejista seja sempre o mesmo nos seis primeiros meses do ano. Considerando-se que y e x representam, respectivamente, as quantidades de trabalhadores no setor varejista e os meses, janeiro sendo o primeiro, fevereiro, o segundo, e assim por diante, a expressão algébrica que relaciona essas quantidades nesses meses é`,
+                o: [
+                    "y = 4 300x.",
+                    "y = 884 905x.",
+                    "y = 872 005 + 4 300x.",
+                    "y = 876 305 + 4 300x.",
+                    "y = 880 605 + 4 300x."
+                ],
+                c: 2,
+                e: "O mês de fevereiro corresponde a x = 2, e nele o total de trabalhadores é y = 880 605. Sabemos que o incremento mensal (coeficiente angular) é de 4 300. Usando a forma da função afim y = ax + b:<br>880 605 = 4 300(2) + b<br>880 605 = 8 600 + b<br>b = 880 605 - 8 600 = 872 005.<br>A lei da função é dada por y = 872 005 + 4 300x."
+            },
+            {
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                Uma pesquisa da ONU estima que, já em 2008, pela primeira vez na história das civilizações, a maioria das pessoas viverá na zona urbana. O gráfico a seguir mostra o crescimento da população urbana desde 1950, quando a população era de 700 milhões de pessoas, e apresenta uma previsão para 2030 baseada em crescimento linear no período de 2008 a 2030.<br><br>
+                <img src="imagens exercicio/populacao urbana.jpeg" alt="Gráfico de crescimento populacional urbano" class="img-center"><br>
+                <small style="color: #718096;">Almanaque Abril, 2008, p. 128 (adaptado).</small><br><br>
+                De acordo com o gráfico, a população urbana mundial em 2020 corresponderá, aproximadamente, a quantos bilhões de pessoas?`,
+                o: [
+                    "4,00.",
+                    "4,10.",
+                    "4,15.",
+                    "4,25.",
+                    "4,50."
+                ],
+                c: 3,
+                e: "Analisando o período de previsão linear (2008 a 2030):<br>Em 2008 a população era de 3,3 bilhões e em 2030 a previsão indica 5,0 bilhões.<br>A variação total em 22 anos é de 5,0 - 3,3 = 1,7 bilhão.<br>Para o ano de 2020, passaram-se 12 anos desde 2008. Calculando por proporção linear:<br>Aumento = (1,7 / 22) &times; 12 &asymp; 0,93 bilhão.<br>Somando ao valor inicial de 2008: 3,3 + 0,93 = 4,23 bilhões, que se aproxima de 4,25 bilhões."
+            },
+            {
+                t: `<strong>Questão 6 (INÉDITA)</strong><br><br>
+                Arrumar a mala, imaginar o lugar, as pessoas que vamos encontrar e as possíveis situações que vamos viver, os abraços de despedida, a expectativa feliz das futuras novidades, tudo isso faz parte da viagem e é prazeroso vivê-lo.<br>
+                Pensando em viajar com sua família, Tarcísio fez uma pesquisa para alugar um veículo em três locadoras e anotou as informações passadas por elas.<br><br>
+                <ul>
+                    <li>Locadora 1: cobra R$ 90,00 de diária mais R$ 0,25 por quilômetro rodado.</li>
+                    <li>Locadora 2: cobra R$ 100,00 de diária mais R$ 0,20 por quilômetro rodado.</li>
+                    <li>Locadora 3: cobra R$ 120,00 de diária sem custo adicional por quilometragem.</li>
+                </ul><br>
+                Para poder utilizar o veículo, a fim de se deslocar entre as cidades que deseja visitar com sua família, Tarcísio optou pela locadora 3, por ser a mais econômica para realizar a viagem.<br>
+                Para que a economia seja possível, Tarcísio deverá percorrer com o veículo alugado uma quilometragem`,
+                o: [
+                    "inferior a 100 km.",
+                    "exata de 100 km.",
+                    "superior a 100 km e inferior a 120 km.",
+                    "exata de 120 km.",
+                    "superior a 120 km."
+                ],
+                c: 4,
+                e: "Vamos comparar o custo das locadoras para uma diária em função dos quilômetros rodados (x):<br>• L1(x) = 90 + 0,25x<br>• L2(x) = 100 + 0,20x<br>• L3(x) = 120<br><br>Para a Locadora 3 ser mais vantajosa que a Locadora 2 (que é mais barata que a 1 em longas distâncias):<br>120 < 100 + 0,20x &rArr; 20 < 0,20x &rArr; x > 100 km.<br>Para a Locadora 3 ser mais barata que a Locadora 1:<br>120 < 90 + 0,25x &rArr; 30 < 0,25x &rArr; x > 120 km.<br>Portanto, para ela ser a mais econômica de todas, a quilometragem obrigatoriamente deve ser superior a 120 km."
+            },
+            {
+                t: `<strong>Questão 7 (ENEM/PPL)</strong><br><br>
+                No comércio é comumente utilizado o salário mensal comissionado. Além de um valor fixo, o vendedor tem um incentivo, geralmente um percentual sobre as vendas. Considere um vendedor que tenha salário comissionado, sendo sua comissão dada pelo percentual do total de vendas que realizar no período. O gráfico expressa o valor total de seu salário, em reais, em função do total de vendas realizadas, também em reais.<br><br>
+                <img src="imagens exercicio/comissao.jpeg" alt="Gráfico Salário versus Total de Vendas" class="img-center"><br>
+                Qual o valor percentual da sua comissão?`,
+                o: [
+                    "2,0%.",
+                    "5,0%.",
+                    "16,7%.",
+                    "27,7%.",
+                    "50,0%."
+                ],
+                c: 0,
+                e: "A partir do gráfico observamos que o salário fixo (quando as vendas são R$ 0) é de R$ 800,00. Quando o vendedor atinge R$ 20 000,00 em vendas, seu salário total passa para R$ 1 200,00.<br>O valor recebido exclusivamente de comissão foi de 1 200 - 800 = R$ 400,00.<br>Para calcular o percentual da comissão dividimos o ganho sobre o valor vendido:<br>Percentual = 400 / 20 000 = 2 / 100 = 2%."
+            },
+            {
+                t: `<strong>Questão 8 (ENEM)</strong><br><br>
+                Uma empresa produz jogos pedagógicos para computadores, com custos fixos de R$ 1 000,00 e custos variáveis de R$ 100,00 por unidade de jogo produzida. Desse modo, o custo total para x jogos produzidos é dado por C(x) = 1 + 0,1x (em R$ 1 000,00). A gerência da empresa determina que o preço de venda do produto seja de R$ 700,00. Com isso a receita bruta para x jogos produzidos é dada por R(x) = 0,7x (em R$ 1 000,00). O lucro líquido, obtido pela venda de x unidades de jogos, é calculado pela diferença entre a receita bruta e os custos totais. O gráfico que modela corretamente o lucro líquido dessa empresa, quando são produzidos x jogos, é:<br><br>
+                <img src="imagens exercicio/lucro opcoes.png" alt="Gráficos das alternativas de Lucro Líquido" class="img-center">`,
+                o: [
+                    "<img src='imagens exercicio/grafico_8a.jpeg' alt='Alternativa A' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens exercicio/grafico_8b.jpeg' alt='Alternativa B' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens exercicio/grafico_8c.jpeg' alt='Alternativa C' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens exercicio/grafico_8d.jpeg' alt='Alternativa D' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens exercicio/grafico_8e.jpeg' alt='Alternativa E' style='max-height: 100px; display: inline-block; vertical-align: middle;'>"
+                ],
+                c: 1,
+                e: "A função Lucro Líquido L(x) é dada por R(x) - C(x):<br>L(x) = 0,7x - (1 + 0,1x) = 0,6x - 1.<br>Esta é uma reta com coeficiente linear igual a -1 (onde cruza o eixo vertical) e coeficiente angular igual a 0,6.<br>Para encontrar a raiz (onde o lucro é zero): 0,6x - 1 = 0 &rArr; x = 1 / 0,6 &asymp; 1,67.<br>O gráfico da alternativa B representa perfeitamente essa reta partindo de -1,0 no eixo vertical."
+            },
+            {
+                t: `<strong>Questão 9 (ENEM)</strong><br><br>
+                A raiva é uma doença viral e infecciosa, transmitida por mamíferos. A campanha nacional de vacinação antirrábica tem o objetivo de controlar a circulação do vírus da raiva canina e felina, prevenindo a raiva humana. O gráfico mostra a cobertura (porcentagem de vacinados) da campanha, em cães, nos anos de 2013, 2015 e 2017, no município de Belo Horizonte, em Minas Gerais. Os valores das coberturas dos anos de 2014 e 2016 não estão informados no gráfico e deseja-se estimá-los. Para tal, levou-se em consideração que a variação na cobertura de vacinação da campanha antirrábica, nos períodos de 2013 a 2015 e de 2015 a 2017, deu-se de forma linear.<br><br>
+                <img src="imagens exercicio/vacinação raiva.jpeg" alt="Gráfico da cobertura vacinal linear" class="img-center"><br>
+                <small style="color: #718096;">Disponível em: pni.datasus.gov.br. Acesso em: 5 nov. 2017.</small><br><br>
+                Qual teria sido a cobertura dessa campanha no ano de 2014?`,
+                o: [
+                    "62,3%.",
+                    "63,0%.",
+                    "63,5%.",
+                    "64,0%.",
+                    "65,5%."
+                ],
+                c: 1,
+                e: "De acordo com o enunciado, a variação entre 2013 e 2015 é linear. Em 2013 a cobertura era 67% e em 2015 caiu para 59%.<br>A queda em dois anos foi de 67% - 59% = 8%.<br>Como o comportamento é linear, a queda anual média no período é de 8% / 2 = 4% ao ano.<br>Logo, para o ano intermédio de 2014, subtrai-se 4% do valor inicial: 67% - 4% = 63%."
+            },
+            {
+                t: `<strong>Questão 10 (ENEM)</strong><br><br>
+                Um dos grandes desafios do Brasil é o gerenciamento dos seus recursos naturais, sobretudo os recursos hídricos. Existe uma demanda crescente por água e o risco de racionamento não pode ser descartado. O nível de água de um reservatório foi monitorado por um período, sendo o resultado mostrado no gráfico. Suponha que essa tendência linear observada no monitoramento se prolongue pelos próximos meses.<br><br>
+                <img src="imagens exercicio/reservatorio.jpeg" alt="Gráfico de decrescimento do nível do reservatório" class="img-center"><br>
+                Nas condições dadas, qual o tempo mínimo, após o sexto mês, para que o reservatório atinja o nível zero de sua capacidade?`,
+                o: [
+                    "2 meses e meio.",
+                    "3 meses e meio.",
+                    "1 mês e meio.",
+                    "4 meses.",
+                    "1 mês."
+                ],
+                c: 0,
+                e: "Observando os pontos do gráfico, no mês 1 o nível está em 30% e no mês 6 o nível reduziu para 10%.<br>O decrescimento foi de 30% - 10% = 20% ao longo de 5 meses (6 - 1).<br>A taxa de diminuição mensal é de 20% / 5 = 4% ao mês.<br>No mês 6 restam 10% de capacidade. Para atingir 0%, calculamos o tempo necessário:<br>Tempo = 10% / 4% ao mês = 2,5 meses (2 meses e meio)."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

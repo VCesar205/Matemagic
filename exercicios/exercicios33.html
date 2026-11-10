@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="painel1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 10</span>
+                        <span>Sistema Métrico Decimal e Não Decimal</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios do tema.</p>
+                    <a href="unidade3.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                A maior piscina do mundo, registrada no livro Guinness, está localizada no Chile, em San Alfonso del Mar, cobrindo um terreno de 8 hectares de área. Sabe-se que 1 hectare corresponde a 1 hectômetro quadrado. Qual é o valor, em metros quadrados, da área coberta pelo terreno da piscina?`,
+                o: [
+                    "8",
+                    "80",
+                    "800",
+                    "8 000",
+                    "80 000"
+                ],
+                c: 4,
+                e: "Como 1 ha = 1 hm², temos 8 ha = 8 hm². Sabendo que 1 hm = 100 m, então 1 hm² = (100 m)³ = 10.000 m². Portanto, 8 hm² = 8 × 10.000 = 80.000 m²."
+            },
+            {
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                A Secretaria de Saúde de um município avalia um programa que disponibiliza, para cada aluno de uma escola municipal, uma bicicleta, que deve ser usada no trajeto de ida e volta, entre sua casa e a escola. Na fase de implantação do programa, o aluno que morava mais distante da escola realizou sempre o mesmo trajeto, representado na figura, na escala 1 : 25 000, por um período de cinco dias.<br><br>
+                <img src="imagens exercicio/malha.jpeg" class="img-center" alt="Malha do trajeto">
+                Quantos quilômetros esse aluno percorreu na fase de implantação do programa?`,
+                o: [
+                    "4",
+                    "8",
+                    "16",
+                    "20",
+                    "40"
+                ],
+                c: 3,
+                e: "Contando os segmentos na malha quadriculada da Casa até a Escola, temos 16 segmentos de 1 cm, totalizando 16 cm no desenho. Pela escala, 16 cm × 25.000 = 400.000 cm = 4 km por trajeto simples. Como ele fez ida e volta durante 5 dias, são 10 trajetos: 4 km × 10 = 40 km."
+            },
+            {
+                t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                Atendendo à encomenda de um mecânico, um soldador terá de juntar duas barras de metais diferentes. A solda utilizada tem espessura de 18 milímetros, conforme ilustrado na figura.<br><br>
+                <img src="imagens exercicio/solda.jpeg" class="img-center" alt="Esquema da soldagem">
+                Qual o comprimento, em metros, da peça resultante após a soldagem?`,
+                o: [
+                    "2,518",
+                    "2,5018",
+                    "2,2300",
+                    "2,0230",
+                    "2,6800"
+                ],
+                c: 0,
+                e: "Convertendo todas as medidas para metros: 1,5 m + 1 m + 0,018 m (pois 18 mm = 0,018 m). Somando tudo, obtemos: 1,5 + 1 + 0,018 = 2,518 metros."
+            },
+            {
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                As exportações de soja do Brasil totalizaram 4,129 milhões de toneladas no mês de julho de 2012, e registraram um aumento em relação ao mês de julho de 2011, embora tenha havido uma baixa em relação ao mês de maio de 2012.<br><br>
+                <small>Disponível em: www.noticiasagricolas.com.br. Acesso em: 02 ago. 2012.</small><br><br>
+                A quantidade, em quilogramas, de soja exportada pelo Brasil no mês de julho de 2012 foi de`,
+                o: [
+                    "4,129 · 10³",
+                    "4,129 · 10⁶",
+                    "4,129 · 10⁹",
+                    "4,129 · 10¹²",
+                    "4,129 · 10¹⁵"
+                ],
+                c: 2,
+                e: "1 milhão = 10⁶ e 1 tonelada = 10³ kg. Logo, 4,129 milhões de toneladas equivalem a 4,129 × 10⁶ × 10³ kg = 4,129 × 10⁹ kg."
+            },
+            {
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                A London Eye é uma enorme roda-gigante na capital inglesa. Por ser um dos monumentos construídos para celebrar a entrada do terceiro milênio, ela também é conhecida como Roda do Milênio. Um turista brasileiro, em visita à Inglaterra, perguntou a um londrino o diâmetro (destacado na imagem) da Roda do Milênio e ele respondeu que ele tem 443 pés.<br><br>
+                <img src="imagens exercicio/londoneye.jpeg" class="img-center" alt="London Eye"><br>
+                <small>Disponível em: www.mapadelondres.org. Acesso em: 14 mai. 2015 (adaptado).</small><br><br>
+                Não habituado com a unidade pé, e querendo saber sua curiosidade, esse turista consultou um manual de unidades de medidas e constatou que 1 pé equivale a 12 polegadas, e que 1 polegada equivale a 2,54 cm. Após alguns cálculos de conversão, o turista ficou surpreendido com o resultado obtido em metros. Qual a medida que mais se aproxima do diâmetro da Roda do Milênio, em metro?`,
+                o: [
+                    "53",
+                    "94",
+                    "113",
+                    "135",
+                    "145"
+                ],
+                c: 3,
+                e: "Cálculo da conversão: 443 pés × 12 polegadas = 5.316 polegadas. Em centímetros: 5.316 × 2,54 cm = 13.502,64 cm. Convertendo para metros: 135,02 metros, aproximando-se perfeitamente de 135."
+            },
+            {
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                Um mecânico de uma equipe de corrida necessita que as seguintes medidas realizadas em um carro sejam obtidas em metros:<br>
+                a) distância <strong>a</strong> entre os eixos dianteiro e traseiro;<br>
+                b) altura <strong>b</strong> entre o solo e o encosto do piloto.<br><br>
+                <img src="imagens exercicio/carro.jpeg" class="img-center" alt="Medidas do carro">
+                Ao optar pelas medidas <strong>a</strong> e <strong>b</strong> em metros, obtém-se, respectivamente,`,
+                o: [
+                    "0,23 e 0,16.",
+                    "2,3 e 1,6.",
+                    "23 e 16.",
+                    "230 e 160.",
+                    "2 300 e 1 600."
+                ],
+                c: 1,
+                e: "Para a medida 'a': 2.300 mm ÷ 1.000 = 2,3 m. Para a medida 'b': 160 cm ÷ 100 = 1,6 m. Portanto, 2,3 e 1,6."
+            },
+            {
+                t: `<strong>Questão 7 (ENEM)</strong><br><br>
+                Uma empresa europeia construiu um avião solar, como na figura, objetivando dar uma volta ao mundo utilizando somente energia solar. O avião solar tem comprimento AB igual a 20 m e uma envergadura de asas CD igual a 60 m.<br><br>
+                <img src="imagens exercicio/aviao.jpeg" class="img-center" alt="Avião Solar">
+                Para uma feira de ciências, uma equipe de alunos fez uma maquete desse avião. A escala utilizada pelos alunos foi de 3 : 400. A envergadura CD na referida maquete, em centímetro, é igual a`,
+                o: [
+                    "5",
+                    "20",
+                    "45",
+                    "55",
+                    "80"
+                ],
+                c: 2,
+                e: "Envergadura real CD = 60 m = 6.000 cm. Utilizando a proporção da escala: (3 ÷ 400) × 6.000 = 3 × 15 = 45 cm."
+            },
+            {
+                t: `<strong>Questão 8 (INÉDITA)</strong><br><br>
+                A tabela nutricional é a comunicação entre a empresa produtora de alimentos e os consumidores que desejam maiores informações sobre os produtos que estão comprando. Na embalagem de um alimento analisado por uma pessoa que segue orientações nutricionais, vêm descritas as seguintes informações:<br><br>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                    <thead>
+                        <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                            <th colspan="3" style="padding: 10px; text-align: center;">INFORMAÇÃO NUTRICIONAL<br><small>Valor nutricional numa porção de 50 g</small></th>
+                        </tr>
+                        <tr style="background-color: #f8fafc; border-bottom: 1px solid #edf2f7;">
+                            <th style="padding: 8px; text-align: left;">Quantidade por porção</th>
+                            <th style="padding: 8px; text-align: center;">VD%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 8px;">Carboidratos: 24,5 g</td>
+                            <td style="padding: 8px; text-align: center;">7,8%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 8px;">Proteínas: 35 dg</td>
+                            <td style="padding: 8px; text-align: center;">4,5%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 8px;">Sódio: 750 mg</td>
+                            <td style="padding: 8px; text-align: center;">4%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                Se essa pessoa consumir, durante uma semana, 2 kg desse alimento, ela terá consumido uma quantidade de carboidratos, proteína e sódio total de`,
+                o: [
+                    "1 000 g.",
+                    "1 150 g.",
+                    "1 200 g.",
+                    "1 250 g.",
+                    "1 300 g."
+                ],
+                c: 1,
+                e: "Convertendo tudo para gramas na porção (50g): Carboidratos = 24,5 g; Proteínas = 35 dg = 3,5 g; Sódio = 750 mg = 0,75 g. Total por porção = 24,5 + 3,5 + 0,75 = 28,75 g. Em 2 kg (2.000 g), temos 40 porções de 50 g. Multiplicando pelo total da porção: 40 × 28,75 g = 1.150 g."
+            },
+            {
+                t: `<strong>Questão 9 (UFG ADAPTADA)</strong><br><br>
+                O Parque Ipiranga em Anápolis possui uma excelente pista de caminhada. O Sr. João, morador das imediações desse parque, realiza caminhadas ali diariamente. Em uma dessas caminhadas, ele observou que existem ao longo da pista três pontos principais: um quiosque para lanches rápidos, um ponto de táxi e um viveiro. Ele então resolveu contar e observou que, do quiosque até o ponto de táxi, havia caminhado 3 000 passos; do ponto de táxi até o viveiro, 2 400 passos; e, do viveiro até o quiosque, 2 800 passos. Sabendo-se que cada um dos passos do Sr. João mede 90 cm, o comprimento total da pista é de`,
+                o: [
+                    "8 200 m.",
+                    "7 380 m.",
+                    "3 690 m.",
+                    "3 600 m.",
+                    "3 090 m."
+                ],
+                c: 1,
+                e: "Somando os passos totais do circuito da pista: 3.000 + 2.400 + 2.800 = 8.200 passos. Multiplicando pela medida de cada passo: 8.200 × 90 cm = 738.000 cm. Convertendo para metros: 7.380 m."
+            },
+            {
+                t: `<strong>Questão 10 (ENEM)</strong><br><br>
+                Uma empresa de comunicação tem a tarefa de elaborar um material publicitário de um estaleiro para divulgar um novo navio, equipado com um guindaste de 15 m de altura e uma esteira de 90 m de comprimento. No desenho desse navio, a representação do guindaste deve ter sua altura entre 0,5 cm e 1 cm, enquanto a esteira deve apresentar comprimento superior a 4 cm. Todo o desenho deverá ser feito em uma escala 1 : x. Os valores possíveis para x são, apenas`,
+                o: [
+                    "x > 1 500.",
+                    "x < 3 000.",
+                    "1 500 < x < 2 250.",
+                    "1 500 < x < 3 000.",
+                    "2 250 < x < 3 000."
+                ],
+                c: 4,
+                e: "Para o guindaste (15 m = 1.500 cm): 1.500/1 ≤ x ≤ 1.500/0,5 → 1.500 ≤ x ≤ 3.000. Para a esteira (90 m = 9.000 cm): x < 9.000/4 → x < 2.250. Intercalando as duas condições para que ambas sejam satisfeitas ao mesmo tempo: 1.500 ≤ x < 2.250."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; // 10 XPs por acerto
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

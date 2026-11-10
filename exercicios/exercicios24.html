@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="painel1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 8</span>
+                        <span>Regra de Três</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios do tema.</p>
+                    <a href="unidade2.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                t: `<strong>Questão 1 (ENEM ADAPTADA)</strong><br><br>
+                    A relação da resistência elétrica com as dimensões do condutor foi estudada por um grupo de cientistas por meio de vários experimentos de eletricidade. Eles verificaram que existe proporcionalidade entre:<br><br>
+                    • resistência (R) e comprimento (l), dada a mesma secção transversal (A);<br>
+                    • resistência (R) e área da secção transversal (A), dado o mesmo comprimento (l) e<br>
+                    • comprimento (l) e área da secção transversal (A), dada a mesma resistência (R).<br><br>
+                    Considerando os resistores como fios, pode-se exemplificar o estudo das grandezas que influem na resistência elétrica utilizando as figuras seguintes.<br><br>
+                    <img src="imagens exercicio/joule.jpeg" alt="Esquema de fios condutores" class="img-center"><br>
+                    Disponível em: www.efeitojoule.com. Acesso em: abr. 2010 (adaptado).<br><br>
+                    As figuras mostram que as proporcionalidades tentes entre resistência (R) e comprimento (l), resistência (R) e área da seção transversal (A), e entre comprimento (l) e área da seção transversal (A) são, respectivamente,`,
+                o: [
+                    "direta, direta e direta.",
+                    "direta, direta e inversa.",
+                    "direta, inversa e direta.",
+                    "inversa, direta e direta.",
+                    "inversa, direta e inversa."
+                ],
+                c: 2,
+                e: "Analisando as figuras: aumentando o comprimento, a resistência aumenta (direta); aumentando a área da seção transversal, a resistência diminui (inversa); para manter a mesma resistência, se aumentamos o comprimento, precisamos também aumentar a área (direta)."
+            },
+            {
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                    Uma mãe correu à bula para verificar a dosagem de um remédio que precisava dar a seu filho. Na bula, recomendava-se a seguinte dosagem: 5 gotas para cada 2 kg de massa corporal a cada 8 horas.<br><br>
+                    Se a mãe administrou corretamente 30 gotas do remédio a seu filho a cada 8 horas, então a massa corporal dele é de`,
+                o: ["12 kg.", "16 kg.", "24 kg.", "36 kg.", "75 kg."],
+                c: 0,
+                e: "Montando uma regra de três simples direta: 5 gotas estão para 2 kg, assim como 30 gotas estão para x kg. <br>5/2 = 30/x &rArr; 5x = 60 &rArr; x = 12 kg."
+            },
+            {
+                t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                    No depósito de uma biblioteca há caixas contendo folhas de papel de 0,1 mm de espessura, e em cada uma delas estão anotados 10 títulos de livros diferentes. Essas folhas foram empilhadas formando uma torre vertical de 1 m de altura.<br><br>
+                    Qual a representação, em potência de 10, correspondente à quantidade de títulos de livros registrados nesse empilhamento?`,
+                o: [
+                    "10<sup>2</sup>",
+                    "10<sup>4</sup>",
+                    "10<sup>5</sup>",
+                    "10<sup>6</sup>",
+                    "10<sup>7</sup>"
+                ],
+                c: 2,
+                e: "Primeiro convertemos a altura da torre para milímetros: 1 m = 1 000 mm. <br>O número de folhas é 1 000 mm / 0,1 mm = 10 000 folhas (10<sup>4</sup>). <br>Como cada folha possui 10 títulos, o total de títulos é 10 000 × 10 = 100 000, que equivale a 10<sup>5</sup>."
+            },
+            {
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                    Pneus usados geralmente são descartados de forma inadequada, favorecendo a proliferação de insetos e roedores e provocando sérios problemas de saúde pública. Estima-se que no Brasil, a cada ano, sejam descartados 20 milhões de pneus usados. Como uma alternativa para dar uma destinação final a estes pneus, a Petrobrás, em sua unidade de São Mateus do Sul, no Paraná, desenvolveu um processo de obtenção de combustível a partir da mistura dos pneus com xisto. Esse procedimento permite a partir de 1 tonelada de pneu, um rendimento de cerca de 530 kg de óleo. Considerando que uma tonelada corresponde em média a 200 pneus, se todos os pneus descartados anualmente fossem utilizados no processo de obtenção de combustível pela mistura com xisto, seriam então produzidas`,
+                o: [
+                    "5,3 mil toneladas de óleo.",
+                    "53 mil toneladas de óleo.",
+                    "530 mil toneladas de óleo.",
+                    "5,3 milhões de toneladas de óleo.",
+                    "530 milhões de toneladas de óleo."
+                ],
+                c: 1,
+                e: "Total de pneus: 20 000 000. Como 200 pneus equivalem a 1 tonelada, temos: 20 000 000 / 200 = 100 000 toneladas de pneus. <br>Cada tonelada rende 530 kg (0,53 toneladas) de óleo. <br>Logo, 100 000 × 0,53 = 53 000 toneladas (ou 53 mil toneladas) de óleo."
+            },
+            {
+                t: `<strong>Questão 5 (ENEM ADAPTADA)</strong><br><br>
+                    Um comerciante contratou um novo funcionário para cuidar das vendas. Combinou pagar a essa pessoa R$ 120,00 por semana, desde que as vendas se mantivessem em torno dos R$ 600,00 semanais e, como um estímulo, também propôs que na semana na qual ele vendesse R$ 1 200,00 ele receberia R$ 200,00 em vez de R$ 120,00.<br><br>
+                    Ao término da primeira semana, esse novo funcionário conseguiu aumentar as vendas para R$ 990,00 e foi pedir ao patrão um aumento proporcional ao que conseguiu aumentar nas vendas. O patrão concordou e, após fazer algumas contas, pagou ao funcionário a quantia de`,
+                o: ["R$ 160,00.", "R$ 165,00.", "R$ 172,00.", "R$ 180,00.", "R$ 198,00."],
+                c: 2,
+                e: "O aumento esperado nas vendas para atingir o prêmio máximo era de R$ 1 200 - R$ 600 = R$ 600, o que geraria um acréscimo de R$ 200 - R$ 120 = R$ 80 no salário. <br>O funcionário aumentou as vendas em R$ 990 - R$ 600 = R$ 390. <br>Montando a proporção do bônus: 390 / 600 = x / 80 &rArr; x = R$ 52,00. <br>Somando ao salário base: R$ 120 + R$ 52 = R$ 172,00."
+            },
+            {
+                t: `<strong>Questão 6 (INÉDITA)</strong><br><br>
+                    Em uma bicicleta elétrica, a autonomia total da bateria carregada por oito horas é de 56 quilômetros de deslocamento em média. A bateria é similar às dos celulares: descarrega de forma linear. Alexandro recarregou por apenas 2 horas a bateria da sua bicicleta que estava totalmente descarregada, e pretende ir à escola que fica a 7,5 quilômetros da sua casa, e voltar.<br><br>
+                    A distância, em quilômetros, que Alexandro terá que caminhar após descarregar por completo a bateria de sua bicicleta é de`,
+                o: ["1.", "1,5.", "2.", "2,5.", "3."],
+                c: 0,
+                e: "Com 8 horas de carga, a autonomia é de 56 km. Como o carregamento é linear, com 2 horas de carga (1/4 do tempo total) ele terá 56 / 4 = 14 km de autonomia. <br>O trajeto total de ida e volta para a escola é de 7,5 + 7,5 = 15 km. <br>Portanto, faltará cobrir a pé uma distância de 15 - 14 = 1 km."
+            },
+            {
+                t: `<strong>Questão 7 (INÉDITA)</strong><br><br>
+                    Numa empresa de grande porte, sabe-se que 5 máquinas, todas de igual eficiência, são capazes de produzir 500 peças de um determinado produto em 5 dias, se operarem durante 5 horas por dia. Olhando agora essa situação, em que 10 máquinas iguais às primeiras operassem 10 horas por dia, durante 10 dias, conclui-se que o número de peças produzidas seria igual a`,
+                o: ["2 000.", "3 500.", "4 000.", "6 000.", "8 000."],
+                c: 4,
+                e: "Utilizando a regra de três composta:<br>Máquinas, Dias e Horas/dia são diretamente proporcionais ao número de Peças.<br>(5/10) × (5/10) × (5/10) = 500/x &rArr; 125/1000 = 500/x &rArr; 1/8 = 500/x &rArr; x = 4 000 peças."
+            },
+            {
+                t: `<strong>Questão 8 (ENEM)</strong><br><br>
+                    Uma escola lançou uma campanha para seus alunos arrecadarem, durante 30 dias, alimentos não perecíveis para doar a uma comunidade carente da região. 20 alunos aceitaram a tarefa e nos primeiros 10 dias trabalharam 3 horas diárias, arrecadando 12 kg de alimentos por dia. Animados com os resultados, 30 novos alunos somaram-se ao grupo e passaram a trabalhar 4 horas por dia nos dias seguintes até o término da campanha.<br><br>
+                    Admitindo-se que o ritmo de coleta tenha se mantido constante, a quantidade de alimentos arrecadados ao final do prazo estipulado seria de`,
+                o: ["920 kg.", "800 kg.", "720 kg.", "600 kg.", "570 kg."],
+                c: 0,
+                e: "Primeira etapa (10 dias): 12 kg/dia × 10 dias = 120 kg arrecadados.<br>Segunda etapa (restam 20 dias): O número de alunos passa de 20 para 50, e a carga de 3h para 4h. <br>Calculando a nova produção diária por regra de três: (20/50) × (3/4) = 12/y &rArr; 60/200 = 12/y &rArr; 3/10 = 12/y &rArr; y = 40 kg por dia. <br>Em 20 dias: 40 kg/dia × 20 dias = 800 kg. <br>Total da campanha: 120 kg + 800 kg = 920 kg."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+            
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return; 
+            
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true; 
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+            
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 5;
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? "✅ Muito bem!" : "❌ Quase lá... ";
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

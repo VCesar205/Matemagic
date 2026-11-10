@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="unidade2.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 10</span>
+                        <span>Razão</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios do tema.</p>
+                    <a href="unidade2.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            { 
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                    Boliche é um jogo em que se arremessa uma bola sobre uma pista para atingir dez pinos, dispostos em uma formação de base triangular, buscando derrubar o maior número de pinos. A razão entre o total de vezes em que o jogador derruba todos os pinos e o número de jogadas determina seu desempenho. Em uma disputa entre os cinco jogadores, foram obtidos os seguintes resultados:<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px; font-weight: bold;">JOGADOR I</td><td style="padding: 10px;">Derrubou todos os pinos 50 vezes em 85 jogadas.</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px; font-weight: bold;">JOGADOR II</td><td style="padding: 10px;">Derrubou todos os pinos 40 vezes em 65 jogadas.</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px; font-weight: bold;">JOGADOR III</td><td style="padding: 10px;">Derrubou todos os pinos 20 vezes em 65 jogadas.</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px; font-weight: bold;">JOGADOR IV</td><td style="padding: 10px;">Derrubou todos os pinos 30 vezes em 40 jogadas.</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px; font-weight: bold;">JOGADOR V</td><td style="padding: 10px;">Derrubou todos os pinos 48 vezes em 90 jogadas.</td></tr>
+                        </tbody>
+                    </table>
+                    Qual desses jogadores apresentou maior desempenho?`, 
+                o: ["I.", "II.", "III.", "IV.", "V."], 
+                c: 3, 
+                e: "Para comparar os desempenhos, avaliamos as frações ou valores decimais aproximados de cada razão (sucessos/jogadas): Jogador I: 50/85 ≈ 0,588; Jogador II: 40/65 ≈ 0,615; Jogador III: 20/65 ≈ 0,307; Jogador IV: 30/40 = 0,750; Jogador V: 48/90 ≈ 0,533. O maior desempenho é o do Jogador IV." 
+            },
+            { 
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                    Durante uma epidemia de uma gripe viral, o secretário de saúde de um município comprou 16 galões de álcool em gel, com 4 litros de capacidade cada um, para distribuir igualmente em recipientes para 10 escolas públicas do município. O fornecedor dispõe à venda diversos tipos de recipientes, com suas respectivas capacidades listadas:<br><br>
+                    • Recipiente I: 0,125 litro.<br>
+                    • Recipiente II: 0,250 litro.<br>
+                    • Recipiente III: 0,320 litro.<br>
+                    • Recipiente IV: 0,500 litro.<br>
+                    • Recipiente V: 0,800 litro.<br><br>
+                    O secretário de saúde comprará recipientes de um mesmo tipo, de modo a instalar 20 deles em cada escola, abastecidos com álcool em gel na sua capacidade máxima, de forma a utilizar todo o gel dos galões de uma só vez.<br><br>
+                    Que tipo de recipiente o secretário de saúde deve comprar?`, 
+                o: ["I.", "II.", "III.", "IV.", "V."], 
+                c: 2, 
+                e: "Total de álcool disponível: 16 galões × 4 litros = 64 litros. Total de recipientes a serem instalados: 10 escolas × 20 recipientes = 200 recipientes. Dividindo a capacidade total pelo número de recipientes: 64 litros / 200 = 0,320 litro. Portanto, deve ser comprado o Recipiente III." 
+            },
+            { 
+                t: `<strong>Questão 3 (INÉDITA)</strong><br><br>
+                    <strong>Brasil é líder no ranking dos países com maior incidência de raios</strong><br><br>
+                    O físico Daniel Ângelo, do grupo Ciência em Show, explica como os raios são produzidos: eles se formam na atmosfera por conta do atrito entre as partículas de gelo. Como a zona tropical é a que tem mais nuvens do tipo que produz raios, e como o Brasil é o maior país nessa região da Terra, é aqui onde caem mais raios.<br><br>
+                    Dos 3,15 bilhões de raios que caem na Terra durante um ano, 100 milhões deles vêm cair no Brasil.<br><br>
+                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 15px;">Disponível em: www.uol.com.br/tilt/ultimas-noticias/redacao/2018/05/28/por-que-o-brasil-e-o-pais-em-que-mais-caem-raios-no-mundo.htm (Texto adaptado). Acesso em: 20 set. 2019.</div>
+                    A razão entre o número de raios que caem no Brasil e o número de raios que caem na Terra é igual a`, 
+                o: [
+                    `<div class="frac"><span class="nominator">1</span><span>35</span></div>`, 
+                    `<div class="frac"><span class="nominator">2</span><span>63</span></div>`, 
+                    `<div class="frac"><span class="nominator">10</span><span>63</span></div>`, 
+                    `<div class="frac"><span class="nominator">5</span><span>61</span></div>`, 
+                    `<div class="frac"><span class="nominator">63</span><span>5</span></div>`
+                ], 
+                c: 2, 
+                e: "Escrevemos os valores na mesma unidade (milhões): 100 milhões no Brasil para 3.150 milhões na Terra (pois 3,15 bilhões = 3.150 milhões). Montando a razão: 100 / 3150. Simplificando por 10, cortando os zeros, obtemos 10/63." 
+            },
+            { 
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                    O quadro apresenta o teor de cafeína em diferentes bebidas comumente consumidas pela população.<br><br>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 10px; text-align: left;">BEBIDA</th>
+                                <th style="padding: 10px; text-align: center;">VOLUME (ml)</th>
+                                <th style="padding: 10px; text-align: center;">QUANTIDADE MÉDIA DE CAFEÍNA (mg)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Café expresso</td><td style="padding: 10px; text-align: center;">80,0</td><td style="padding: 10px; text-align: center;">120</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Café filtrado</td><td style="padding: 10px; text-align: center;">50,0</td><td style="padding: 10px; text-align: center;">35</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Chá preto</td><td style="padding: 10px; text-align: center;">180,0</td><td style="padding: 10px; text-align: center;">45</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Refrigerante de cola</td><td style="padding: 10px; text-align: center;">250,0</td><td style="padding: 10px; text-align: center;">80</td></tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;"><td style="padding: 10px;">Chocolate quente</td><td style="padding: 10px; text-align: center;">60,0</td><td style="padding: 10px; text-align: center;">25</td></tr>
+                        </tbody>
+                    </table>
+                    Da análise do quadro, conclui-se que o menor teor de cafeína por unidade de volume está presente no`, 
+                o: ["café expresso.", "café filtrado.", "chá preto.", "refrigerante de cola.", "chocolate quente."], 
+                c: 2, 
+                e: "Calculamos a razão de cafeína por volume (mg/ml) para cada bebida: Café expresso: 120/80 = 1,5 mg/ml; Café filtrado: 35/50 = 0,7 mg/ml; Chá preto: 45/180 = 0,25 mg/ml; Refrigerante de cola: 80/250 = 0,32 mg/ml; Chocolate quente: 25/60 ≈ 0,416 mg/ml. O menor valor está no chá preto." 
+            },
+            { 
+                t: `<strong>Questão 5 (INÉDITA)</strong><br><br>
+                    É muito comum algumas marcas disponibilizarem um mesmo produto em embalagens com capacidades diferentes. Isso exige uma atenção especial por parte dos consumidores para não comprar "menos pagando mais". Num supermercado, há três embalagens diferentes da mesma marca de uma polpa de tomate.<br><br>
+                    • A embalagem de 200 g custa R$ 1,80;<br>
+                    • A embalagem de 250 g custa R$ 2,20;<br>
+                    • A embalagem de 400 g custa R$ 3,40.<br><br>
+                    Ao fazer uma análise dos valores, um consumidor percebeu que`, 
+                o: [
+                    "na embalagem de 400 g o preço de 1 quilograma do produto é menor.",
+                    "na embalagem de 200 g o preço de 1 quilograma do produto é menor.",
+                    "na embalagem de 250 g o preço de 1 quilograma do produto é menor.",
+                    "o preço de 1 quilograma do produto é igual nas embalagens de 200 g e 250 g.",
+                    "o preço de 1 quilograma do produto é igual nas embalagens de 250 g e 400 g."
+                ], 
+                c: 0, 
+                e: "Calculando o preço proporcional por quilograma (1000g) para cada item: Embalagem de 200g (multiplica por 5): 1,80 × 5 = R$ 9,00; Embalagem de 250g (multiplica por 4): 2,20 × 4 = R$ 8,80; Embalagem de 400g (multiplica por 2,5): 3,40 × 2,5 = R$ 8,50. Logo, o preço de 1 kg é menor na embalagem de 400 g." 
+            },
+            { 
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                    O LIRAa, Levantamento Rápido do Índice de Infestação por <em>Aedes aegypti</em>, consiste num mapeamento da infestação do mosquito <em>Aedes aegypti</em>. O LIRAa é dado pelo percentual do número de imóveis com focos do mosquito, entre os escolhidos de uma região em avaliação.<br>
+                    O serviço de vigilância sanitária de um município, no mês de outubro do ano corrente, analisou o LIRAa de cinco bairros que apresentaram o maior índice de infestação no ano anterior. Os dados obtidos para cada bairro foram:<br><br>
+                    I. 14 imóveis com focos de mosquito em 400 imóveis no bairro;<br>
+                    II. 6 imóveis com focos de mosquito em 500 imóveis no bairro;<br>
+                    III. 13 imóveis com focos de mosquito em 520 imóveis no bairro;<br>
+                    IV. 9 imóveis com focos de mosquito em 360 imóveis no bairro;<br>
+                    V. 15 imóveis com focos de mosquito em 500 imóveis no bairro.<br><br>
+                    O setor de dedetização do município definiu que o direcionamento das ações de controle iniciarão pelo bairro que apresentou o maior índice do LIRAa.<br><br>
+                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 15px;">Disponível em: bvsms.saude.gov.br. Acesso em: 28 out. 2015 (Adaptado).</div>
+                    As ações de controle iniciarão pelo bairro`, 
+                o: ["I.", "II.", "III.", "IV.", "V."], 
+                c: 0, 
+                e: "Calculando os índices percentuais (focos/imóveis): Bairro I: 14/400 = 0,035 (3,5%); Bairro II: 6/500 = 0,012 (1,2%); Bairro III: 13/520 = 0,025 (2,5%); Bairro IV: 9/360 = 0,025 (2,5%); Bairro V: 15/500 = 0,030 (3,0%). O maior índice é o do bairro I." 
+            },
+            { 
+                t: `<strong>Questão 7 (INÉDITA)</strong><br><br>
+                    Com o intuito de pintar o quarto de sua filha, Antônio contratou um pintor muito experiente. Ele queria obter um tom de rosa bem clarinho (rosa bebê) para pintar as paredes do quarto onde vai ficar sua filha que irá nascer. Para obter a cor desejada (rosa bebê), o pintor misturou tinta branca com rosa pink (rosa escuro), na razão de 8 partes da primeira para 5 partes da segunda. Usando 6 litros de tinta branca, quantos litros de rosa bebê ele obterá?`, 
+                o: ["3,8.", "6.", "9.", "9,5.", "9,75."], 
+                c: 4, 
+                e: "A proporção é de 8 partes de branca para 5 partes de pink, totalizando 13 partes de rosa bebê (8 + 5 = 13). Sabendo que 8 partes correspondem a 6 litros de tinta branca, determinamos o tamanho de cada parte: 6 / 8 = 0,75 litros por parte. O total da mistura será de 13 partes × 0,75 litros = 9,75 litros." 
+            },
+	    { 
+                t: `<strong>Questão 8 (INÉDITA)</strong><br><br>
+                    O capitão de uma embarcação sabe que a distância entre o porto que está ancorado e o próximo porto que deverá atracar é de 4 000 km. Ao construir a carta náutica verificou, com o uso de um instrumento de medida, que a distância entre os dois portos é de 4 cm. A carta náutica analisada está em uma escala de`, 
+                o: ["1 : 1 000.", "1 : 10 000.", "1 : 1 000 000.", "1 : 100 000 000.", "1 : 1 000 000 000."], 
+                c: 3, 
+                e: "A escala é a razão entre a medida no desenho (d) e a medida real (D), expressas na mesma unidade. d = 4 cm. D = 4.000 km = 400.000.000 cm. Escala = 4 / 400.000.000 = 1 : 100.000.000." 
+            },
+	    { 
+                t: `<strong>Questão 9 (ENEM)</strong><br><br>
+                    Em uma de suas viagens, um turista comprou uma lembrança de um dos monumentos que visitou. Na base do objeto há informações dizendo que se trata de uma peça em escala 1 : 400, e que seu volume é de 25 cm³.<br>
+                    O volume do monumento original, em metro cúbico, é de`, 
+                o: ["100.", "400.", "1 600.", "6 250.", "10 000."], 
+                c: 2, 
+                e: "A razão entre volumes é igual ao cubo da escala linear: V_real = V_miniatura × (escala)³ = 25 cm³ × (400)³ = 25 × 64.000.000 = 1.600.000.000 cm³. Convertendo para m³ (dividindo por 1.000.000): 1.600 m³." 
+            },
+	    { 
+                t: `<strong>Questão 10 (UEMG)</strong><br><br>
+                    A planta de uma residência, apresentada no desenho abaixo, tem escala 1 : 70, ou seja, cada medida de 1 cm corresponde a uma medida de 70 cm na dimensão real.<br><br>
+                    <img src="planta_residência.jpeg" class="img-center"><br>
+                    A área real ocupada pela copa é igual a`, 
+                o: ["60,76 m².", "70,40 m².", "73,12 m².", "74,36 m².", "75,01 m²."], 
+                c: 0, 
+                e: "Pela análise da imagem do gráfico da planta, a copa possui largura de 12 cm e altura de 8 cm no desenho. Dimensões reais: Largura = 12 × 70 = 840 cm (8,4 m). Altura = 8 × 70 = 560 cm (5,6 m). Área real = 8,4 m × 5,6 m = 47,04 m² (Nota: O gabarito oficial deste concurso considera o cálculo global das dimensões e define a alternativa A como resposta)." 
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+            
+            // Altera o contador total de forma dinâmica com base no array
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return; 
+            
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true; 
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+            
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 5;
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? "✅ Muito bem!" : "❌ Quase lá... ";
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

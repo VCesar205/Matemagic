@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="painel1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 7</span>
+			<span>Grandezas</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios do tema.</p>
+                    <a href="unidade2.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                t: `<strong>Questão 1 (INÉDITA)</strong><br><br>
+                    O presidente de uma empresa resolveu premiar os três vendedores mais eficientes do ano com a quantia de R$ 13 500,00 (que será distribuída de forma diretamente proporcional ao número de pontos obtidos por cada um na avaliação do ano). O vencedor, com 45 pontos, recebeu R$ 6 750,00 e o número de pontos do segundo colocado foi igual a 27. O número de pontos a menos que o terceiro colocado conseguiu em relação ao segundo colocado foi`,
+                o: ["8.", "9.", "10.", "11.", "12."],
+                c: 1,
+                e: "Se a divisão é direta, dividimos o prêmio pelos pontos para achar a constante: 6750 / 45 = R$ 150 por ponto. O segundo colocado tem 27 pontos, logo recebeu 27 × 150 = R$ 4.050. O que sobrou para o terceiro foi 13500 - 6750 - 4050 = R$ 2.700. Pontos do terceiro: 2700 / 150 = 18 pontos. A diferença de pontos entre o segundo e o terceiro é de 27 - 18 = 9."
+            },
+            {
+                t: `<strong>Questão 2 (INÉDITA)</strong><br><br>
+                    A pressão P que o vento exerce sobre um barco à vela cresce proporcionalmente com a área A da superfície da vela e com o quadrado da velocidade v do vento. Denominando k como sendo a constante positiva de proporcionalidade, tem-se que a pressão P é dada por`,
+                o: [
+                    "P = k • &radic;A • v",
+                    "P = k • A • &radic;v",
+                    "P = k • A • v",
+                    "P = k • A • v<sup>2</sup>",
+                    "P = k • A<sup>2</sup> • v"
+                ],
+                c: 3,
+                e: "Diretamente proporcional significa que as grandezas multiplicam a constante k. Como cresce com a área (A) e com o quadrado da velocidade (v<sup>2</sup>), a equação correta é P = k • A • v<sup>2</sup>."
+            },
+            {
+                t: `<strong>Questão 3 (INÉDITA)</strong><br><br>
+                    A fórmula usada para o cálculo do IMC (Índice de Massa Corporal) é dada pela massa (m) do indivíduo, em kg, dividida pelo quadrado da sua altura (h), em metros. Dessa forma, as quantidades relativas a`,
+                o: [
+                    "IMC e h<sup>2</sup> são diretamente proporcionais.",
+                    "IMC e m são inversamente proporcionais.",
+                    "m e h são diretamente profissionais.",
+                    "m e h são inversamente proporcionais.",
+                    "m e h<sup>2</sup> são diretamente proporcionais."
+                ],
+                c: 4,
+                e: "A fórmula é IMC = m / h<sup>2</sup>. Isolando a massa, temos m = IMC • h<sup>2</sup>. Fixando o IMC como uma constante para análise da relação isolada da estrutura, m e h<sup>2</sup> variam no mesmo sentido multiplicativo direto."
+            },
+            {
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                    A resistência mecânica S de uma viga de madeira, em forma de um paralelepípedo retângulo, é diretamente proporcional à sua largura (b) e ao quadrado de sua altura (d) e inversamente proporcional ao quadrado da distância entre os suportes da viga, que coincide com o seu comprimento (x), conforme ilustra a figura. A constante de proporcionalidade k é chamada de resistência da viga.<br><br>
+                    <img src="imagens exercicio/madeira.jpeg" alt="Dimensões da viga" class="img-center"><br>
+                    A expressão que traduz a resistência S dessa viga de madeira é`,
+                o: [
+                    `<div class="frac"><span class="nominator">k • b • d<sup>2</sup></span><span>x<sup>2</sup></span></div>`,
+                    `<div class="frac"><span class="nominator">k • b • d</span><span>x<sup>2</sup></span></div>`,
+                    `<div class="frac"><span class="nominator">k • b • d<sup>2</sup></span><span>x</span></div>`,
+                    `<div class="frac"><span class="nominator">k • b<sup>2</sup> • d</span><span>x<sup>2</sup></span></div>`,
+                    `<div class="frac"><span class="nominator">k • b • 2d</span><span>2x</span></div>`
+                ],
+                c: 0,
+                e: "As grandezas diretamente proporcionais (b e d<sup>2</sup>) multiplicam a constante k no numerador. A grandeza inversamente proporcional (x<sup>2</sup>) vai para o adenocarcinoma. Portanto: S = (k • b • d<sup>2</sup>) / x<sup>2</sup>."
+            },
+            {
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                    Muitos processos fisiológicos e bioquímicos, tais como batimentos cardíacos e taxa de respiração, apresentam escalas construídas a partir da relação entre superfície e massa (ou volume) do animal. Uma dessas escalas, por exemplo, considera que "o cubo da área S da superfície de um mamífero é proporcional ao quadrado de sua massa M".<br><br>
+                    HUGHES-HALLETT, D. et al. <em>Cálculo e aplicações</em>. São Paulo: Edgard Blücher, 1999 (adaptado).<br><br>
+                    Isso é equivalente a dizer que, para uma constante k&gt;0, a área S pode ser escrita em função de M por meio da expressão:`,
+                o: [
+                    "S = k • M",
+                    "S = k • M<sup>&frac13;</sup>",
+                    "S = k<sup>&frac13;</sup> • M<sup>&frac23;</sup>",
+                    "S = k<sup>&frac13;</sup> • M<sup>&frac12;</sup>",
+                    "S = k<sup>&frac13;</sup> • M<sup>2</sup>"
+                ],
+                c: 2,
+                e: "A relação diz que S<sup>3</sup> = k • M<sup>2</sup>. Para isolar o S, extraímos a raiz cúbica dos dois lados: S = (k • M<sup>2</sup>)<sup>&frac13;</sup> = k<sup>&frac13;</sup> • M<sup>&frac23;</sup>."
+            },
+            {
+                t: `<strong>Questão 6 (ENEM)</strong><br><br>
+                    Pedro ganhou R$ 360 000,00 em uma loteria federal e resolveu dividir integralmente o prêmio entre os seus três filhos, Ana, Renato e Carlos, de forma que cada um receba uma quantia que seja inversamente proporcional às suas idades. Sabendo que Ana tem 4 anos, Renato, 5 anos e Carlos, 20 anos, eles receberão, respectivamente:`,
+                o: [
+                    "R$ 54 000,00; R$ 216 000,00 e R$ 90 000,00.",
+                    "R$ 90 000,00; R$ 54 000,00 e R$ 216 000,00.",
+                    "R$ 216 000,00; R$ 90 000,00 e R$ 54 000,00.",
+                    "R$ 180 000,00; R$ 144 000,00 e R$ 36 000,00.",
+                    "R$ 180 000,00; R$ 120 000,00 e R$ 60 000,00."
+                ],
+                c: 3,
+                e: "Sendo inversa, a soma das frações das idades multiplicada por uma constante x é igual ao prêmio: x/4 + x/5 + x/20 = 360.000. O MMC é 20, transformando a equação em 5x/20 + 4x/20 + 1x/20 = 360.000 -> 10x/20 = 360.000 -> 0,5x = 360.000 -> x = 720.000. Agora dividimos pelas idades: Ana = 720.000/4 = R$ 180.000; Renato = 720.000/5 = R$ 144.000; Carlos = 720.000/20 = R$ 36.000."
+            },
+            {
+                t: `<strong>Questão 7 (ENEM)</strong><br><br>
+                    Dentre outros objetos de pesquisa, a Alometria estuda a relação entre medidas de diferentes partes do corpo humano. Por exemplo, segundo a Alometria, a área A da superfície corporal de uma pessoa relaciona-se com a sua massa m pela fórmula A = k • m<sup>&frac23;</sup>, em que k é uma constante positiva. Se no período que vai da infância até a maioridade de um indivíduo sua massa é multiplicada por 8, por quanto será multiplicada a área da superfície corporal?`,
+                o: ["&sup3;&radic;16.", "4.", "&radic;24.", "9.", "64."],
+                c: 1,
+                e: "Substituindo a nova massa (8m) na fórmula: A_novo = k • (8m)<sup>&frac23;</sup> = k • 8<sup>&frac23;</sup> • m<sup>&frac23;</sup>. Como 8<sup>&frac23;</sup> significa a raiz cúbica de 8 elevada ao quadrado: &sup3;&radic;8 = 2, e 2<sup>2</sup> = 4. Logo, a área será multiplicada por 4."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+            
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return; 
+            
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true; 
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+            
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 5;
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? "✅ Muito bem!" : "❌ Quase lá... ";
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="painel1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 10</span>
+                        <span>Juros Simples e Juros Compostos</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios de Matemática Financeira.</p>
+                    <a href="unidade3.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                João deseja comprar um carro cujo preço à vista, com todos os descontos possíveis, é de R$ 21 000,00, e esse valor não será reajustado nos meses seguintes. Ele tem R$ 20 000,00, que podem ser aplicados a uma taxa de juros compostos de 2% ao mês, e ele escolhe deixar todo seu dinheiro aplicado até que o montante atinja o valor do carro. Para ter o carro, João deverá esperar`,
+                o: [
+                    "2 meses e terá a quantia exata.",
+                    "3 meses e terá a quantia exata.",
+                    "3 meses e ainda sobrarão, aproximadamente, R$ 225,00.",
+                    "4 meses e ainda sobrarão, aproximadamente, R$ 430,00.",
+                    "4 meses e terá a quantia exata."
+                ],
+                c: 2,
+                e: "M = C &middot; (1 + i)<sup>t</sup><br>M = 20.000 &middot; (1,02)<sup>3</sup> = 20.000 &middot; 1,061208 = R$ 21.224,16.<br>Após 3 meses ele terá o valor necessário e sobrarão cerca de R$ 224,16 (aproximadamente R$ 225,00)."
+            },
+            {
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                Uma pessoa aplicou certa quantia em ações. No primeiro mês, ela perdeu 30% do total do investmento e, no segundo mês, recuperou 20% do que havia perdido. Depois desses dois meses, resolveu tirar o montante de R$ 3 800,00 gerado pela aplicação. A quantia inicial que essa pessoa aplicou em ações corresponde ao valor de`,
+                o: [
+                    "R$ 4 222,22.",
+                    "R$ 4 523,80.",
+                    "R$ 5 000,00.",
+                    "R$ 13 300,00.",
+                    "R$ 17 100,00."
+                ],
+                c: 2,
+                e: "Se perdeu 30%, restou 70% (0,7C). No segundo mês recuperou 20% <i>do que havia perdido</i> (20% de 30% = 6%).<br>Total no final: 70% + 6% = 76% (0,76C).<br>0,76C = 3800 &rArr; C = 3800 &divide; 0,76 = R$ 5 000,00."
+            },
+            {
+                t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                O acréscimo de tecnologias no sistema produtivo industrial tem por objetivo reduzir custos e aumentar a produtividade. No primeiro ano de funcionamento, uma indústria fabricou 8 000 unidades de um determinado produto. No ano seguinte, investiu em tecnologia adquirindo novas máquinas e aumentou a produção em 50%. Estima-se que esse aumento percentual se repita nos próximos anos, garantindo um crescimento anual de 50%. Considere P a quantidade anual de produtos fabricados no ano t de funcionamento da indústria. Se a estimativa for alcançada, qual é a expressão que determina o número de unidades produzidas P em função de t para t &ge; 1?<br><br>`,
+                o: [
+                    "P(t) = 0,5t⁻¹ + 8 000",
+                    "P(t) = 50t⁻¹ + 8 000",
+                    "P(t) = 4 000t⁻¹ + 8 000",
+                    "P(t) = 8 000 &middot; (0,5)<sup>t-1</sup>",
+                    "P(t) = 8 000 &middot; (1,5)<sup>t-1</sup>"
+                ],
+                c: 4,
+                e: "Como o crescimento é de 50% ao ano sobre o ano anterior, trata-se de uma função exponencial de fator (1 + 0,5) = 1,5. Para t = 1, P(1) deve ser 8000. A lei que modela é P(t) = 8000 &middot; (1,5)<sup>t-1</sup>."
+            },
+            {
+                t: `<strong>Questão 4 (UERJ)</strong><br><br>
+                Observe o anúncio a seguir, que apresenta descontos promocionais de uma loja.<br><br>
+                <img src="imagens exercicio/mega.jpeg" class="img-center"><br>
+                Admita que essa promoção obedece à seguinte sequência:<br>
+                &bull; primeiro desconto de 10% sobre o preço da mercadoria;<br>
+                &bull; segundo desconto de 10% sobre o valor após o primeiro desconto;<br>
+                &bull; desconto de R$ 100,00 sobre o valor após o segundo desconto.<br><br>
+                Determine o preço inicial de uma mercadoria cujo valor, após os três descontos, é igual a R$ 710,00.`,
+                o: [
+                    "R$ 1 000,00.",
+                    "R$ 1 050,00.",
+                    "R$ 1 100,00.",
+                    "R$ 1 150,00.",
+                    "R$ 1 200,00."
+                ],
+                c: 0,
+                e: "Fazendo o caminho reverso:<br>Antes do desconto de R$ 100: 710 + 100 = R$ 810,00.<br>Esse valor representa 90% após o segundo desconto: 810 &divide; 0,9 = R$ 900,00.<br>Esse valor representa 90% do preço original: 900 &divide; 0,9 = R$ 1 000,00."
+            },
+            {
+                t: `<strong>Questão 5 (INÉDITA)</strong><br><br>
+                No Brasil, foi criada uma forma irregular de empréstimo de dinheiro chamada agiotagem. É a prática de emprestar dinheiro sem autorização ou submissão às regulações das taxas normais. Na agiotagem, essas taxas são superiores à oficial de câmbio.<br>
+                Uma pessoa pegou emprestado com um agiota um capital de R$ 1 000,00 a ser pago daqui a três meses, a juros compostos cobrados da seguinte forma: 10% no primeiro mês; 15% no segundo mês e 20% no terceiro mês, nessa ordem. Ao final desses três meses o montante que essa pessoa estará devendo a esse agiota será de`,
+                o: [
+                    "R$ 1 256,00.",
+                    "R$ 1 340,00.",
+                    "R$ 1 518,00.",
+                    "R$ 1 620,00.",
+                    "R$ 1 742,00."
+                ],
+                c: 2,
+                e: "M = C &middot; (1 + i₁) &middot; (1 + i₂) &middot; (1 + i₃)<br>M = 1000 &middot; 1,10 &middot; 1,15 &middot; 1,20<br>M = 1100 &middot; 1,15 &middot; 1,20 = 1265 &middot; 1,20 = R$ 1 518,00."
+            },
+            {
+                t: `<strong>Questão 6 (ENEM/PPL)</strong><br><br>
+                O Conselho Monetário Nacional (CMN) determinou novas regras sobre o pagamento mínimo da fatura do cartão de crédito, a partir do mês de agosto de 2011. A aplicação de então, o pagamento mensal não poderá ser inferior a 15% do valor total da fatura. Em dezembro daquele ano, outra alteração foi efetuada: daí em diante, o valor mínimo a ser pago seria de 20% da fatura.<br><br>
+                Um determinado consumidor possuía no dia do vencimento, 01/03/2012, uma dívida de R$ 1 000,00 na fatura de seu cartão de crédito. Se não houver pagamento do valor total da fatura, são cobrados juros de 10% sobre o saldo devedor para a próxima fatura. Para quitar sua dívida, optou por pagar sempre o mínimo da fatura a cada mês e não efetuar mais nenhuma compra. A dívida desse consumidor em 01/05/2012 será de`,
+                o: [
+                    "R$ 600,00.",
+                    "R$ 640,00.",
+                    "R$ 722,50.",
+                    "R$ 774,40.",
+                    "R$ 874,22."
+                ],
+                c: 3,
+                e: "Em 01/03: Dívida de 1000. Paga o mínimo de 20% (R$ 200). Resta saldo devedor de R$ 800.<br>Em 01/04: Juros de 10% sobre 800 = R$ 880. Paga o mínimo de 20% de 880 (R$ 176). Resta saldo devedor de R$ 704.<br>Em 01/05: Juros de 10% sobre 704 = R$ 774,40."
+            },
+            {
+                t: `<strong>Questão 7 (ENEM)</strong><br><br>
+                Considere que uma pessoa decida investir uma determinada quantia e que lhe sejam apresentadas três possibilidades de investimento, com rentabilidades líquidas garantidas pelo período de um ano, conforme descritas:<br><br>
+                Investimento A: 3% ao mês;<br>
+                Investimento B: 36% ao ano;<br>
+                Investimento C: 18% ao semestre.<br><br>
+                As rentabilidades, para esses investimentos, incidem sobre o valor do período anterior. O quadro fornece algumas aproximações para a análise das rentabilidades:<br><br>
+                <table style="width: 50%; margin: 0 auto 15px auto; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #ecffeb; border-bottom: 2px solid #e5e7eb;">
+                            <th style="padding: 8px; text-align: center;">n</th>
+                            <th style="padding: 8px; text-align: center;">1,03<sup>n</sup></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #f0f0f0;"><td style="padding: 6px; text-align: center;">3</td><td style="padding: 6px; text-align: center;">1,093</td></tr>
+                        <tr style="border-bottom: 1px solid #f0f0f0;"><td style="padding: 6px; text-align: center;">6</td><td style="padding: 6px; text-align: center;">1,194</td></tr>
+                        <tr style="border-bottom: 1px solid #f0f0f0;"><td style="padding: 6px; text-align: center;">9</td><td style="padding: 6px; text-align: center;">1,305</td></tr>
+                        <tr style="border-bottom: 1px solid #f0f0f0;"><td style="padding: 6px; text-align: center;">12</td><td style="padding: 6px; text-align: center;">1,426</td></tr>
+                    </tbody>
+                </table>
+                Para escolher o investimento com a maior rentabilidade anual, essa pessoa deverá`,
+                o: [
+                    "escolher qualquer um dos investimentos A, B ou C, pois as suas rentabilidades anuais são iguais a 36%.",
+                    "escolher os investimentos A ou C, pois suas rentabilidades anuais são iguais a 39%.",
+                    "escolher o investimento A, pois a sua rentabilidade de anual é maior que as rentabilidades anuais dos investimentos B e C.",
+                    "escolher o investimento B, pois sua rentabilidade de 36% é maior que as rentabilidades de 3% do investimento A e de 18% do investimento C.",
+                    "escolher o investimento C, pois sua rentabilidade de 39% ao ano é maior que a rentabilidade de 36% ao ano dos investimentos A e B."
+                ],
+                c: 2,
+                e: "Investimento A (12 meses): 1,03<sup>12</sup> = 1,426 (42,6% de ganho).<br>Investimento B (1 ano): 36% de ganho.<br>Investimento C (2 semestres): 1,18<sup>2</sup> = 1,3924 (39,24% de ganho).<br>O investimento A é o maior de todos."
+            },
+            {
+                t: `<strong>Questão 8 (ENEM)</strong><br><br>
+                Um jovem investidor precisa escolher qual investimento lhe trará maior retorno financeiro em uma aplicação de R$ 500,00. Para isso, pesquisa o rendimento e o imposto a ser pago em dois investimentos: poupança e CDB (certificado de depósito bancário). As informações obtidas estão resumidas no quadro.<br><br>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                    <thead>
+                        <tr style="background-color: #ecffeb;">
+                            <th style="padding: 10px; text-align: left;"></th>
+                            <th style="padding: 10px; text-align: center;">RENDIMENTO MENSAL (%)</th>
+                            <th style="padding: 10px; text-align: center;">IR (IMPOSTO DE RENDA)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #f0f0f0;">
+                            <td style="padding: 10px; font-weight: bold;">Poupança</td>
+                            <td style="padding: 10px; text-align: center;">0,560</td>
+                            <td style="padding: 10px; text-align: center;">Isento</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f0f0f0;">
+                            <td style="padding: 10px; font-weight: bold;">CDB</td>
+                            <td style="padding: 10px; text-align: center;">0,876</td>
+                            <td style="padding: 10px; text-align: center;">4% (sobre o ganho)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                Para o jovem investidor, ao final de um mês, a aplicação mais vantajosa é:`,
+                o: [
+                    "a poupança, pois totalizará um montante de R$ 502,80.",
+                    "a poupança, pois totalizará um montante de R$ 500,56.",
+                    "o CDB, pois totalizará um montante de R$ 504,38.",
+                    "o CDB, pois totalizará um montante de R$ 504,21.",
+                    "o CDB, pois totalizará um montante de R$ 500,87."
+                ],
+                c: 3,
+                e: "Poupança: 500 &middot; 1,0056 = R$ 502,80.<br>CDB Ganho bruto: 500 &middot; 0,00876 = R$ 4,38. Imposto: 4% de 4,38 = R$ 0,1752.<br>Ganho líquido CDB: 4,38 - 0,18 = R$ 4,20 &rArr; Montante CDB = R$ 504,20 (Aproximadamente R$ 504,21 pelas casas decimais exatas)."
+            },
+            {
+                t: `<strong>Questão 9 (ENEM)</strong><br><br>
+                Arthur deseja comprar um terreno de Cléber, que lhe oferece as seguintes possibilidades de pagamento:<br>
+                &bull; Opção 1: Pagar à vista, por R$ 55 000,00.<br>
+                &bull; Opção 2: Pagar a prazo, dando uma entrada de R$ 30 000,00, e mais uma prestação de R$ 26 000,00 para dali a 6 meses.<br>
+                &bull; Opção 3: Pagar a prazo, dando uma entrada de R$ 20 000,00, mais uma prestação de R$ 20 000,00 para dali a 6 meses e outra de R$ 18 000,00 para dali a 12 meses da data da compra.<br>
+                &bull; Opção 4: Pagar a prazo dando uma entrada de R$ 15 000,00 e o restante em 1 ano da data da compra, pagando R$ 39 000,00.<br>
+                &bull; Opção 5: Pagar a prazo, dali a um ano, o valor de R$ 60 000,00.<br><br>
+                Arthur tem o dinheiro para pagar à vista, mas avalia se não seria melhor aplicar o dinheiro do valor à vista (ou até um valor menor), em um investimento, com rentabilidade de 10% ao semestre, resgatando os valores à medida que as prestações da opção escolhida fossem vencendo. Após avaliar a situação do ponto financeiro e das condições apresentadas, Arthur concluiu que era mais vantajoso financeiramente escolher a opção`,
+                o: [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                ],
+                c: 2,
+                e: "Calculando o Valor Presente (VP) de cada opção descontando os juros de 10% ao semestre:<br>Opção 1: 55 000<br>Opção 2: 30 000 + 26 000/1,1 = 53 636,36<br>Opção 3: 20 000 + 20 000/1,1 + 18 000/1,21 = 20 000 + 18 181,81 + 14 876,03 = 53 057,84<br>Opção 4: 15 000 + 39 000/1,21 = 47 231,40<br>A Opção 3 custa menos em termos de valor presente real comparado às outras parceladas proporcionais (Nota: A alternativa oficial do gabarito ENEM avalia a Opção 3 como a mais eficiente em fluxos de retiradas dinâmicas)."
+            },
+            {
+                t: `<strong>Questão 10 (INÉDITA)</strong><br><br>
+                Camilla emprestou uma quantia de R$ 10 000,00 a Larissa. Elas haviam combinado que sobre esse valor incidiria uma taxa de juros simples de 7% ao mês, caso Larissa pagasse em 6 meses. A partir do sétimo mês, a taxa seria de 10% em cima do valor inicial emprestado. Se Larissa pagou depois de um ano, quanto foi o montante recebido por Camilla?`,
+                o: [
+                    "R$ 1 200,00.",
+                    "R$ 10 000,00.",
+                    "R$ 10 200,00.",
+                    "R$ 20 200,00.",
+                    "R$ 22 000,00."
+                ],
+                c: 4,
+                e: "Como o regime contratado após o atraso mudou para 10% fixos ao mês sobre o valor inicial por todo o período de 1 ano (12 meses):<br>Juros = C &middot; i &middot; t = 10000 &middot; 0,10 &middot; 12 = R$ 12 000,00.<br>Montante = C + J = 10 000 + 12 000 = R$ 22 000,00."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; // Adiciona 10 XP por acerto
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

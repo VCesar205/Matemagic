@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="painel1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 10</span>
+                        <span>Função Exponencial</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios do tema</p>
+                    <a href="unidade3.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                t: `<strong>Questão 1 (ENEM/PPL)</strong><br><br>
+                Em um experimento, uma cultura de bactérias tem sua população reduzida pela metade a cada hora, devido à ação de um agente bactericida. Neste experimento, o número de bactérias em função do tempo pode ser modelado por uma função do tipo`,
+                o: [
+                    "afim.",
+                    "seno.",
+                    "cosseno.",
+                    "logarítmica crescente.",
+                    "exponencial."
+                ],
+                c: 4,
+                e: "Como a população reduz-se pela metade a cada intervalo de tempo fixo (1 hora), a taxa de decrescimento é proporcional ao valor atual da população. Fenômenos em que o valor é multiplicado/dividido por um fator constante a intervalos regulares são modelados por funções <strong>exponenciais</strong> da forma $P(t) = P_0 \\cdot (0,5)^t$."
+            },
+            {
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                Ao abrir um negócio, um microempresário descreveu suas vendas, em milhares de reais (unidade monetária brasileira), durante os dois primeiros anos. No primeiro ano, suas vendas cresceram de modo linear. Posteriormente, ele decidiu investir em propaganda, o que fez suas vendas crescerem de modo exponencial.<br><br>
+                Qual é o gráfico que melhor descreve as vendas em função do tempo?`,
+                o: [
+                    "<img src='imagens exercicio/grafico_2a.jpeg' alt='Alternativa A' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens exercicio/grafico_2b.jpeg' alt='Alternativa B' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens exercicio/grafico_2c.jpeg' alt='Alternativa C' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens exercicio/grafico_2d.jpeg' alt='Alternativa D' style='max-height: 100px; display: inline-block; vertical-align: middle;'>",
+                    "<img src='imagens exercicio/grafico_2e.jpeg' alt='Alternativa E' style='max-height: 100px; display: inline-block; vertical-align: middle;'>"
+                ],
+                c: 3,
+                e: "O comportamento das vendas é dividido em duas partes distintas:<br>1. No primeiro ano ($0 \\le t \\le 1$), o crescimento é linear, representado graficamente por um segmento de <strong>linha reta inclinada</strong>.<br>2. No segundo ano ($1 < t \\le 2$), o crescimento torna-se exponencial, representado por uma <strong>curva com concavidade voltada para cima</strong> que cresce de forma acelerada. O gráfico D representa perfeitamente essa transição."
+            },
+            {
+                t: `<strong>Questão 3 (ENEM/PPL)</strong><br><br>
+                A torre de Hanói é um jogo que tem o objetivo de mover todos os discos de uma haste para outra, utilizando o menor número possível de movimento, respeitando-se as regras.<br><br>
+                <img src="imagens exercicio/torre hanoi.jpeg" alt="Torre de Hanói com 5 discos" class="img-center"><br>
+                As regras são:<br>
+                1 – um disco maior não pode ser colocado sobre um disco menor;<br>
+                2 – pode-se mover um único disco por vez;<br>
+                3 – um disco deve estar sempre em uma das três hastes ou em movimento.<br><br>
+                <small>Disponível em: www.uime.usp.br. Acesso em: 28 abr. 2010 (adaptado).<br>Disponível em: www.realidadevirtual.com.br. Acesso em: 28 abr. 2010 (adaptado).</small><br><br>
+                Usando a torre de Hanói e baseando-se nas regras do jogo, podemos montar uma tabela entre o número de peças (X) e o número mínimo de movimentos (Y):<br><br>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #edf2f7; text-align: center;">
+                    <thead>
+                        <tr style="background-color: #f8fafc; border-bottom: 2px solid #2d3748;">
+                            <th style="padding: 8px;">NÚMERO DE PEÇAS</th>
+                            <th style="padding: 8px;">NÚMERO MÍNIMO DE MOVIMENTOS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">1</td>
+                            <td style="padding: 6px;">1</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">2</td>
+                            <td style="padding: 6px;">3</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #e2e8f0;">
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">3</td>
+                            <td style="padding: 6px;">7</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px; border-right: 1px solid #e2e8f0;">4</td>
+                            <td style="padding: 6px;">15</td>
+                        </tr>
+                    </tbody>
+                </table>
+                A relação entre (X) e (Y) é`,
+                o: [
+                    "Y = 2<sup>X</sup> - 1",
+                    "Y = 2<sup>X - 1</sup>",
+                    "Y = 2<sup>X</sup>",
+                    "Y = 2X - 1",
+                    "Y = 2X - 4"
+                ],
+                c: 0,
+                e: "Analisando os valores fornecidos na tabela:<br>• Para $X=1 \\implies Y = 2^1 - 1 = 1$<br>• Para $X=2 \\implies Y = 2^2 - 1 = 3$<br>• Para $X=3 \\implies Y = 2^3 - 1 = 7$<br>• Para $X=4 \\implies Y = 2^4 - 1 = 15$<br>A lei matemática correspondente que modela o comportamento padrão do jogo é $Y = 2^X - 1$."
+            },
+            {
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                A duração do efeito de alguns fármacos está relacionada à sua meia-vida, tempo necessário para que a quantidade original do fármaco no organismo se reduza à metade. A cada intervalo de tempo correspondente a uma meia-vida, a quantidade de fármaco existente no organismo no final do intervalo é igual a 50% da quantidade do início desse intervalo.<br><br>
+                <img src="imagens exercicio/farmaco.jpeg" alt="Gráfico de decaimento por meia-vida" class="img-center"><br>
+                O gráfico acima representa, de forma genérica, o que acontece com a quantidade de fármaco no organismo humano ao longo do tempo.<br><br>
+                <small>F. D. Fuchs e Cher i. Wannm Pharmacologia Clínica. Rio de Janeiro: Guanabara Koogan, 1992, p.40.</small><br><br>
+                A meia-vida do antibiótico Amoxicilina é de 1 hora. Assim, se uma dose desse antibiótico for injetada as 12 h em um paciente, o percentual dessa dose que restará em seu organismo às 13 h 30 min será aproximadamente de`,
+                o: [
+                    "10%.",
+                    "15%.",
+                    "25%.",
+                    "35%.",
+                    "50%."
+                ],
+                c: 3,
+                e: "• O intervalo de tempo de 12 h até 13 h 30 min é de 1h30min, o que equivale a 1,5 horas.<br>• Como a meia-vida é de 1 hora, 1,5 horas equivalem a exatamente 1,5 meias-vidas.<br>• Olhando no gráfico fornecido, localizamos no eixo horizontal (número de meias-vidas) o ponto médio entre 1 e 2, isto é, 1,5. Subindo verticalmente até a curva exponencial e projetando no eixo vertical, o percentual correspondente de fármaco restante se encontra entre 30% e 40%, sendo aproximadamente igual a 35%."
+            },
+            {
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                O sindicato de trabalhadores de uma empresa sugere que o piso salarial da classe seja de R$ 1 800,00, propondo um aumento percentual fixo por cada ano dedicado ao trabalho. A expressão que corresponde à proposta salarial (s), em função do tempo de serviço (t), em anos, é s(t) = 1 800 · (1,03)<sup>t</sup>. De acordo com a proposta do sindicato, o salário de um profissional dessa empresa com 2 anos de tempo de serviço será, em reais,`,
+                o: [
+                    "7 416,00.",
+                    "3 819,24.",
+                    "3 709,62.",
+                    "3 708,00.",
+                    "1 909,62."
+                ],
+                c: 4,
+                e: "Para calcular o salário após 2 anos, devemos substituir $t = 2$ na função dada:<br>$s(2) = 1800 \\cdot (1,03)^2$<br>$s(2) = 1800 \\cdot 1,0609$<br>$s(2) = 1909,62$<br>Portanto, o salário será de R$ 1 909,62."
+            },
+            {
+                t: `<strong>Questão 6 (UFPR)</strong><br><br>
+                Uma pizza a 185 °C foi retirada de um forno quente. Entretanto, somente quando a temperatura atingir 65 °C será possível segurar um de seus pedaços com as mãos nuas, sem se queimar. Suponha que a temperatura T da pizza, em graus Celsius, possa ser descrita em função do tempo t, em minutos, pela expressão T = 160 · 2<sup>-0,8t</sup> + 25. Qual o tempo necessário para que se possa segurar um pedaço dessa pizza com as mãos nuas, sem se queimar?`,
+                o: [
+                    "0,25 minutos.",
+                    "0,68 minutos.",
+                    "2,5 minutos.",
+                    "6,63 minutos.",
+                    "10,0 minutos."
+                ],
+                c: 2,
+                e: "Queremos descobrir o valor de $t$ para o qual $T = 65$. Substituindo na expressão:<br>$65 = 160 \\cdot 2^{-0,8t} + 25$<br>$65 - 25 = 160 \\cdot 2^{-0,8t}$<br>$40 = 160 \\cdot 2^{-0,8t}$<br>$2^{-0,8t} = \\frac{40}{160} = \\frac{1}{4}$<br>$2^{-0,8t} = 2^{-2}$<br>Igualando os expoentes: $-0,8t = -2 \\implies t = \\frac{2}{0,8} = 2,5\\text{ minutos}$."
+            },
+            {
+                t: `<strong>Questão 7 (UNIFG)</strong><br><br>
+                <img src="imagens exercicio/bacteria.jpeg" alt="Microscopia de Escherichia coli" class="img-center"><br>
+                Um pequeno número da bactéria <em>E.Coli</em>, no intestino grosso de uma pessoa, pode desencadear uma séria infecção em poucas horas, pois cada uma delas se reproduz exponencialmente, dividindo-se em duas, a cada meia hora.<br><br>
+                Admitindo-se que uma infecção se inicie com 100 dessas bactérias e que nenhuma bactéria morre em um intervalo de k horas, então o tamanho da população de <em>E. Coli</em> t horas pós o início da infecção, 0 &le; t &le; k, pode ser determinado através da expressão matemática`,
+                o: [
+                    "P(t) = 100<sup>2t</sup>",
+                    "P(t) = 100 + 2<sup>t</sup>",
+                    "P(t) = 100 + 2<sup>2t</sup>",
+                    "P(t) = 100 · 2<sup>t</sup>",
+                    "P(t) = 100 · 2<sup>2t</sup>"
+                ],
+                c: 4,
+                e: "• A população inicial $P_0$ é igual a 100.<br>• As bactérias se duplicam (fator de crescimento = 2) a cada meia hora. Isso significa que em 1 hora, ocorrem exatamente dois ciclos de duplicação.<br>• Portanto, em $t$ horas, ocorrerão $2t$ ciclos de divisão celular.<br>A expressão final que modela o crescimento populacional é $P(t) = 100 \\cdot 2^{2t}$."
+            },
+            {
+                t: `<strong>Questão 8 (ENEM)</strong><br><br>
+                Pesquisas indicam que o número de bactérias X é duplicado a cada quarto de hora. Um aluno resolveu fazer uma observação para verificar a veracidade dessa afirmação. Ele usou uma população inicial de 10<sup>5</sup> bactérias X e encerrou a observação ao final de uma hora. Suponha que a observação do aluno tenha confirmado que o número de bactérias X se duplica a cada quarto de hora. Após uma hora do início do período de observação desse aluno, o número de bactérias X foi de`,
+                o: [
+                    "2<sup>-2</sup> · 10<sup>5</sup>",
+                    "2<sup>-1</sup> · 10<sup>5</sup>",
+                    "2<sup>2</sup> · 10<sup>5</sup>",
+                    "2<sup>3</sup> · 10<sup>5</sup>",
+                    "2<sup>4</sup> · 10<sup>5</sup>"
+                ],
+                c: 4,
+                e: "• População inicial: $10^5$.<br>• O período de duplicação acontece a cada quarto de hora (15 minutos).<br>• O experimento dura 1 hora integral, o que equivale a 4 quartos de hora (4 ciclos completos).<br>• Multiplicando a população por 2 a cada ciclo, teremos ao fim: $10^5 \\cdot 2 \\cdot 2 \\cdot 2 \\cdot 2 = 2^4 \\cdot 10^5$."
+            },
+            {
+                t: `<strong>Questão 9 (ENEM)</strong><br><br>
+                O governo de uma cidade está preocupado com a possível epidemia de uma doença infectocontagiosa causada por bactéria. Para decidir que medidas tomar, deve calcular a velocidade de reprodução da bactéria. Em experiências laboratoriais de uma cultura bacteriana, inicialmente com 40 mil unidades, obteve-se a fórmula para a população:<br>
+                <div style="text-align: center; margin: 15px 0; font-weight: bold; font-size: 1.1rem;">P(t) = 40 · 2<sup>3t</sup></div>
+                Em que t é o tempo, em hora, e P(t) é a população, em milhares de bactérias.<br>
+                Em relação à quantidade inicial de bactérias, após 20 minutos, a população será`,
+                o: [
+                    "reduzida a um terço.",
+                    "reduzida à metade.",
+                    "reduzida a dois terços.",
+                    "duplicada.",
+                    "triplicada."
+                ],
+                c: 3,
+                e: "• Primeiro convertemos 20 minutos para horas, dividindo por 60: $t = \\frac{20}{60} = \\frac{1}{3}\\text{ hora}$.<br>• Substituindo $t = \\frac{1}{3}$ na lei de formação da função:<br>$P(\\frac{1}{3}) = 40 \\cdot 2^{3 \\cdot (1/3)} = 40 \\cdot 2^1 = 80\\text{ mil}$.<br>• Como a população inicial era de 40 mil e passou para 80 mil, ela foi <strong>duplicada</strong>."
+            },
+            {
+                t: `<strong>Questão 10 (ENEM)</strong><br><br>
+                O acréscimo de tecnologias no sistema produtivo industrial tem por objetivo reduzir custos e aumentar a produtividade. No primeiro ano de funcionamento, uma indústria fabricou 8 000 unidades de um determinado produto. No ano seguinte, investiu em tecnologia adquirindo novas máquinas e aumentou a produção em 50%. Estima-se que esse aumento percentual se repita nos próximos anos, garantindo um crescimento anual de 50%. Considere P a quantidade anual de produtos fabricados no ano t de funcionamento da indústria.<br>
+                Se a estimativa for alcançada, qual é a expressão que determina o número de unidades produzidas P em função de t para t &le; 1?`,
+                o: [
+                    "P(t) = 0,5 · t<sup>-1</sup> + 8 000",
+                    "P(t) = 50 · t<sup>-1</sup> + 8 000",
+                    "P(t) = 4 000 · t<sup>-1</sup> + 8 000",
+                    "P(t) = 8 000 · (0,5)<sup>t-1</sup>",
+                    "P(t) = 8 000 · (1,5)<sup>t-1</sup>"
+                ],
+                c: 4,
+                e: "Este cenário configura-se matematicamente como uma progressão geométrica (PG) ou crescimento exponencial:<br>• Ano $t=1$: $P(1) = 8000$<br>• Ano $t=2$: $P(2) = 8000 \\cdot (1 + 0,5) = 8000 \\cdot (1,5)$<br>• Ano $t=3$: $P(3) = 8000 \\cdot (1,5)^2$<br>Generalizando para o ano $t$, o fator multiplicador acumulado terá expoente $(t-1)$, resultando na função $P(t) = 8000 \\cdot (1,5)^{t-1}$."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

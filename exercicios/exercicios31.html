@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="painel1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 10</span>
+                        <span>Porcentagem</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios do tema.</p>
+                    <a href="unidade3.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                t: `<strong>Questão 1 (ENEM)</strong><br><br>
+                No dia 12 de janeiro de 2010, o governo da Venezuela adotou um plano de racionamento de energia que previa cortes no fornecimento em todo o país. O ministro da Energia afirmou que uma das formas mais eficazes de se economizar energia nos domicílios seria o uso de lâmpadas que consomem 20% menos da energia consumida por lâmpadas normais. Em uma residência, o consumo mensal de energia proveniente do uso de lâmpadas comuns é de 63 kWh. Se todas as lâmpadas dessa residência forem trocadas pelas lâmpadas econômicas, esse consumo passará a ser de, aproximadamente,`,
+                o: [
+                    "9 kWh.",
+                    "11 kWh.",
+                    "22 kWh.",
+                    "35 kWh.",
+                    "50 kWh."
+                ],
+                c: 4,
+                e: "20% de 63 = 12,6. Então: 63 - 12,6 = 50,4 kWh. Aproximadamente 50 kWh."
+            },
+            {
+                t: `<strong>Questão 2 (ENEM)</strong><br><br>
+                O Brasil é um país com uma vantagem econômica clara no terreno de recursos naturais, dispondo de uma das maiores áreas com vocação agrícola do mundo. Especialistas calculam que, dos 853 milhões de hectares do país, as cidades, as reservas indígenas e as áreas de preservação, incluindo florestas e mananciais, cobram por volta de 470 milhões de hectares. Aproximadamente 280 milhões se destinam à agropecuária, 200 milhões para pastagens e 80 milhões para a agricultura, somadas as lavouras anuais e perenes, como o café e a fruticultura.<br><br>
+                FORTES, G. Recuperação de pastagens é alternativa para ampliar cultivos. Folha de S. Paulo, 30 out. 2011.<br><br>
+                De acordo com os dados apresentados, o percentual correspondente à área utilizada para agricultura em relação à área do território brasileiro é mais próximo de`,
+                o: [
+                    "32,8%.",
+                    "28,6%.",
+                    "10,7%.",
+                    "9,4%.",
+                    "8,0%."
+                ],
+                c: 3,
+                e: "A área utilizada para agricultura é de 80 milhões de hectares. Então: (80 ÷ 853) × 100 ≈ 9,4%."
+            },
+            {
+               t: `<strong>Questão 3 (ENEM)</strong><br><br>
+                Devido ao não cumprimento das metas definidas para a campanha de vacinação contra a gripe comum e o vírus H1N1 em um ano, o Ministério da Saúde anunciou a prorrogação da campanha por mais uma semana. A tabela apresenta as quantidades de pessoas vacinadas dentre os cinco grupos de risco até a data de início da prorrogação da campanha.<br><br>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.95rem;">
+                    <thead>
+                        <tr style="background-color: #ecffeb; color: #03ad3c; border-bottom: 2px solid #e5e7eb;">
+                            <th style="padding: 10px; text-align: left;">Grupo de risco</th>
+                            <th style="padding: 10px; text-align: center;">População (milhão)</th>
+                            <th style="padding: 10px; text-align: center;">População já vacinada (milhão)</th>
+                            <th style="padding: 10px; text-align: center;">(%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 10px;">Crianças</td>
+                            <td style="padding: 10px; text-align: center;">4,5</td>
+                            <td style="padding: 10px; text-align: center;">0,9</td>
+                            <td style="padding: 10px; text-align: center;">20</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 10px;">Profissionais da Saúde</td>
+                            <td style="padding: 10px; text-align: center;">2,0</td>
+                            <td style="padding: 10px; text-align: center;">1,0</td>
+                            <td style="padding: 10px; text-align: center;">50</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 10px;">Gestantes</td>
+                            <td style="padding: 10px; text-align: center;">2,5</td>
+                            <td style="padding: 10px; text-align: center;">1,5</td>
+                            <td style="padding: 10px; text-align: center;">60</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 10px;">Indígenas</td>
+                            <td style="padding: 10px; text-align: center;">0,5</td>
+                            <td style="padding: 10px; text-align: center;">0,4</td>
+                            <td style="padding: 10px; text-align: center;">80</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 10px;">Idosos</td>
+                            <td style="padding: 10px; text-align: center;">20,5</td>
+                            <td style="padding: 10px; text-align: center;">8,2</td>
+                            <td style="padding: 10px; text-align: center;">40</td>
+                        </tr>
+                </table>
+                Qual é a porcentagem do total de pessoas desses grupos de risco já vacinadas?`,
+                o: [
+                    "12.",
+                    "18.",
+                    "30.",
+                    "40.",
+                    "50."
+                ],
+                c: 3,
+                e: "Somando as populações: 4,5 + 2 + 2,5 + 0,5 + 20,5 = 30 milhões. Somando os vacinados: 0,9 + 1 + 1,5 + 0,4 + 8,2 = 12 milhões. Então: (12 ÷ 30) × 100 = 40%."
+            },
+            {
+                t: `<strong>Questão 4 (ENEM)</strong><br><br>
+                Uma pessoa compra semanalmente, numa mesma loja, sempre a mesma quantidade de um produto que custa R$ 10,00 a unidade. Como já sabe quanto deve gastar, leva sempre R$ 6,00 a mais do que a quantia necessária para comprar tal quantidade, para o caso de eventuais despesas extras. Entretanto, um dia, ao chegar à loja, foi informada de que o preço daquele produto havia aumentado 20%. Devido a esse reajuste, concluiu que o dinheiro levado era a quantia exata para comprar duas unidades a menos em relação à quantidade habitualmente comprada.<br><br>
+                A quantia que essa pessoa levava semanalmente para fazer a compra era`,
+                o: [
+                    "R$ 166,00.",
+                    "R$ 156,00.",
+                    "R$ 84,00.",
+                    "R$ 46,00.",
+                    "R$ 24,00."
+                ],
+                c: 1,
+                e: "Se o produto aumentou 20%, passou de R$10 para R$12. Seja x a quantidade comprada normalmente. O valor levado era 10x + 6. Após o reajuste, esse valor compra x − 2 unidades: 12(x − 2) = 10x + 6 → 12x − 24 = 10x + 6 → 2x = 30 → x = 15. Valor levado: 10 × 15 + 6 = R$156,00."
+            },
+            {
+                t: `<strong>Questão 5 (INÉDITA)</strong><br><br>
+                Júlia é uma jovem comerciante com pouca experiência no ramo. Certa vez, ela comprou uma mercadoria no valor de R$ 150,00 no atacado. Para vender essa mercadoria na sua loja, ela acrescentou 50% de lucro. No período de promoção, ela ofereceu essa mercadoria com 40% de desconto sobre o preço que ali estava. Ela imagina que estava lucrando com essa venda 10%.<br><br>
+                Com esses descontos, a Júlia na verdade teve`,
+                o: [
+                    "lucro de R$ 10,00.",
+                    "lucro de R$ 15,00.",
+                    "lucro de R$ 25,00.",
+                    "prejuízo de R$ 15,00.",
+                    "prejuízo de R$ 20,00."
+                ],
+                c: 3,
+                e: "Ela comprou por R$150. Com 50% de lucro: 150 × 1,5 = R$225. Aplicando 40% de desconto: 225 × 0,6 = R$135. Como gastou R$150 e vendeu por R$135, teve prejuízo de R$15."
+            },
+            {
+                t: `<strong>Questão 6 (ENEM ADAPTADA)</strong><br><br>
+                Um paciente necessita de reidratação endovenosa feita por meio de 5 frascos de soro durante 24 h. Cada frasco tem um volume de 800 mL de soro. Nas primeiras quatro horas, deverá receber 40% do total a ser aplicado. Cada mililitro de soro corresponde a 12 gotas.<br><br>
+                O número de gotas por minuto que o paciente deverá receber após as quatro primeiras horas será`,
+                o: [
+                    "16.",
+                    "20.",
+                    "24.",
+                    "34.",
+                    "40."
+                ],
+                c: 3,
+                e: "Volume total: 5 × 800 = 4000 mL. Nas primeiras 4h recebe 40%: 1600 mL. Restam 2400 mL para 20h. Como 1 mL = 12 gotas: 2400 × 12 = 28800 gotas. Em 20h = 1200 minutos. Então: 28800 ÷ 1200 = 24 gotas/min."
+            },
+            {
+                t: `<strong>Questão 7 (ENEM)</strong><br><br>
+                O recinto das provas de natação olímpica utiliza a mais avançada tecnologia para proporcionar aos nadadores condições ideais. Isso passa por reduzir o impacto da ondulação e das correntes provocadas pelos nadadores no seu deslocamento. Para conseguir isso, a piscina de competição tem uma profundidade uniforme de 3 m, que ajuda a diminuir a “reflexão” da água (o movimento contra uma superfície e o regresso no sentido contrário, atingindo os nadadores), além dos já tradicionais 50 m de comprimento e 25 m de largura. Um clube deseja reformar sua piscina de 50 m de comprimento, 20 m de largura e 2 m de profundidade de forma que passe a ter as mesmas dimensões das piscinas olímpicas.<br><br>
+                Disponível em: desporto.publico.pt. Acesso em: 6 ago. 2012.<br><br>
+                Após a reforma, a capacidade dessa piscina superará a capacidade da piscina original em um valor próximo de`,
+                o: [
+                    "20%.",
+                    "25%.",
+                    "47%.",
+                    "50%.",
+                    "88%."
+                ],
+                c: 4,
+                e: "Piscina original: 50 × 20 × 2 = 2000 m³. Piscina olímpica: 50 × 25 × 3 = 3750 m³. Aumento: 3750 − 2000 = 1750. Percentual: 1750 ÷ 2000 × 100 = 87,5% ≈ 88%."
+            },
+            {
+                t: `<strong>Questão 8 (ENEM)</strong><br><br>
+                Um produtor de maracujá usa uma caixa-d’água, com volume V, para alimentar o sistema de irrigação de seu pomar. O sistema capta água através de um furo no fundo da caixa a uma vazão constante. Com a caixa-d’água cheia, o sistema foi acionado às 7 h da manhã de segunda-feira. Às 13 h do mesmo dia, verificou-se que já haviam sido usados 15% do volume da água existente na caixa. Um dispositivo eletrônico interrompe o funcionamento do sistema quando o volume restante na caixa é de 5% do volume total, para reabastecimento.<br><br>
+                Supondo que o sistema funcione sem falhas, a que horas o dispositivo eletrônico interromperá o funcionamento?`,
+                o: [
+                    "Às 15 h de segunda-feira.",
+                    "Às 11 h de terça-feira.",
+                    "Às 14 h de terça-feira.",
+                    "Às 4 h de quarta-feira.",
+                    "Às 21 h de terça-feira."
+                ],
+                c: 4,
+                e: "Em 6 horas foram consumidos 15% da água. Para consumir 95%: x/6 = 95/15 → x = 38 horas. Somando 38 horas a partir das 7h de segunda-feira, chegamos às 21h de terça-feira."
+            },
+	    {
+                t: `<strong>Questão 9 (INÉDITA)</strong><br><br>
+                    <strong>Black Friday</strong><br>
+                    Em português significa: sexta-feira negra, é o dia que inaugura a temporada de compras natalícias com significativas promoções em muitas lojas retalhistas e grandes armazéns. É um dia depois do Dia de Ação de Graças nos Estados Unidos, ou seja, celebra-se no dia seguinte à quarta quinta-feira do mês de novembro. Esta festividade começou nos Estados Unidos e, com a ajuda das novas tecnologias e com a promoção deste dia por parte das diversas empresas, tem se estendido pelo resto do mundo.<br><br>
+                    <em>Disponível em: pt.wikipedia.org/wiki/Black_Friday. Acesso em: 10 ago. 2019.</em><br><br>
+                    Um anúncio chamou muito a atenção de um comprador para a Black Friday (ofertas com até 50% + 12% de desconto / até 12% de desconto no boleto).<br><br>
+		    <img src="imagens exercicio/black friday.jpeg" class="img-center"><br>
+                    Feita a compra nessa empresa e pagando-se no boleto bancário, o desconto real e máximo que essa pessoa terá nessa loja será de`,
+                o: [
+                    "25%.",
+                    "42%.",
+                    "50%.",
+                    "56%.",
+                    "62%."
+                ],
+                c: 3,
+                e: "Descontos sucessivos aplicam-se sobre o valor restante. Para um produto de R$ 100,00:<br>1) Com 50% de desconto inicial, o valor passa a ser 50% de R$ 100 = R$ 50,00.<br>2) O desconto adicional de 12% no boleto incide sobre os R$ 50,00: 12% de 50 = R$ 6,00.<br>3) O preço final será R$ 50 - R$ 6 = R$ 44,00.<br>Como o valor caiu de R$ 100 para R$ 44, o desconto real total é de 100% - 44% = 56%."
+            },
+	    {
+                t: `<strong>Questão 10 (ENEM)</strong><br><br>
+                    O cartão Micro SD é um tipo de mídia utilizada para armazenamento de dados (arquivos, fotos, filmes, músicas etc.). Um usuário tem um cartão Micro SD de 16 GB e, utilizando seu computador, visualiza, em termos percentuais, os dados armazenados no cartão, conforme o gráfico.<br><br>
+		    <img src="imagens exercicio/micro sd.jpeg" class="img-center"><br>
+                    O usuário adquiriu um cartão do mesmo tipo, mas de 32 GB, com o objetivo de gravar os dados do seu cartão de 16 GB em seu novo cartão de 32 GB. No entanto, para aumentar o espaço de armazenamento disponível, decidiu não gravar suas músicas no novo cartão. Analisando o gráfico, o espaço disponível no novo cartão de 32 GB, em termos percentuais, é igual a`,
+                o: [
+                    "60.",
+                    "65.",
+                    "70.",
+                    "75.",
+                    "80."
+                ],
+                c: 2,
+                e: "No cartão de 16 GB, os dados ocupam: Fotos (22%), Vídeos (13%) e Aplicativos (25%). As músicas (10%) não serão transferidas.<br> Total de dados transferidos = 22% + 13% + 25% = 60% de 16 GB = 9,6 GB.<br> No novo cartão de 32 GB, a quantidade de espaço ocupado será de 9,6 GB.<br> O espaço ocupado em percentual do novo cartão será: 9,6 / 32 = 0,30 = 30%.<br> Portanto, o espaço <strong>disponível</strong> no cartão de 32 GB será: 100% - 30% = 70%."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 5;
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

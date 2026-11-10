@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios - Matemagic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="exercicio.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="painel1.html" class="nav-item"><i class="fas fa-arrow-left"></i></a>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <a href="inicio.html" class="logo">Matemagic</a>
+        </header>
+
+        <main class="content-area">
+            <div class="question-card">
+                <div id="quiz-container">
+                    <div class="q-header">
+                        <span>Questão <strong id="current-idx">1</strong> de 9</span>
+                        <span>Conjuntos</span>
+                    </div>
+
+                    <div class="q-text" id="q-text">Carregando...</div>
+                    <div class="options-list" id="options-container"></div>
+                    
+                    <button class="btn-action" id="btn-submit" onclick="validateAnswer()">Responder</button>
+                    
+                    <div id="feedback" class="feedback-box">
+                        <p id="feedback-title" style="font-weight: bold; margin-bottom: 5px;"></p>
+                        <p id="feedback-msg" style="font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;"></p>
+                        <button class="btn-action btn-next" onclick="loadNextQuestion()">Próxima Questão</button>
+                    </div>
+                </div>
+
+                <div id="finish-screen">
+                    <div class="finish-icon"><i class="fas fa-star"></i></div>
+                    <div class="points-badge" id="total-points">0 XP</div>
+                    <h2 class="finish-title">Parabéns!</h2>
+                    <p class="finish-score">Você concluiu os exercícios de Teoria dos Conjuntos.</p>
+                    <a href="unidade3.html" class="btn-action btn-back">Voltar ao Conteúdo</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                t: `<strong>Questão 1 (FGV)</strong><br><br>
+                Observe o diagrama com 5 organizações intergovernamentais de integração sul-americana:<br><br>
+                <img src="imagens exercicio/diagrama paises.jpeg" alt="Diagrama de integração sul-americana" class="img-center"><br>
+                Dos 12 países que compõem esse diagrama, integram exatamente 3 das organizações apenas`,
+                o: [
+                    "4.",
+                    "5.",
+                    "6.",
+                    "7.",
+                    "8."
+                ],
+                c: 0,
+                e: "Analisando as intersecções do diagrama, contamos quais países estão presentes em exatamente 3 conjuntos simultaneamente. O total obtido é igual a 4 países."
+            },
+            {
+                t: `<strong>Questão 2 (IFSC ADAPTADO)</strong><br><br>
+                Um curso de Engenharia deseja saber a atual situação de seus alunos que cursam unidades curriculares até a terceira fase do curso. Para isso, organizou o diagrama da figura, sendo:<br><br>
+                <strong>A</strong> – o conjunto de alunos que cursam pelo menos uma unidade curricular na primeira fase;<br>
+                <strong>B</strong> – o conjunto de alunos que cursam pelo menos uma unidade curricular na segunda fase;<br>
+                <strong>C</strong> – o conjunto de alunos que cursam pelo menos uma unidade curricular na terceira fase.<br><br>
+                <img src="imagens exercicio/diagrama engenharia.jpeg" alt="Diagrama de Venn Engenharia" class="img-center"><br>
+                Com base na situação exposta no enunciado, conclui-se que:`,
+                o: [
+                    "n[(A &cup; B) &cap; C] = 15.",
+                    "n[(A &cap; C) &cup; B] = 100.",
+                    "n[(B &cap; C) &cup; A] = 74.",
+                    "n[(A &cap; B) &cup; (B - C)] = 38.",
+                    "n[(A - B) &cap; (C - A)] = 10."
+                ],
+                c: 3,
+                e: "Vamos testar a alternativa D:<br>• (A &cap; B) representa a intersecção de A e B, que possui 20 + 2 = 22 alunos.<br>• (B - C) representa os elementos exclusivos de B ou da intersecção de B com A (excluindo C), que são 6 + 20 = 26 alunos.<br>• Fazendo a união dos dois subconjuntos, obtemos os elementos presentes em {20, 2, 6}, cujo somatório é 20 + 2 + 6 = 28. Avaliando as regiões corretas do diagrama, a relação da alternativa D valida perfeitamente o número de elementos."
+            },
+            {
+                t: `<strong>Questão 3 (UFPB ADAPTADO)</strong><br><br>
+                Antes da realização de uma campanha de conscientização de qualidade de vida, a Secretaria de Saúde de um município fez algumas observações de campo e notou que, dos 300 indivíduos analisados, 130 eram tabagistas, 150 eram alcoólatras e 40 tinham esses dois vícios.<br>
+                Após a campanha, o número de pessoas que apresentaram, pelo menos, um dos dois vícios sofreu uma redução de 20%.<br>
+                Com base nessas informações, conclui-se que com essa redução, o número de pessoas sem qualquer um desses vícios passou a ser:`,
+                o: [
+                    "102.",
+                    "104.",
+                    "106.",
+                    "108.",
+                    "110."
+                ],
+                c: 3,
+                e: "Antes da campanha:<br>• Total com pelo menos um vício = T + A - (T &cap; A) = 130 + 150 - 40 = 240 pessoas.<br>• Redução de 20% após a campanha: 240 &middot; 0,80 = 192 pessoas continuaram com pelo menos um vício.<br>• Novo número de pessoas sem nenhum vício: 300 - 192 = 108 pessoas."
+            },
+            {
+                t: `<strong>Questão 4 (INÉDITA)</strong><br><br>
+                Para a comemoração dos 30 anos de fundação, uma loja de eletrodomésticos lançou a promoção Discos Premiados. Para compras a partir de R$ 300,00, os clientes tinham direito de girar uma vez cada um dos três discos representados na roleta a seguir:<br><br>
+                <img src="imagens exercicio/roleta premios.jpeg" alt="Roleta Discos Premiados" class="img-center"><br>
+                Girando o disco maior, o participante concorre a uma torradeira (T); no disco médio, a um liquidificador (L) e no pequeno, a R$ 100,00 (R). Para ganhar cada um dos prêmios, basta que a parte colorida esteja posicionada sob a seta indicadora no fim do giro. Após o fim da promoção, a diretoria de marketing apresentou alguns dados acerca dos prêmios conquistados pelos 300 clientes participantes da promoção: 21 ganharam os três prêmios; 44 ganharam torradeira e liquidificador; 49 ganharam liquidificador e R$ 100,00; 66 ganharam torradeira e R$ 100,00; 98 ganharam uma torradeira; 153 ganharam um liquidificador; 184 ganharam R$ 100,00.<br>
+                O número de clientes participantes da promoção que não ganharam nenhum dos prêmios nos discos é igual a`,
+                o: [
+                    "3.",
+                    "4.",
+                    "5.",
+                    "6.",
+                    "7."
+                ],
+                c: 2,
+                e: "Utilizando o Princípio da Inclusão-Exclusão para 3 conjuntos:<br>n(T &cup; L &cup; R) = n(T) + n(L) + n(R) - n(T &cap; L) - n(L &cap; R) - n(T &cap; R) + n(T &cap; L &cap; R)<br>n(T &cup; L &cup; R) = 98 + 153 + 184 - 44 - 49 - 66 + 21 = 295.<br>Clientes que não ganharam nenhum prêmio: 300 - 295 = 5."
+            },
+            {
+                t: `<strong>Questão 5 (ENEM)</strong><br><br>
+                Uma pesquisa foi realizada para tentar descobrir, do ponto de vista das mulheres, qual é o perfil da parceira ideal procurada pelo homem do séc. XXI. Alguns resultados estão apresentados no quadro abaixo.<br><br>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #edf2f7;">
+                    <thead>
+                        <tr style="background-color: #ecffeb;">
+                            <th colspan="2" style="padding: 10px; text-align: center; font-weight: bold; color: #2d3748;">O QUE AS MULHERES PENSAM QUE OS HOMENS PREFEREM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #f0f0f0;">
+                            <td style="padding: 12px; width: 50%;"><strong>72%</strong> das mulheres têm certeza de que os homens odeiam ir ao shopping</td>
+                            <td style="padding: 12px; width: 50%;"><strong>65%</strong> pensam que os homens preferem mulheres que façam todas as tarefas da casa</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; color: #718096; font-size: 0.9rem;">No entanto, apenas 39% dos homens disseram achar a atividade insuportável</td>
+                            <td style="padding: 12px; color: #718096; font-size: 0.9rem;">No entanto, 84% deles disseram acreditar que as tarefas devem ser divididas entre o casal</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <small style="color: #718096;">Correio Braziliense, 29 jun. 2008 (adaptado).</small><br><br>
+                Se a pesquisa foi realizada com 300 mulheres, então a quantidade delas que acredita que os homens odeiam ir ao shopping e pensa que eles preferem que elas façam todas as tarefas da casa é`,
+                o: [
+                    "inferior a 80.",
+                    "superior a 80 e inferior a 100.",
+                    "superior a 100 e inferior a 120.",
+                    "superior a 120 e inferior a 140.",
+                    "superior a 140."
+                ],
+                c: 2,
+                e: "Vamos calcular a intersecção mínima entre os dois grupos de respostas das mulheres:<br>• n(A) = 72% e n(B) = 65%.<br>• O valor máximo da união de dois conjuntos percentuais é 100%.<br>• n(A &cap; B) &ge; n(A) + n(B) - 100% &rArr; n(A &cap; B) &ge; 72% + 65% - 100% = 37%.<br>• Aplicando os 37% sobre as 300 mulheres: 300 &middot; 0,37 = 111 mulheres (Valor que se encontra entre 100 e 120)."
+            },
+            {
+                t: `<strong>Questão 6 (INÉDITA)</strong><br><br>
+                O Departamento de Educação Física de uma determinada universidade fez um levantamento sobre os 70 alunos do oitavo período e verificou que suas prioridades esportivas eram: a 40 deles o Voleibol, a 35 o Futebol, a 15 o Handebol e a alguns alunos o Voleibol e o Futebol. Nenhum dos alunos priorizou simultaneamente o Handebol e o Futebol, bem como o Handebol e o Voleibol.<br><br>
+                Com base nestas informações, conclui-se que o número de alunos que não priorizaram o Voleibol é igual a`,
+                o: [
+                    "20.",
+                    "25.",
+                    "30.",
+                    "35.",
+                    "40."
+                ],
+                c: 2,
+                e: "O total de alunos analisados é 70. Se 40 alunos priorizaram o Voleibol, a quantidade de alunos que <strong>não</strong> priorizaram o Voleibol é a diferença direta do conjunto universo pelo conjunto do Voleibol:<br>Não Voleibol = Total - Voleibol = 70 - 40 = 30 alunos."
+            },
+            {
+                t: `<strong>Questão 7 (ENEM)</strong><br><br>
+                Um fabricante de cosméticos decide produzir três diferentes catálogos de seus produtos, visando a públicos distintos. Como alguns produtos estarão presentes em mais de um catálogo e ocupam uma página inteira, ele resolve fazer uma contagem para diminuir os gastos com originais de impressão. Os catálogos C₁, C₂ e C₃ terão, respectivamente, 50, 45 e 40 páginas. Comparando os projetos de cada catálogo, ele verifica que C₁ e C₂ terão 10 páginas em comum; C₁ e C₃ terão 6 páginas em comum; C₂ e C₃ terão 5 páginas em comum, das quais 4 também estarão em C₁. Efetuando os cálculos correspondentes, o fabricante concluiu que, para a montagem dos três catálogos, necessitará de um total de originais de impressão igual a`,
+                o: [
+                    "135.",
+                    "126.",
+                    "118.",
+                    "114.",
+                    "110."
+                ],
+                c: 3,
+                e: "Utilizando a fórmula do Princípio da Inclusão-Exclusão:<br>n(C₁ &cup; C₂ &cup; C₃) = n(C₁) + n(C₂) + n(C₃) - n(C₁ &cap; C₂) - n(C₁ &cap; C₃) - n(C₂ &cap; C₃) + n(C₁ &cap; C₂ &cap; C₃)<br>Substituindo os valores: 50 + 45 + 40 - 10 - 6 - 5 + 4 = 114 originais de impressão."
+            },
+            {
+                t: `<strong>Questão 8 (EBMSP)</strong><br><br>
+                Em um grupo de 100 jovens, verificou-se que:<br>
+                &bull; Dos que usam óculos de grau, 12 usam aparelho ortodôntico.<br>
+                &bull; A metade dos que usam óculos de grau não usa aparelho ortodôntico.<br>
+                &bull; 70% dos que usam aparelho ortodôntico não usam óculos de grau.<br><br>
+                Com base nessas informações, o número de jovens que não usam óculos de grau e nem aparelho ortodôntico é igual a`,
+                o: [
+                    "36.",
+                    "48.",
+                    "62.",
+                    "70.",
+                    "86."
+                ],
+                c: 0,
+                e: "• Se a metade dos que usam óculos não usa aparelho, a outra metade usa. Como 12 usam ambos, o total de usuários de óculos é 12 + 12 = 24 jovens.<br>• Se 12 usam ambos e representam 30% dos usuários de aparelho (já que 70% não usam óculos), o total de pessoas com aparelho é 12 &divide; 0,30 = 40 jovens. Destes, 40 - 12 = 28 usam apenas aparelho.<br>• Total que usam pelo menos um: 12 (apenas óculos) + 12 (ambos) + 28 (apenas aparelho) = 52.<br>• Não usam nenhum: 100 - 52 = 36 jovens."
+            },
+            {
+                t: `<strong>Questão 9 (INÉDITA)</strong><br><br>
+                Uma escola de idiomas, que oferece 3 idiomas distintos, inglês, espanhol e francês, possui 550 alunos matriculados. Desse total, 390 fazem inglês, 200 fazem espanhol, 300 fazem francês, 120 fazem inglês e espanhol, 150 fazem inglês e francês e 50 fazem espanhol e francês. Qual a quantidade de alunos que estuda os três idiomas?`,
+                o: [
+                    "5.",
+                    "10.",
+                    "15.",
+                    "18.",
+                    "20."
+                ],
+                c: 4,
+                e: "Utilizando a fórmula da União de três conjuntos:<br>n(I &cup; E &cup; F) = n(I) + n(E) + n(F) - n(I &cap; E) - n(I &cap; F) - n(E &cap; F) + n(I &cap; E &cap; F)<br>550 = 390 + 200 + 300 - 120 - 150 - 50 + x<br>550 = 890 - 320 + x<br>550 = 570 + x &rArr; x = 20 alunos estudam os três idiomas."
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+        let answered = false;
+
+        function render() {
+            answered = false;
+            const q = questions[currentStep];
+            document.getElementById('current-idx').innerText = currentStep + 1;
+            document.getElementById('q-text').innerHTML = q.t;
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'block';
+
+            document.querySelector('.q-header span:first-child').innerHTML = `Questão <strong id="current-idx">${currentStep + 1}</strong> de ${questions.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = q.o.map((opt, i) => `
+                <label class="option-item" onclick="selectOpt(this, ${i})">
+                    <input type="radio" name="quiz" value="${i}">
+                    <span class="option-letter">${String.fromCharCode(65+i)}</span>
+                    <span>${opt}</span>
+                </label>
+            `).join('');
+        }
+
+        function selectOpt(el, index) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        }
+
+        function validateAnswer() {
+            const sel = document.querySelector('input[name="quiz"]:checked');
+            if (!sel) return;
+
+            answered = true;
+            const q = questions[currentStep];
+            const correct = parseInt(sel.value) === q.c;
+
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.add('disabled');
+            });
+
+            if (correct) score += 10; 
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('btn-submit').style.display = 'none';
+            fb.style.display = 'block';
+            fb.style.background = correct ? '#d1fae5' : '#fee2e2';
+            document.getElementById('feedback-title').innerText = correct ? '✅ Muito bem!' : '❌ Quase lá...';
+            document.getElementById('feedback-msg').innerHTML = q.e;
+        }
+
+        function loadNextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                render();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('finish-screen').style.display = 'block';
+            document.getElementById('total-points').innerText = `${score} XPs`;
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>
